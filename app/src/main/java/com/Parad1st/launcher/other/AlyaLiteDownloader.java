@@ -297,10 +297,11 @@ public class AlyaLiteDownloader {
                 collectMatchingItems(sampJson.optJSONArray("files"), gpu, true, itemsMap);
 
                 List<AssetItem> allItems = new ArrayList<>(itemsMap.values());
-                long totalBytes = 0L;
+                long sumBytes = 0L;
                 for (AssetItem item : allItems) {
-                    if (item.size > 0) totalBytes += item.size;
+                    if (item.size > 0) sumBytes += item.size;
                 }
+                final long totalBytes = sumBytes;
 
                 File gameDir = getGameDir();
                 if (!gameDir.exists() && !gameDir.mkdirs()) {
@@ -308,11 +309,12 @@ public class AlyaLiteDownloader {
                 }
 
                 long downloadedBytes = 0L;
-                int totalFiles = allItems.size();
+                final int totalFiles = allItems.size();
                 long lastUiUpdate = 0L;
 
                 for (int i = 0; i < totalFiles; i++) {
                     if (cancelled) return;
+                    final int fileIndex = i;
                     AssetItem item = allItems.get(i);
                     File targetFile = safeChildFile(gameDir, item.path);
                     File parentDir = targetFile.getParentFile();
@@ -320,7 +322,7 @@ public class AlyaLiteDownloader {
                         parentDir.mkdirs();
                     }
 
-                    String shortName = targetFile.getName();
+                    final String shortName = targetFile.getName();
                     if (targetFile.exists() && item.size > 0 && targetFile.length() == item.size) {
                         downloadedBytes += item.size;
                         long now = System.currentTimeMillis();
@@ -336,20 +338,16 @@ public class AlyaLiteDownloader {
                         continue;
                     }
 
-                    long bytesBeforeFile = downloadedBytes;
+                    final long bytesBeforeFile = downloadedBytes;
                     long receivedForFile = downloadWithRetry(item.url, targetFile, bytesRead -> {
                         if (cancelled) throw new IOException("Unduhan dibatalkan");
                         long currentTotal = bytesBeforeFile + bytesRead;
                         int pct = totalBytes > 0 ? (int) Math.min(100L, (currentTotal * 100L) / totalBytes)
-                                : ((i * 100) / Math.max(1, totalFiles));
+                                : ((fileIndex * 100) / Math.max(1, totalFiles));
                         String status = String.format(Locale.US, "Mengunduh data Lite (%s) %d/%d: %s",
-                                gpu.toUpperCase(Locale.US), i + 1, totalFiles, shortName);
+                                gpu.toUpperCase(Locale.US), fileIndex + 1, totalFiles, shortName);
                         String pctStr = formatProgress(currentTotal, totalBytes, pct);
-                        mainHandler.post(() -> {
-                            if (statusText != null) statusText.setText(status);
-                            if (percentText != null) percentText.setText(pctStr);
-                            if (progressBar != null) progressBar.setProgress(pct);
-                        });
+                        updateUi(mainHandler, statusText, percentText, progressBar, status, pctStr, pct);
                     });
                     downloadedBytes += (item.size > 0 ? item.size : receivedForFile);
                 }
