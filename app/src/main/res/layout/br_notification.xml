@@ -50,7 +50,7 @@
                 android:fontFamily="@font/muller_bold"
                 android:lineSpacingMultiplier="0.85"
                 android:minWidth="140dp"
-                android:text="ryzn sa-mp"
+                android:text="Ryzn SA-MP"
                 android:textColor="#ffffffff"
                 android:textSize="11sp" />
 
@@ -65,7 +65,7 @@
                 android:minHeight="30dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="ryzn"
+                android:text="Ryzn"
                 android:textAllCaps="false"
                 android:textColor="#ffffffff"
                 android:textSize="11sp" />

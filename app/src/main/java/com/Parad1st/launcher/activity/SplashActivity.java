@@ -146,7 +146,7 @@ public class SplashActivity extends AppCompatActivity{
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
-                    "Notifikasi ryzn SA-MP",
+                    "Notifikasi Ryzn SA-MP",
                     NotificationManager.IMPORTANCE_DEFAULT
             );
             NotificationManager manager = getSystemService(NotificationManager.class);
@@ -157,8 +157,8 @@ public class SplashActivity extends AppCompatActivity{
 		NotificationCompat.Builder builder =
 				new NotificationCompat.Builder(SplashActivity.this, CHANNEL_ID)
 						.setSmallIcon(R.drawable.logo_splash)
-						.setContentTitle("ryzn SA-MP")
-						.setContentText("Selamat datang di ryzn SA-MP! Ayo bermain sekarang.")
+						.setContentTitle("Ryzn SA-MP")
+						.setContentText("Selamat datang di Ryzn SA-MP! Ayo bermain sekarang.")
 						.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 		NotificationManagerCompat notificationManager =

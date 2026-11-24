@@ -49,7 +49,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class AlyaLiteDownloader {
 
     public static final String GAME_DIR_NAME = "ryznSAMP";
-    public static final String CLIENT_NAME = "ryzn SA-MP";
+    public static final String CLIENT_NAME = "Ryzn SA-MP";
     public static final int DEFAULT_SERVER_PORT = 7777;
     public static final String UPDATE_JSON_URL = "https://raw.githubusercontent.com/KyuuX444/alya-assets/refs/heads/main/alyaupdate.json";
     public static final String DEFAULT_LITE_LIST_URL = "https://raw.githubusercontent.com/KyuuX444/alya-assets/refs/heads/main/lite_list.json";
@@ -100,7 +100,7 @@ public class AlyaLiteDownloader {
         if (Build.VERSION.SDK_INT >= 30 && !Environment.isExternalStorageManager()) {
             Toast.makeText(
                     activity,
-                    "Izinkan akses semua file agar ryzn SA-MP dapat menyimpan data game di /storage/emulated/0/" + GAME_DIR_NAME + "/",
+                    "Izinkan akses semua file agar Ryzn SA-MP dapat menyimpan data game di /storage/emulated/0/" + GAME_DIR_NAME + "/",
                     Toast.LENGTH_LONG
             ).show();
             try {
@@ -374,7 +374,7 @@ public class AlyaLiteDownloader {
                 if (cancelled) return;
 
                 updateUi(mainHandler, statusText, percentText, progressBar,
-                        "Mengambil daftar data ryzn SA-MP (GPU: " + gpu.toUpperCase(Locale.US) + ")...", "0%", 0);
+                        "Mengambil daftar data Ryzn SA-MP (GPU: " + gpu.toUpperCase(Locale.US) + ")...", "0%", 0);
 
                 JSONObject liteJson = new JSONObject(fetchText(liteUrl));
                 JSONObject sampJson = new JSONObject(fetchText(sampUrl));
@@ -431,7 +431,7 @@ public class AlyaLiteDownloader {
                         long currentTotal = bytesBeforeFile + bytesRead;
                         int pct = totalBytes > 0 ? (int) Math.min(100L, (currentTotal * 100L) / totalBytes)
                                 : ((fileIndex * 100) / Math.max(1, totalFiles));
-                        String status = String.format(Locale.US, "Mengunduh data ryzn SA-MP (%s) %d/%d: %s",
+                        String status = String.format(Locale.US, "Mengunduh data Ryzn SA-MP (%s) %d/%d: %s",
                                 gpu.toUpperCase(Locale.US), fileIndex + 1, totalFiles, shortName);
                         String pctStr = formatProgress(currentTotal, totalBytes, pct);
                         updateUi(mainHandler, statusText, percentText, progressBar, status, pctStr, pct);
@@ -442,7 +442,7 @@ public class AlyaLiteDownloader {
                 if (cancelled) return;
 
                 updateUi(mainHandler, statusText, percentText, progressBar,
-                        "Menyiapkan konfigurasi & font ryzn SA-MP...", "100%", 100);
+                        "Menyiapkan konfigurasi & font Ryzn SA-MP...", "100%", 100);
                 ensureClientConfigAndFonts(com.byparad1st.launcher.Registration.reg.getNick());
 
                 if (!cancelled && callback != null) {
@@ -576,7 +576,7 @@ public class AlyaLiteDownloader {
             conn.setInstanceFollowRedirects(false);
             conn.setConnectTimeout(20000);
             conn.setReadTimeout(20000);
-            conn.setRequestProperty("User-Agent", "ryzn-SA-MP-Android");
+            conn.setRequestProperty("User-Agent", "Ryzn-SA-MP-Android");
             int code = conn.getResponseCode();
             if (code == HttpURLConnection.HTTP_MOVED_PERM
                     || code == HttpURLConnection.HTTP_MOVED_TEMP

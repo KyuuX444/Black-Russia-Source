@@ -27,7 +27,7 @@
     <string name="common_signin_button_text_long">Masuk dengan Google</string>
     <string name="wallet_buy_button_place_holder">Beli dengan Google</string>
     <string name="hello">GTA San Andreas</string>
-    <string name="app_name">ryzn SA-MP</string>
+    <string name="app_name">Ryzn SA-MP</string>
     <string name="text_paused_cellular">Apakah Anda ingin mengaktifkan pengunduhan melalui koneksi seluler? Tergantung paket data Anda, hal ini dapat dikenakan biaya.</string>
     <string name="text_paused_cellular_2">Jika Anda memilih untuk tidak mengaktifkan pengunduhan melalui seluler, unduhan akan dilanjutkan otomatis saat Wi-Fi tersedia.</string>
     <string name="text_button_resume_cellular">Lanjutkan unduhan</string>

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="ryzn SA-MP"
+                android:text="Ryzn SA-MP"
                 android:textColor="@color/white"
                 android:textSize="38sp"
                 app:layout_constraintBottom_toTopOf="@id/tv_play_black"

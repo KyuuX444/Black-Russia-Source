@@ -55,7 +55,7 @@ public class LoaderActivity extends AppCompatActivity {
         downloader.startDownload(this, progressBar, percentText, statusText, new AlyaLiteDownloader.Callback() {
             @Override
             public void onSuccess() {
-                Toast.makeText(LoaderActivity.this, "Data ryzn SA-MP berhasil dipasang!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoaderActivity.this, "Data Ryzn SA-MP berhasil dipasang!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(LoaderActivity.this, MainActivity.class));
                 finish();
             }

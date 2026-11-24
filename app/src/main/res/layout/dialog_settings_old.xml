@@ -27,7 +27,7 @@
             android:layout_margin="8dp"
             android:fontFamily="@font/ttnorms_blackitalic"
             android:gravity="center"
-            android:text="Pengaturan Klien ryzn SA-MP"
+            android:text="Pengaturan Klien Ryzn SA-MP"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
 

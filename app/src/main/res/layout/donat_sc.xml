@@ -59,7 +59,7 @@
         android:fontFamily="@font/muller_regular"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="Klien ryzn SA-MP"
+        android:text="Klien Ryzn SA-MP"
         android:textAllCaps="true"
         android:textColor="#ffffff"
         android:textSize="14sp" />
@@ -73,7 +73,7 @@
         android:fontFamily="@font/muller_bold"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="ryzn SA-MP"
+        android:text="Ryzn SA-MP"
         android:textAllCaps="true"
         android:textColor="#ffffff"
         android:textSize="14sp" />

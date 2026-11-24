@@ -31,7 +31,7 @@
     <string name="auth_client_needs_update_title">Aplikasi membutuhkan pembaruan untuk Layanan Google Play.</string>
     <string name="auth_client_play_services_err_notification_msg">Kesalahan layanan Google Play</string>
     <string name="auth_client_requested_by_msg">Diminta oleh %1$s</string>
-    <string name="app_name">ryzn SA-MP</string>
+    <string name="app_name">Ryzn SA-MP</string>
     <string name="players_list_header_dialog">Daftar Pemain</string>
     <string name="players_list_header_first_column">ID</string>
     <string name="players_list_header_fourth_column">Ping</string>

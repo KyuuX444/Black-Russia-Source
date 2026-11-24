@@ -61,7 +61,7 @@ public class LoaderFragment extends Fragment {
             @Override
             public void onSuccess() {
                 if (!isAdded()) return;
-                Toast.makeText(act, "Data ryzn SA-MP berhasil dipasang!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(act, "Data Ryzn SA-MP berhasil dipasang!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(act, MainActivity.class));
                 act.finish();
             }

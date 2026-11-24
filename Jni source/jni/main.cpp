@@ -59,7 +59,7 @@ void MainLoop();
 
 void PrintBuildInfo()
 {
-       Log("Client ryzn SA-MP");
+       Log("Client Ryzn SA-MP");
 }
 
 #ifdef GAME_EDITION_CR
@@ -75,7 +75,7 @@ extern uintptr_t g_dwRenderQueueOffset;
 
 void PrintBuildCrashInfo()
 {
-	CrashLog("ryzn SA-MP");
+	CrashLog("Ryzn SA-MP");
 	CrashLog("Last processed auto and entity: %d %d", g_usLastProcessedModelIndexAutomobile, g_iLastProcessedModelIndexAutoEnt);
 	CrashLog("Last processed skin and entity: %d %d", g_iLastProcessedSkinCollision, g_iLastProcessedEntityCollision);
 }

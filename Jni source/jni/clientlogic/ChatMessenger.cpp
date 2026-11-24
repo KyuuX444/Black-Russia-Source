@@ -15,10 +15,10 @@ extern CGUI* pGUI;
 extern CChatWindow* pChatWindow;
 
 char CLocalisation::m_szMessages[E_MSG::MSG_COUNT][MAX_LOCALISATION_LENGTH] = {
-	"Menghubungkan ke ryzn SA-MP...",
+	"Menghubungkan ke Ryzn SA-MP...",
 	"Terhubung. Menyiapkan permainan...",
 	"Server menutup koneksi, silakan masuk kembali",
-	"{ffffff}Klien {ff0000}ryzn SA-MP {ffffff}dijalankan",
+	"{ffffff}Klien {ff0000}Ryzn SA-MP {ffffff}dijalankan",
 	"unused",
 	"Anda telah diblokir oleh server",
 	"Koneksi ke server terputus, menyambung ulang dalam 15 detik...",
@@ -28,7 +28,7 @@ char CLocalisation::m_szMessages[E_MSG::MSG_COUNT][MAX_LOCALISATION_LENGTH] = {
 
 void CLocalisation::Initialise(const char* szFile)
 {
-	Log("Initializing ryzn SA-MP");
+	Log("Initializing Ryzn SA-MP");
 	char buff[MAX_LOCALISATION_LENGTH];
 
 	sprintf(&buff[0], "%sSAMP/%s", g_pszStorage, szFile);
