@@ -52,6 +52,8 @@ void CSettings::Save(int iIgnoreCategory)
 	ini_table_create_entry(config, "client", "name", m_Settings.szNickName);
 	ini_table_create_entry(config, "client", "password", m_Settings.szPassword);
 	ini_table_create_entry_as_int(config, "client", "last_server", m_Settings.last_server);
+	ini_table_create_entry(config, "server", "host", m_Settings.szServerHost);
+	ini_table_create_entry_as_int(config, "server", "port", m_Settings.iServerPort);
 	ini_table_create_entry(config, "gui", "Font", m_Settings.szFont);
 
 	ini_table_create_entry_as_float(config, "gui", "FontSize", m_Settings.fFontSize);
@@ -201,29 +203,42 @@ void CSettings::LoadSettings(const char* szNickName, int iChatLines)
 
 	snprintf(m_Settings.szNickName, sizeof(m_Settings.szNickName), "__android_%d%d", rand() % 1000, rand() % 1000);
 	memset(m_Settings.szPassword, 0, sizeof(m_Settings.szPassword));
+	memset(m_Settings.szServerHost, 0, sizeof(m_Settings.szServerHost));
 	snprintf(m_Settings.szFont, sizeof(m_Settings.szFont), "Arial.ttf");
 
 	const char* szName = ini_table_get_entry(config, "client", "name");
 	const char* szPassword = ini_table_get_entry(config, "client", "password");
+	const char* szServerHost = ini_table_get_entry(config, "server", "host");
 
 	const char* szFontName = ini_table_get_entry(config, "gui", "Font");
 
 	if (szName)
 	{
-		strcpy(m_Settings.szNickName, szName);
+		snprintf(m_Settings.szNickName, sizeof(m_Settings.szNickName), "%s", szName);
 	}
 	if (szPassword)
 	{
-		strcpy(m_Settings.szPassword, szPassword);
+		snprintf(m_Settings.szPassword, sizeof(m_Settings.szPassword), "%s", szPassword);
+	}
+	if (szServerHost)
+	{
+		snprintf(m_Settings.szServerHost, sizeof(m_Settings.szServerHost), "%s", szServerHost);
 	}
 	if (szFontName)
 	{
-		strcpy(m_Settings.szFont, szFontName);
+		snprintf(m_Settings.szFont, sizeof(m_Settings.szFont), "%s", szFontName);
 	}
 
 	ClearBackslashN(m_Settings.szNickName, sizeof(m_Settings.szNickName));
 	ClearBackslashN(m_Settings.szPassword, sizeof(m_Settings.szPassword));
+	ClearBackslashN(m_Settings.szServerHost, sizeof(m_Settings.szServerHost));
 	ClearBackslashN(m_Settings.szFont, sizeof(m_Settings.szFont));
+
+	m_Settings.iServerPort = ini_table_get_entry_as_int(config, "server", "port", 7777);
+	if (m_Settings.iServerPort <= 0 || m_Settings.iServerPort > 65535)
+	{
+		m_Settings.iServerPort = 7777;
+	}
 
 	if (szNickName)
 	{

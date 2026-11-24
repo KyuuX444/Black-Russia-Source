@@ -72,9 +72,9 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat_bold"
-                android:text="Pilih Server"
+                android:text="Pilih Server SA-MP"
                 android:textColor="#ffffff"
-                android:textSize="26sp" />
+                android:textSize="24sp" />
 
             <Button
                 android:id="@+id/servers_btn_my_server"
@@ -83,8 +83,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_red_rectangle"
                 android:fontFamily="@font/muller_bold"
-                android:minWidth="100dp"
-                android:text="Server Saya"
+                android:minWidth="110dp"
+                android:text="Sambung Langsung"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -93,12 +93,12 @@
                 android:id="@+id/all_servers_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="16dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_br_red_unfilled_ss"
                 android:fontFamily="@font/muller_bold"
                 android:minWidth="100dp"
-                android:text="Semua Server"
+                android:text="Daftar Server"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textSize="11sp" />
@@ -126,12 +126,12 @@
 
                 <FrameLayout
                     android:id="@+id/server_main_frame"
-                    android:layout_width="300dp"
-                    android:layout_height="150dp"
+                    android:layout_width="320dp"
+                    android:layout_height="100dp"
                     android:layout_centerInParent="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical">
 
                     <View
@@ -151,8 +151,8 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:paddingLeft="5dp"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="5dp">
+                        android:paddingTop="8dp"
+                        android:paddingBottom="4dp">
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -165,22 +165,22 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="10dp"
                                 android:fontFamily="@font/muller_bold"
-                                android:text="Nama Server"
+                                android:text="Server Bebas (SA-MP 0.3.7)"
                                 android:textColor="#ffffff"
-                                android:textSize="16sp" />
+                                android:textSize="14sp" />
                         </FrameLayout>
 
                         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                             android:id="@+id/br_server_progress"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_12sdp"
+                            android:layout_height="@dimen/_10sdp"
                             android:layout_marginLeft="10dp"
-                            android:layout_marginTop="@dimen/_15sdp"
+                            android:layout_marginTop="8dp"
                             android:layout_marginRight="10dp"
                             app:rcBackgroundColor="#40000000"
                             app:rcBackgroundPadding="0dp"
                             app:rcMax="100"
-                            app:rcProgress="0"
+                            app:rcProgress="100"
                             app:rcProgressColor="@color/gradient1"
                             app:rcRadius="@dimen/_5sdp"
                             app:rcReverse="false"
@@ -191,36 +191,81 @@
                             android:id="@+id/br_server_online"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="6dp"
                             android:layout_marginRight="5dp"
                             android:fontFamily="@font/muller_bold"
                             android:gravity="center"
-                            android:text="999/1000"
+                            android:text="Masukkan IP:Port server di bawah"
                             android:textColor="#ffffff"
-                            android:textSize="16sp" />
+                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/br_server_image"
-                        android:layout_width="@dimen/_50sdp"
-                        android:layout_height="@dimen/_50sdp"
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_35sdp"
                         android:layout_gravity="bottom|left|center_vertical|center_horizontal|center"
                         android:visibility="visible"
                         app:srcCompat="@drawable/br_peaw_servers" />
                 </FrameLayout>
 
+                <LinearLayout
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/br_server_ip_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="38dp"
+                        android:background="@drawable/launcher_main_edit_text_bg"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:gravity="center"
+                        android:hint="IP:Port server (cth. 127.0.0.1:7777)"
+                        android:imeOptions="actionDone|flagNoFullscreen"
+                        android:inputType="textUri|textNoSuggestions"
+                        android:maxLength="127"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#99ffffff"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/br_server_pass_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/launcher_main_edit_text_bg"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:gravity="center"
+                        android:hint="Password server (kosongkan jika tidak ada)"
+                        android:imeOptions="actionDone|flagNoFullscreen"
+                        android:inputType="textPassword"
+                        android:maxLength="127"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:singleLine="true"
+                        android:textColor="#ffffff"
+                        android:textColorHint="#99ffffff"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/br_servers_play"
-                    android:layout_width="230dp"
-                    android:layout_height="70dp"
+                    android:layout_width="220dp"
+                    android:layout_height="56dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="14dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/br_highlight_button_play"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Main"
                     android:textAllCaps="false"
                     android:textColor="#ffffff"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
 

@@ -35,7 +35,7 @@ const char* g_pszStorage = nullptr;
 #include "clientlogic/CSkyBox.h"
 #include "clientlogic/CRQ_Commands.h"
 
-const cryptor::string_encryptor encLib = cryptor::create("libsamp.so", 11);
+const cryptor::string_encryptor encLib = cryptor::create("libsampvoice.so", 16);
 void CrashLog(const char* fmt, ...);
 CGame *pGame = nullptr;
 CNetGame *pNetGame = nullptr;
@@ -140,11 +140,7 @@ void InitSAMP(JNIEnv* pEnv, jobject thiz)
 
 	CWeaponsOutFit::ParseDatFile();
 
-	if(!CCheckFileHash::IsFilesValid())
-	{
-		CClientInfo::bSAMPModified = false;
-		return;
-	}
+	CClientInfo::bSAMPModified = false;
 }
 extern CSnapShotHelper* pSnapShotHelper;
 void ProcessCheckForKeyboard();
@@ -341,7 +337,7 @@ void handler3(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
 		CrashLog("SIGBUS | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
+		CrashLog("libsamp base address: 0x%X", FindLibrary("libsampvoice.so"));
 		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
@@ -369,8 +365,8 @@ void handler3(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsampvoice.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsampvoice.so"));
 
 
 		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
@@ -404,7 +400,7 @@ void handler(int signum, siginfo_t *info, void* contextPtr)
 		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
 		CrashLog("SIGSEGV | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
+		CrashLog("libsamp base address: 0x%X", FindLibrary("libsampvoice.so"));
 		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
@@ -432,8 +428,8 @@ void handler(int signum, siginfo_t *info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsampvoice.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsampvoice.so"));
 
 		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
 		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
@@ -466,7 +462,7 @@ void handler2(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
 		CrashLog("SIGFPE | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
+		CrashLog("libsamp base address: 0x%X", FindLibrary("libsampvoice.so"));
 		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
@@ -494,8 +490,8 @@ void handler2(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("1: libGTASA.so + 0x%X", context->uc_mcontext.arm_pc - g_libGTASA);
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsampvoice.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsampvoice.so"));
 
 
 		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
@@ -530,7 +526,7 @@ void handler1(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("Last rendered object: %d", g_iLastRenderedObject);
 		CrashLog("SIGABRT | Fault address: 0x%X", info->si_addr);
 		CrashLog("libGTASA base address: 0x%X", g_libGTASA);
-		CrashLog("libsamp base address: 0x%X", FindLibrary("libsamp.so"));
+		CrashLog("libsamp base address: 0x%X", FindLibrary("libsampvoice.so"));
 		CrashLog("libc base address: 0x%X", FindLibrary("libc.so"));
 		CrashLog("register states:");
 		CrashLog("r0: 0x%X, r1: 0x%X, r2: 0x%X, r3: 0x%X",
@@ -559,8 +555,8 @@ void handler1(int signum, siginfo_t* info, void* contextPtr)
 		CrashLog("2: libGTASA.so + 0x%X", context->uc_mcontext.arm_lr - g_libGTASA);
 
 
-		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsamp.so"));
-		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsamp.so"));
+		CrashLog("1: libsamp.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libsampvoice.so"));
+		CrashLog("2: libsamp.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libsampvoice.so"));
 
 		CrashLog("1: libc.so + 0x%X", context->uc_mcontext.arm_pc - FindLibrary("libc.so"));
 		CrashLog("2: libc.so + 0x%X", context->uc_mcontext.arm_lr - FindLibrary("libc.so"));
@@ -618,11 +614,11 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	firebase::crashlytics::Initialize();
 
 	uintptr_t libgtasa = FindLibrary("libGTASA.so");
-	uintptr_t libsamp = FindLibrary("libsamp.so");
+	uintptr_t libsamp = FindLibrary("libsampvoice.so");
 	uintptr_t libc = FindLibrary("libc.so");
 
 	Log("libGTASA.so: 0x%x", libgtasa);
-	Log("libsamp.so: 0x%x", libsamp);
+	Log("libsampvoice.so: 0x%x", libsamp);
 	Log("libc.so: 0x%x", libc);
 
 	char str[100];
@@ -631,7 +627,7 @@ jint JNI_OnLoad(JavaVM *vm, void *reserved)
 	firebase::crashlytics::SetCustomKey("libGTASA.so", str);
 	
 	sprintf(str, "0x%x", libsamp);
-	firebase::crashlytics::SetCustomKey("libsamp.so", str);
+	firebase::crashlytics::SetCustomKey("libsampvoice.so", str);
 
 	sprintf(str, "0x%x", libc);
 	firebase::crashlytics::SetCustomKey("libc.so", str);

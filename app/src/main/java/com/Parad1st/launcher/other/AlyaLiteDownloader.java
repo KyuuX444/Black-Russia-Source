@@ -50,6 +50,7 @@ public class AlyaLiteDownloader {
 
     public static final String GAME_DIR_NAME = "ryznSAMP";
     public static final String CLIENT_NAME = "ryzn SA-MP";
+    public static final int DEFAULT_SERVER_PORT = 7777;
     public static final String UPDATE_JSON_URL = "https://raw.githubusercontent.com/KyuuX444/alya-assets/refs/heads/main/alyaupdate.json";
     public static final String DEFAULT_LITE_LIST_URL = "https://raw.githubusercontent.com/KyuuX444/alya-assets/refs/heads/main/lite_list.json";
     public static final String DEFAULT_SAMP_LIST_URL = "https://raw.githubusercontent.com/KyuuX444/alya-assets/refs/heads/main/samp_list.json";
@@ -156,6 +157,9 @@ public class AlyaLiteDownloader {
                     + "name = " + cleanNick + "\n"
                     + "password = \n"
                     + "pagesize = 10\n\n"
+                    + "[server]\n"
+                    + "host = \n"
+                    + "port = 7777\n\n"
                     + "[debug]\n"
                     + "debug = 0\n"
                     + "online = 0\n\n"
@@ -186,6 +190,88 @@ public class AlyaLiteDownloader {
                 w.store();
             } catch (Exception ignored) {
             }
+        }
+    }
+
+    public static String[] parseServerAddress(String rawInput) {
+        if (rawInput == null) return new String[]{"", String.valueOf(DEFAULT_SERVER_PORT)};
+        String s = rawInput.trim();
+        if (s.isEmpty()) return new String[]{"", String.valueOf(DEFAULT_SERVER_PORT)};
+
+        int port = DEFAULT_SERVER_PORT;
+        int colonIdx = s.lastIndexOf(':');
+        if (colonIdx > 0 && colonIdx < s.length() - 1) {
+            String hostPart = s.substring(0, colonIdx).trim();
+            String portPart = s.substring(colonIdx + 1).trim();
+            try {
+                int parsed = Integer.parseInt(portPart);
+                if (parsed > 0 && parsed <= 65535) {
+                    port = parsed;
+                    s = hostPart;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        } else if (colonIdx == s.length() - 1) {
+            s = s.substring(0, colonIdx).trim();
+        }
+        return new String[]{s, String.valueOf(port)};
+    }
+
+    public static String formatServerAddress(String host, int port) {
+        if (host == null || host.trim().isEmpty()) return "";
+        int validPort = (port > 0 && port <= 65535) ? port : DEFAULT_SERVER_PORT;
+        return host.trim() + ":" + validPort;
+    }
+
+    public static String getSavedServerAddress() {
+        try {
+            File f = getSettingsFile();
+            if (!f.exists()) return "";
+            Wini w = new Wini(f);
+            String host = w.get("server", "host");
+            String portStr = w.get("server", "port");
+            if (host == null || host.trim().isEmpty()) return "";
+            int port = DEFAULT_SERVER_PORT;
+            if (portStr != null) {
+                try {
+                    int parsed = Integer.parseInt(portStr.trim());
+                    if (parsed > 0 && parsed <= 65535) port = parsed;
+                } catch (NumberFormatException ignored) {
+                }
+            }
+            return formatServerAddress(host, port);
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
+
+    public static String getSavedServerPassword() {
+        try {
+            File f = getSettingsFile();
+            if (!f.exists()) return "";
+            Wini w = new Wini(f);
+            String pass = w.get("client", "password");
+            return pass != null ? pass.trim() : "";
+        } catch (Exception ignored) {
+            return "";
+        }
+    }
+
+    public static boolean saveServerConfig(String rawAddress, String password) {
+        try {
+            ensureClientConfigAndFonts("");
+            File f = getSettingsFile();
+            Wini w = new Wini(f);
+            String[] parsed = parseServerAddress(rawAddress);
+            w.put("server", "host", parsed[0]);
+            w.put("server", "port", parsed[1]);
+            if (password != null) {
+                w.put("client", "password", password);
+            }
+            w.store();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

@@ -309,10 +309,84 @@ JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_buycar(JNIEn
 }
 
 
+static void ParseServerConnectTarget(JNIEnv* pEnv, jbyteArray str, jint action, char* outHost, size_t outHostSize)
+{
+	outHost[0] = '\0';
+	int outPort = (action > 0 && action <= 65535) ? (int)action : pSettings->GetReadOnly().iServerPort;
+	if (outPort <= 0 || outPort > 65535) outPort = 7777;
+
+	if (str)
+	{
+		jsize length = pEnv->GetArrayLength(str);
+		if (length > 0)
+		{
+			jboolean isCopy = JNI_FALSE;
+			jbyte* pBytes = pEnv->GetByteArrayElements(str, &isCopy);
+			if (pBytes)
+			{
+				std::string raw((const char*)pBytes, (size_t)length);
+				pEnv->ReleaseByteArrayElements(str, pBytes, JNI_ABORT);
+
+				size_t pipePos = raw.find('|');
+				if (pipePos != std::string::npos)
+				{
+					std::string pass = raw.substr(pipePos + 1);
+					snprintf(pSettings->GetWrite().szPassword, sizeof(pSettings->GetWrite().szPassword), "%s", pass.c_str());
+					raw = raw.substr(0, pipePos);
+				}
+
+				while (!raw.empty() && (raw.back() == ' ' || raw.back() == '\r' || raw.back() == '\n' || raw.back() == '\t'))
+					raw.pop_back();
+				size_t start = 0;
+				while (start < raw.size() && (raw[start] == ' ' || raw[start] == '\t'))
+					++start;
+				raw = raw.substr(start);
+
+				size_t colonPos = raw.rfind(':');
+				if (colonPos != std::string::npos)
+				{
+					std::string hostPart = raw.substr(0, colonPos);
+					std::string portPart = raw.substr(colonPos + 1);
+					int parsedPort = atoi(portPart.c_str());
+					if (parsedPort > 0 && parsedPort <= 65535)
+					{
+						outPort = parsedPort;
+					}
+					raw = hostPart;
+				}
+
+				if (!raw.empty())
+				{
+					snprintf(outHost, outHostSize, "%s", raw.c_str());
+				}
+			}
+		}
+	}
+
+	if (outHost[0] != '\0')
+	{
+		snprintf(pSettings->GetWrite().szServerHost, sizeof(pSettings->GetWrite().szServerHost), "%s", outHost);
+		pSettings->GetWrite().iServerPort = outPort;
+		pSettings->GetWrite().last_server = 0;
+		return;
+	}
+
+	if (pSettings->GetReadOnly().szServerHost[0] != '\0')
+	{
+		snprintf(outHost, outHostSize, "%s", pSettings->GetReadOnly().szServerHost);
+		return;
+	}
+
+	int idx = (action >= 0 && action < MAX_SERVERS) ? (int)action : ((g_iServer >= 0 && g_iServer < MAX_SERVERS) ? g_iServer : 0);
+	snprintf(outHost, outHostSize, "%s", g_sEncryptedAddresses[idx].decrypt());
+	pSettings->GetWrite().iServerPort = g_sEncryptedAddresses[idx].getPort();
+}
+
 JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIEnv* pEnv, jobject thiz, jint type, jbyteArray str, jint action)
 {
 	switch(type) {
 		case 1:
+			if (!pNetGame) break;
 			switch(action) {
 				case 398:
 					pNetGame->SendChatCommand("/gps");
@@ -340,27 +414,35 @@ JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIE
 				case 8:
 					pNetGame->SendChatCommand("/");		
 					break;		
-				}
-			case 2:
-				switch(action) {
-					case 0:     
-		                                                                       pNetGame = new CNetGame(
-			                                                                g_sEncryptedAddresses[g_iServer].decrypt(),
-			                                                                g_sEncryptedAddresses[g_iServer].getPort(),
-			                                                                pSettings->GetReadOnly().szNickName,
-			                                                                pSettings->GetReadOnly().szPassword);
-		                                                                        pSettings->GetWrite().last_server = 0;
+			}
+			break;
+		case 2: {
+			char szTargetHost[128];
+			ParseServerConnectTarget(pEnv, str, action, szTargetHost, sizeof(szTargetHost));
+			int targetPort = pSettings->GetReadOnly().iServerPort;
+			if (targetPort <= 0 || targetPort > 65535) targetPort = 7777;
 
-                                                                                                            g_pJavaWrapper->HideGPS();
-                                                                                                            g_pJavaWrapper->ShowRadar();
-                                                                                                            g_pJavaWrapper->HideZona();
-                                                                                                            g_pJavaWrapper->HideX2();
-						break;
-				}
+			if (pNetGame)
+			{
+				Log("sendRPC: CNetGame already initialized, skipping duplicate connect");
+				break;
+			}
+			Log("Connecting to server %s:%d", szTargetHost, targetPort);
+			pNetGame = new CNetGame(
+				szTargetHost,
+				targetPort,
+				pSettings->GetReadOnly().szNickName,
+				pSettings->GetReadOnly().szPassword);
+			pSettings->GetWrite().last_server = 0;
+
+			g_pJavaWrapper->HideGPS();
+			g_pJavaWrapper->ShowRadar();
+			g_pJavaWrapper->HideZona();
+			g_pJavaWrapper->HideX2();
+			break;
 		}
-
-		
 	}
+}
 	JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendDialogResponse(JNIEnv* pEnv, jobject thiz, jint i3, jint i, jint i2, jbyteArray str)
 	{
 		jboolean isCopy = true;

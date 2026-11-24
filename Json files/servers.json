@@ -1,9 +1,11 @@
 [
     {
       "color": "FF0000",
-      "dopname": "(PROMO X999)",
+      "dopname": "(SA-MP 0.3.7)",
       "maxonline": 1000,
-      "name": "RED",
-      "online": 2
+      "name": "SERVER KUSTOM",
+      "online": 0,
+      "ip": "127.0.0.1",
+      "port": 7777
     }
 ]

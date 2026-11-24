@@ -85,7 +85,7 @@ public class SplashActivity extends AppCompatActivity{
 				List<Servers> servers = response.body();
 				if (servers != null) {
 					for (Servers server : servers) {
-						Lists.slist.add(new Servers(server.getColor(), server.getDopname(), server.getname(), server.getOnline(), server.getmaxOnline()));
+						Lists.slist.add(new Servers(server.getColor(), server.getDopname(), server.getname(), server.getOnline(), server.getmaxOnline(), server.getIp(), server.getPort()));
 					}
 				}
 			}

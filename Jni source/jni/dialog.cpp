@@ -255,6 +255,23 @@ extern CChatWindow* pChatWindow;
 #include "clientlogic/CNetwork.h"
 #include "settings.h"
 extern CSettings* pSettings;
+
+static void ConnectFromDialogFallback(int selectedItem)
+{
+	const stSettings& s = pSettings->GetReadOnly();
+	if (s.szServerHost[0] != '\0')
+	{
+		pNetGame = new CNetGame(s.szServerHost, s.iServerPort > 0 ? s.iServerPort : 7777, s.szNickName, s.szPassword);
+		return;
+	}
+	int idx = (selectedItem >= 0 && selectedItem < MAX_SERVERS) ? selectedItem : 0;
+	pNetGame = new CNetGame(
+		g_sEncryptedAddresses[idx].decrypt(),
+		g_sEncryptedAddresses[idx].getPort(),
+		s.szNickName,
+		s.szPassword);
+}
+
 void CDialogWindow::RenderTabList(int dStyle)
 {
 	std::string strUtf8 = m_putf8Info;
@@ -426,13 +443,7 @@ void CDialogWindow::RenderTabList(int dStyle)
 					if (pNetGame)
 						pNetGame->SendDialogResponse(m_wDialogID, 1, m_iSelectedItem, (char*)firstTabs[m_iSelectedItem].c_str());
 					else
-					{
-						pNetGame = new CNetGame(
-							g_sEncryptedAddresses[m_iSelectedItem].decrypt(),
-							g_sEncryptedAddresses[m_iSelectedItem].getPort(),
-							pSettings->GetReadOnly().szNickName,
-							pSettings->GetReadOnly().szPassword);
-					}
+						ConnectFromDialogFallback(m_iSelectedItem);
 
 				}
 			if (ImGui::IsItemHovered())
@@ -450,14 +461,7 @@ void CDialogWindow::RenderTabList(int dStyle)
 					if (pNetGame)
 						pNetGame->SendDialogResponse(m_wDialogID, 1, m_iSelectedItem, (char*)firstTabs[m_iSelectedItem].c_str());
 					else
-					{
-						pNetGame = new CNetGame(
-							g_sEncryptedAddresses[m_iSelectedItem].decrypt(),
-							g_sEncryptedAddresses[m_iSelectedItem].getPort(),
-							pSettings->GetReadOnly().szNickName,
-							pSettings->GetReadOnly().szPassword);
-					}
-
+						ConnectFromDialogFallback(m_iSelectedItem);
 
 				}
 			if (ImGui::IsItemHovered())
@@ -552,13 +556,7 @@ void CDialogWindow::RenderTabList(int dStyle)
 			if (pNetGame)
 				pNetGame->SendDialogResponse(m_wDialogID, 1, dStyle == DIALOG_STYLE_TABLIST_HEADERS ? TempItem : m_iSelectedItem, (char*)firstTabs[m_iSelectedItem].c_str());
 			else
-			{
-				pNetGame = new CNetGame(
-					g_sEncryptedAddresses[m_iSelectedItem].decrypt(),
-					g_sEncryptedAddresses[m_iSelectedItem].getPort(),
-					pSettings->GetReadOnly().szNickName,
-					pSettings->GetReadOnly().szPassword);
-			}
+				ConnectFromDialogFallback(m_iSelectedItem);
 
 		}
 	}
@@ -575,13 +573,7 @@ void CDialogWindow::RenderTabList(int dStyle)
 			if (pNetGame)
 				pNetGame->SendDialogResponse(m_wDialogID, 0, dStyle == DIALOG_STYLE_TABLIST_HEADERS ? TempItem : m_iSelectedItem, (char*)firstTabs[m_iSelectedItem].c_str());
 			else
-			{
-				pNetGame = new CNetGame(
-					g_sEncryptedAddresses[m_iSelectedItem].decrypt(),
-					g_sEncryptedAddresses[m_iSelectedItem].getPort(),
-					pSettings->GetReadOnly().szNickName,
-					pSettings->GetReadOnly().szPassword);
-			}
+				ConnectFromDialogFallback(m_iSelectedItem);
 		}
 	}
 	ImGui::SetWindowSize(ImVec2(vecWinSize.x, pGUI->ScaleY(vecWinSize.y + dStyle == DIALOG_STYLE_TABLIST_HEADERS ? pGUI->ScaleY(187.5f) / 2 : 0)));

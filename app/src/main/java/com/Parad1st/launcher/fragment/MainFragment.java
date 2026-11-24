@@ -36,6 +36,7 @@ import org.ini4j.Wini;
 public class MainFragment extends Fragment {
 	
 	EditText nickname;
+	EditText serverAddress;
 	ImageButton ib_info;
 	
 	@Override
@@ -46,7 +47,22 @@ public class MainFragment extends Fragment {
         InitLogic();
         
         nickname = inflate.findViewById(R.id.edit_text_name);
+        serverAddress = inflate.findViewById(R.id.edit_text_server);
         ib_info = inflate.findViewById(R.id.ib_info);
+        if (serverAddress != null) {
+            serverAddress.setText(AlyaLiteDownloader.getSavedServerAddress());
+            serverAddress.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    if (AlyaLiteDownloader.saveServerConfig(serverAddress.getText().toString(), null)) {
+                        Toast.makeText(getActivity(), "Alamat server berhasil disimpan!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                return false;
+            });
+        }
 		
 	    ((AppCompatButton) inflate.findViewById(R.id.button_play)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -209,8 +225,14 @@ public class MainFragment extends Fragment {
             AlyaLiteDownloader.requestAllFilesPermissionIfNeeded(getActivity());
             return;
         }
+        AlyaLiteDownloader.ensureClientConfigAndFonts(nickname != null ? nickname.getText().toString() : "");
+        if (serverAddress != null) {
+            String rawServer = serverAddress.getText().toString().trim();
+            if (!rawServer.isEmpty()) {
+                AlyaLiteDownloader.saveServerConfig(rawServer, null);
+            }
+        }
         if (IsGameInstalled()) {
-            AlyaLiteDownloader.ensureClientConfigAndFonts(nickname != null ? nickname.getText().toString() : "");
             startActivity(new Intent(getActivity(), com.byparad1st.game.core.GTASA.class));
         } else {
             startActivity(new Intent(getActivity(), LoaderActivity.class));

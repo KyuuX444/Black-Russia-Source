@@ -7,6 +7,8 @@ struct stSettings
 	// client
 	char szNickName[MAX_PLAYER_NAME+1];
 	char szPassword[MAX_SETTINGS_STRING+1];
+	char szServerHost[MAX_SETTINGS_STRING+1];
+	int iServerPort;
 
 	// gui
 	char szFont[40];

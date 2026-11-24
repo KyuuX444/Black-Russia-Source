@@ -36,6 +36,7 @@ import java.util.*;
 public class MainActivity extends AppCompatActivity {
 	
 	EditText nickname;
+	EditText serverAddress;
 	ImageButton ib_info;
     
     @Override
@@ -60,7 +61,22 @@ public class MainActivity extends AppCompatActivity {
         LoadNick();
         
         nickname = findViewById(R.id.edit_text_name);
+        serverAddress = findViewById(R.id.edit_text_server);
         ib_info = findViewById(R.id.ib_info);
+        if (serverAddress != null) {
+            serverAddress.setText(AlyaLiteDownloader.getSavedServerAddress());
+            serverAddress.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (event != null && event.getAction() == KeyEvent.ACTION_DOWN
+                                && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    if (AlyaLiteDownloader.saveServerConfig(serverAddress.getText().toString(), null)) {
+                        tost("Alamat server berhasil disimpan!");
+                    }
+                }
+                return false;
+            });
+        }
 		
 	    ((AppCompatButton) findViewById(R.id.button_play)).setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -225,9 +241,15 @@ public class MainActivity extends AppCompatActivity {
             AlyaLiteDownloader.requestAllFilesPermissionIfNeeded(this);
             return;
         }
+        String curNick = nickname != null ? nickname.getText().toString() : reg.getNick();
+        AlyaLiteDownloader.ensureClientConfigAndFonts(curNick);
+        if (serverAddress != null) {
+            String rawServer = serverAddress.getText().toString().trim();
+            if (!rawServer.isEmpty()) {
+                AlyaLiteDownloader.saveServerConfig(rawServer, null);
+            }
+        }
         if (IsGameInstalled()) {
-            String curNick = nickname != null ? nickname.getText().toString() : reg.getNick();
-            AlyaLiteDownloader.ensureClientConfigAndFonts(curNick);
             startActivity(new Intent(this, com.byparad1st.game.core.GTASA.class));
         } else {
             ToLoad();

@@ -81,14 +81,7 @@ void ANDRunThread_hook(void* a1);
 
 void ApplyPatches_level0()
 {
-		//             (                     )
-	WriteMemory(g_libGTASA + 0x573640, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x573668, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x57367C, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x573690, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x5736C8, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x5736D8, (int)"dxt", 3);
-  	WriteMemory(g_libGTASA + 0x5736E8, (int)"dxt", 3);
+	// GPU texture format strings (.unc/.dxt/.360/.pvr/.etc) preserved for all GPUs & player.pvr.*
 	
 	
 	PLAYERS_REALLOC = ((char* (*)(uint32_t))(g_libGTASA + 0x179B40))(404 * 257 * sizeof(char));

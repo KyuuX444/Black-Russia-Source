@@ -19,6 +19,9 @@
 #include "GetTime.h"
 
 #include "../../main.h"
+#ifndef _WIN32
+#include <arpa/inet.h>
+#endif
 
 #ifdef _MSC_VER
 #pragma warning( push )
@@ -44,14 +47,20 @@ RakClient::~RakClient()
 #endif
 bool RakClient::Connect( const char* host, unsigned short serverPort, unsigned short clientPort, unsigned int depreciated, int threadSleepTimer )
 {
+	if ( host == 0 || host[ 0 ] == 0 )
+		return false;
+
 	RakPeer::Disconnect( 100 );
 	
 	RakPeer::Initialize( 1, clientPort, threadSleepTimer );
 	
-	if ( host[ 0 ] < '0' || host[ 0 ] > '2' )
+	if ( inet_addr( host ) == INADDR_NONE )
 	{
 #if !defined(_COMPATIBILITY_1)
-		host = ( char* ) SocketLayer::Instance()->DomainNameToIP( host );
+		const char* resolved = SocketLayer::Instance()->DomainNameToIP( host );
+		if ( resolved == 0 || resolved[ 0 ] == 0 )
+			return false;
+		host = resolved;
 #else
 		return false;
 #endif

@@ -15,7 +15,7 @@ extern CNetGame* pNetGame;
 #include "..//clientlogic/CHUD.h"
 
 #define NETGAME_VERSION 4057
-#define AUTH_BS "10B3D2B1317ADD02CC1F680BC500A8BC0FD7AD42CE7"
+#define AUTH_BS "15121F6F18550C00AC4B4F8A167D0379BB0ACA99043"
 
 //#define AUTH_BS "E02262CF28BC542486C558D4BE9EFB716592AFAF8B"
 
@@ -1562,8 +1562,6 @@ void CNetGame::Packet_ConnectionSucceeded(Packet* pkt)
 	bsSend.Write(AUTH_BS, byteAuthBSLen);
 	bsSend.Write(byteClientverLen);
 	bsSend.Write(SAMP_VERSION, byteClientverLen);
-
-	CClientInfo::WriteClientInfoToBitStream(bsSend);
 
 	m_pRakClient->RPC(&RPC_ClientJoin, &bsSend, HIGH_PRIORITY, RELIABLE, 0, false, UNASSIGNED_NETWORK_ID, NULL);
 }

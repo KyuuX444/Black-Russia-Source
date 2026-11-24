@@ -296,10 +296,16 @@ void CVoiceChatClient::EnableInput()
 #include "../vendor/raknet/PacketEnumerations.h"
 #include "../vendor/raknet/StringCompressor.h"
 unsigned char GetPacketID(Packet* p);
+static int s_iVoiceConnectAttempts = 0;
+static uint32_t s_dwLastVoiceAttempt = 0;
+
 void CVoiceChatClient::Connect(const char* szHostOrIP, unsigned short port)
 {
 	strncpy(m_szHostOrIp, szHostOrIP, sizeof(m_szHostOrIp));
+	m_szHostOrIp[sizeof(m_szHostOrIp) - 1] = '\0';
 	m_iPort = port;
+	s_iVoiceConnectAttempts = 0;
+	s_dwLastVoiceAttempt = 0;
 	SetNetworkState(VOICECHAT_WAIT_CONNECT);
 }
 
@@ -540,6 +546,14 @@ void CVoiceChatClient::Process()
 		}
 		if (GetNetworkState() == VOICECHAT_WAIT_CONNECT && (pNetGame->GetGameState() == GAMESTATE_CONNECTED))
 		{
+			uint32_t now = GetTickCount();
+			if (s_iVoiceConnectAttempts >= 3 || (s_dwLastVoiceAttempt != 0 && (now - s_dwLastVoiceAttempt) < 3000))
+			{
+				std::this_thread::sleep_for(std::chrono::milliseconds(50));
+				continue;
+			}
+			s_dwLastVoiceAttempt = now;
+			s_iVoiceConnectAttempts++;
 			m_bRecording = false;
 			if (m_pPlayer->recorderRecord && m_bCouldRecord)
 			{

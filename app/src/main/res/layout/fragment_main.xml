@@ -24,6 +24,26 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 	<ImageButton android:id="@+id/ib_info" android:background="@drawable/launcher_red_buttons_bg" android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/launcher_main_info_ic" android:contentDescription="info" android:layout_marginStart="10dp" app:layout_constraintBottom_toBottomOf="@+id/edit_text_name" app:layout_constraintStart_toEndOf="@+id/edit_text_name" app:layout_constraintTop_toTopOf="@+id/edit_text_name" />
+	<EditText
+		android:id="@+id/edit_text_server"
+		android:layout_width="220dp"
+		android:layout_height="40dp"
+		android:layout_marginTop="12dp"
+		android:background="@drawable/launcher_main_edit_text_bg"
+		android:fontFamily="@font/montserrat_regular"
+		android:gravity="center"
+		android:hint="IP:Port server (cth. play.server.com:7777)"
+		android:imeOptions="actionDone|flagNoFullscreen"
+		android:inputType="textUri|textNoSuggestions"
+		android:maxLength="127"
+		android:paddingStart="10dp"
+		android:paddingEnd="10dp"
+		android:singleLine="true"
+		android:textColor="@color/white"
+		android:textColorHint="@color/white15"
+		android:textSize="11.0sp"
+		app:layout_constraintStart_toStartOf="@+id/edit_text_name"
+		app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
 	<androidx.appcompat.widget.AppCompatButton android:textColor="@color/white" android:id="@+id/button_play" android:background="@drawable/launcher_red_buttons_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="30dp" android:text="Main" android:drawablePadding="10dp" android:drawableStart="@drawable/launcher_main_play_ic" android:fontFamily="@font/montserrat_bold" android:paddingStart="28dp" android:paddingEnd="36dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" />
 
 	<androidx.appcompat.widget.AppCompatButton

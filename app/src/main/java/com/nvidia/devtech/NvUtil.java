@@ -45,7 +45,7 @@ public class NvUtil
 	{
 		appLocalValues = new HashMap<String, String>();
 		appLocalValues.put("STORAGE_ROOT", 
-			Environment.getExternalStorageDirectory().getAbsolutePath());
+			Environment.getExternalStorageDirectory().getAbsolutePath() + "/ryznSAMP/");
 	}
 
 	public void appendLog(String text)

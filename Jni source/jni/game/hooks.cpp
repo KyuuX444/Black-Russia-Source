@@ -66,43 +66,79 @@ struct stFile
 	FILE *f;
 };
 
+static bool MatchesPathCI(const char* input, const char* expected)
+{
+	if (!input || !expected) return false;
+	while (*input && *expected)
+	{
+		char a = *input == '\\' ? '/' : *input;
+		char b = *expected == '\\' ? '/' : *expected;
+		if (a >= 'A' && a <= 'Z') a += ('a' - 'A');
+		if (b >= 'A' && b <= 'Z') b += ('a' - 'A');
+		if (a != b)
+			return false;
+		++input;
+		++expected;
+	}
+	return *input == '\0' && *expected == '\0';
+}
+
 stFile* (*NvFOpen)(const char*, const char*, int, int);
 stFile* NvFOpen_hook(const char* r0, const char* r1, int r2, int r3)
 {
 	char path[0xFF] = { 0 };
+	size_t r1Len = r1 ? strlen(r1) : 0;
 	// ----------------------------
-	if(!strncmp(r1+12, "mainV1.scm", 10))
+	if(r1Len >= 12 && !strncmp(r1+12, "mainV1.scm", 10))
 	{
 		sprintf(path, "%sSAMP/main.scm", g_pszStorage);
 		Log("Loading mainV1.scm..");
 		goto open;
 	}
 	// ----------------------------
-	if(!strncmp(r1+12, "SCRIPTV1.IMG", 12))
+	if(r1Len >= 12 && !strncmp(r1+12, "SCRIPTV1.IMG", 12))
 	{
 		sprintf(path, "%sSAMP/script.img", g_pszStorage);
 		Log("Loading script.img..");
 		goto open;
 	}
 	// ----------------------------
-	if(!strncmp(r1, "DATA/PEDS.IDE", 13))
+	if(r1 && !strncmp(r1, "DATA/PEDS.IDE", 13))
 	{
-		sprintf(path, "%s/SAMP/peds.ide", g_pszStorage);
+		sprintf(path, "%sSAMP/peds.ide", g_pszStorage);
 		Log("Loading peds.ide..");
 		goto open;
 	}
 	// ----------------------------
-	if(!strncmp(r1, "DATA/VEHICLES.IDE", 17))
+	if(r1 && !strncmp(r1, "DATA/VEHICLES.IDE", 17))
 	{
-		sprintf(path, "%s/SAMP/vehicles.ide", g_pszStorage);
+		sprintf(path, "%sSAMP/vehicles.ide", g_pszStorage);
 		Log("Loading vehicles.ide..");
 		goto open;
 	}
 
-	if (!strncmp(r1, "DATA/GTA.DAT", 12))
+	if (r1 && !strncmp(r1, "DATA/GTA.DAT", 12))
 	{
-		sprintf(path, "%s/SAMP/gta.dat", g_pszStorage);
+		sprintf(path, "%sSAMP/gta.dat", g_pszStorage);
 		Log("Loading gta.dat..");
+		goto open;
+	}
+
+	if (MatchesPathCI(r1, "SAMP/samp.IDE"))
+	{
+		sprintf(path, "%sSAMP/SAMP.ide", g_pszStorage);
+		goto open;
+	}
+
+	if (MatchesPathCI(r1, "TEXDB/SAMP.IMG"))
+	{
+		sprintf(path, "%stexdb/samp.img", g_pszStorage);
+		goto open;
+	}
+
+	if (MatchesPathCI(r1, "TEXDB/SAMPCOL.IMG"))
+	{
+		sprintf(path, "%stexdb/SAMPCOL.img", g_pszStorage);
 		goto open;
 	}
 
@@ -765,11 +801,91 @@ void CStreaming__Init2_hook()
 	*(uint32_t*)(g_libGTASA + 0x005DE734) = 536870912;
 }
 
+static char g_szStorageRootBuf[512] = "/storage/emulated/0/ryznSAMP/";
+
 void (*NvUtilInit)(void);
 void NvUtilInit_hook(void)
 {	
 	NvUtilInit();
-	*(char**)(g_libGTASA + 0x5D1608) = "/storage/emulated/0/ryznSAMP/";
+	snprintf(g_szStorageRootBuf, sizeof(g_szStorageRootBuf), "%s", g_pszStorage ? g_pszStorage : "/storage/emulated/0/ryznSAMP/");
+	*(char**)(g_libGTASA + 0x5D1608) = g_szStorageRootBuf;
+}
+
+static bool TdbThumbExists(const char* dbName, const char* ext)
+{
+	if (!dbName || !ext || !g_pszStorage) return false;
+	char path[512];
+	snprintf(path, sizeof(path), "%stexdb/%s/%s.%s.tmb", g_pszStorage, dbName, dbName, ext);
+	FILE* f = fopen(path, "rb");
+	if (f)
+	{
+		fclose(f);
+		return true;
+	}
+	return false;
+}
+
+uintptr_t (*TextureDatabaseRuntime_Load)(const char* dbName, bool bFullLoad, int format);
+uintptr_t TextureDatabaseRuntime_Load_hook(const char* dbName, bool bFullLoad, int format)
+{
+	// Format IDs in libGTASA.so: 0=unc, 1=dxt, 2=360, 3=pvr, 4=etc, 5=auto
+	static const char* kExts[5] = { "unc", "dxt", "360", "pvr", "etc" };
+	static const int kGpuOrder[3] = { 1, 3, 4 };
+	static const int kAllOrder[5] = { 4, 1, 3, 0, 2 };
+
+	if (!dbName) return 0;
+
+	if (format >= 0 && format < 5)
+	{
+		if (!TdbThumbExists(dbName, kExts[format]))
+		{
+			int fallback = -1;
+			for (int i = 0; i < 5; i++)
+			{
+				if (TdbThumbExists(dbName, kExts[kAllOrder[i]]))
+				{
+					fallback = kAllOrder[i];
+					break;
+				}
+			}
+			if (fallback == -1)
+			{
+				Log("TextureDatabaseRuntime::Load skipped missing DB: %s (format=%d)", dbName, format);
+				return 0;
+			}
+			Log("TextureDatabaseRuntime::Load fallback for %s: %d -> %d", dbName, format, fallback);
+			format = fallback;
+		}
+	}
+	else if (format == 5)
+	{
+		int foundCount = 0;
+		int foundFmt = -1;
+		for (int i = 0; i < 3; i++)
+		{
+			if (TdbThumbExists(dbName, kExts[kGpuOrder[i]]))
+			{
+				foundFmt = kGpuOrder[i];
+				foundCount++;
+			}
+		}
+		if (foundCount == 1)
+		{
+			format = foundFmt;
+		}
+		else if (foundCount == 0)
+		{
+			if (TdbThumbExists(dbName, "unc")) format = 0;
+			else if (TdbThumbExists(dbName, "360")) format = 2;
+			else
+			{
+				Log("TextureDatabaseRuntime::Load skipped missing auto DB: %s", dbName);
+				return 0;
+			}
+		}
+	}
+
+	return TextureDatabaseRuntime_Load(dbName, bFullLoad, format);
 }
 
 void InstallSpecialHooks()
@@ -780,6 +896,7 @@ void InstallSpecialHooks()
 	SetUpHook(g_libGTASA + 0x0023BEDC, (uintptr_t)OS_FileRead_hook, (uintptr_t*)& OS_FileRead);
 	SetUpHook(g_libGTASA + 0x23B3DC, (uintptr_t)NvFOpen_hook, (uintptr_t*)& NvFOpen);
 	SetUpHook(g_libGTASA + 0x241D94, (uintptr_t) NvUtilInit_hook, (uintptr_t *) &NvUtilInit);
+	SetUpHook(g_libGTASA + 0x1BF244, (uintptr_t)TextureDatabaseRuntime_Load_hook, (uintptr_t*)&TextureDatabaseRuntime_Load);
 
 	SetUpHook(g_libGTASA+0x269974, (uintptr_t)MenuItem_add_hook, (uintptr_t*)&MenuItem_add);
 	SetUpHook(g_libGTASA+0x4D3864, (uintptr_t)CText_Get_hook, (uintptr_t*)&CText_Get);
