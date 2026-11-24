@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:fontFamily="@font/montserrat_regular"
-        android:text="Mengunduh aset SA-MP Lite..."
+        android:text="Mengunduh aset ryzn SA-MP..."
         android:textColor="#9E9E9E"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@id/loading_text"

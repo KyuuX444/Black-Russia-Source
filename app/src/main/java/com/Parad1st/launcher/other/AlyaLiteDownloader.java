@@ -374,7 +374,7 @@ public class AlyaLiteDownloader {
                 if (cancelled) return;
 
                 updateUi(mainHandler, statusText, percentText, progressBar,
-                        "Mengambil daftar data Lite (GPU: " + gpu.toUpperCase(Locale.US) + ")...", "0%", 0);
+                        "Mengambil daftar data ryzn SA-MP (GPU: " + gpu.toUpperCase(Locale.US) + ")...", "0%", 0);
 
                 JSONObject liteJson = new JSONObject(fetchText(liteUrl));
                 JSONObject sampJson = new JSONObject(fetchText(sampUrl));
@@ -431,7 +431,7 @@ public class AlyaLiteDownloader {
                         long currentTotal = bytesBeforeFile + bytesRead;
                         int pct = totalBytes > 0 ? (int) Math.min(100L, (currentTotal * 100L) / totalBytes)
                                 : ((fileIndex * 100) / Math.max(1, totalFiles));
-                        String status = String.format(Locale.US, "Mengunduh data Lite (%s) %d/%d: %s",
+                        String status = String.format(Locale.US, "Mengunduh data ryzn SA-MP (%s) %d/%d: %s",
                                 gpu.toUpperCase(Locale.US), fileIndex + 1, totalFiles, shortName);
                         String pctStr = formatProgress(currentTotal, totalBytes, pct);
                         updateUi(mainHandler, statusText, percentText, progressBar, status, pctStr, pct);

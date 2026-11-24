@@ -1106,7 +1106,7 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
                                      public void run()
                                      {
                                          new AlertDialog.Builder(act)
-                                                 .setMessage("Gagal memulai aplikasi. Pastikan data Lite sudah terpasang di penyimpanan, lalu buka ulang ryzn SA-MP.")
+                                                 .setMessage("Gagal memulai aplikasi. Pastikan data ryzn SA-MP sudah terpasang di penyimpanan, lalu buka ulang ryzn SA-MP.")
                                                  .setPositiveButton("Tutup",
                                                          new DialogInterface.OnClickListener ()
                                                          {
