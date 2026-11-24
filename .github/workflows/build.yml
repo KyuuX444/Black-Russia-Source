@@ -51,15 +51,17 @@ jobs:
 
       - name: Build libsampvoice.so with NDK r17c
         run: |
-          rm -rf "Jni source/obj" "Jni source/libs"
+          rm -rf /tmp/jni_build_src "Jni source/obj" "Jni source/libs"
+          cp -a "Jni source" /tmp/jni_build_src
           "${HOME}/.ndk/android-ndk-r17c/ndk-build" \
-            -C "Jni source/jni" \
-            NDK_PROJECT_PATH="$(pwd)/Jni source" \
-            NDK_APPLICATION_MK="$(pwd)/Jni source/jni/Application.mk" \
-            APP_BUILD_SCRIPT="$(pwd)/Jni source/jni/Android.mk" \
+            -C /tmp/jni_build_src/jni \
+            NDK_PROJECT_PATH=/tmp/jni_build_src \
+            NDK_APPLICATION_MK=/tmp/jni_build_src/jni/Application.mk \
+            APP_BUILD_SCRIPT=/tmp/jni_build_src/jni/Android.mk \
             -j"$(nproc)"
-          test -f "Jni source/libs/armeabi-v7a/libsampvoice.so"
-          cp -f "Jni source/libs/armeabi-v7a/libsampvoice.so" "app/src/main/jniLibs/armeabi-v7a/libsampvoice.so"
+          test -f /tmp/jni_build_src/libs/armeabi-v7a/libsampvoice.so
+          cp -f /tmp/jni_build_src/libs/armeabi-v7a/libsampvoice.so "app/src/main/jniLibs/armeabi-v7a/libsampvoice.so"
+          rm -rf /tmp/jni_build_src
           strings "app/src/main/jniLibs/armeabi-v7a/libsampvoice.so" | grep -E "ryznSAMP|ryzn SA-MP"
 
       - name: Set up JDK 11
