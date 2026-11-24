@@ -19,7 +19,7 @@ permissions:
 jobs:
   build:
     name: Build Native JNI, Debug & Release APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout repository
@@ -51,6 +51,7 @@ jobs:
 
       - name: Build libsampvoice.so with NDK r17c
         run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq libtinfo5
           rm -rf /tmp/jni_build_src "Jni source/obj" "Jni source/libs"
           cp -a "Jni source" /tmp/jni_build_src
           "${HOME}/.ndk/android-ndk-r17c/ndk-build" \
