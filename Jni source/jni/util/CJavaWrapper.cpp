@@ -12,6 +12,9 @@ extern int g_iServer;
 #include "..//settings.h"
 #include "..//net/netgame.h"
 #include "../game/game.h"
+#include "../game/pad.h"
+#include "../scoreboard.h"
+#include "../voice/CVoiceChatClient.h"
 #include "../str_obfuscator_no_template.hpp"
 
 extern CKeyBoard* pKeyBoard;
@@ -19,6 +22,10 @@ extern CChatWindow* pChatWindow;
 extern CSettings* pSettings;
 extern CNetGame* pNetGame;
 extern CGame* pGame;
+extern CScoreBoard* pScoreBoard;
+extern CVoiceChatClient* pVoice;
+extern uint32_t g_uiLastTickVoice;
+bool g_IsVoiceServer();
 
 JNIEnv* CJavaWrapper::GetEnv()
 {
@@ -552,18 +559,10 @@ JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIE
 	{
 		if (pSettings)
 		{
-			pSettings->GetWrite().iHud = b;
-			if(!b)
-			{
-				*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
-				g_pJavaWrapper->HideHud();
-			}
-			else
-			{
-				*(uint8_t*)(g_libGTASA+0x7165E8) = 0;
-				g_pJavaWrapper->ShowHud();
-			}
+			pSettings->GetWrite().iHud = 0;
 		}
+		*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
+		g_pJavaWrapper->ShowHud();
 	}
 
 	JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_setNativeDialog(JNIEnv* pEnv, jobject thiz, jboolean b)
@@ -1061,6 +1060,126 @@ JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIE
 		pEnv->SetIntArrayRegion(color, 0, 3, (const jint*)& arr[0]);
 
 		return color;
+	}
+
+	JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendButtonPanelKey(JNIEnv* pEnv, jobject thiz, jint keyId)
+	{
+		switch (keyId)
+		{
+			case 0: // ESC
+			{
+				if (pScoreBoard && pScoreBoard->m_bToggle)
+					pScoreBoard->Toggle();
+				if (pNetGame && pNetGame->GetTextDrawPool())
+					pNetGame->GetTextDrawPool()->SetSelectState(false, 0);
+				break;
+			}
+			case 1: // TAB
+			{
+				if (pScoreBoard)
+					pScoreBoard->Toggle();
+				break;
+			}
+			case 2: // ALT
+			{
+				if (pGame && pGame->FindPlayerPed())
+				{
+					if (pGame->FindPlayerPed()->IsInVehicle())
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_FIRE] = true;
+					else
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_WALK] = true;
+				}
+				break;
+			}
+			case 3: // SPC
+			{
+				if (pGame && pGame->FindPlayerPed())
+				{
+					if (pGame->FindPlayerPed()->IsInVehicle())
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_HANDBRAKE] = true;
+					else
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_SPRINT] = true;
+				}
+				break;
+			}
+			case 4: // F
+			{
+				LocalPlayerKeys.bKeys[ePadKeys::KEY_SECONDARY_ATTACK] = true;
+				break;
+			}
+			case 5: // H
+			{
+				if (pGame && pGame->FindPlayerPed())
+				{
+					if (pGame->FindPlayerPed()->IsInVehicle() && !pGame->FindPlayerPed()->IsAPassenger())
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_CROUCH] = true;
+					else
+						LocalPlayerKeys.bKeys[ePadKeys::KEY_CTRL_BACK] = true;
+				}
+				break;
+			}
+			case 6: // 2
+			{
+				LocalPlayerKeys.bKeys[ePadKeys::KEY_SUBMISSION] = true;
+				break;
+			}
+			case 7: // Y
+			{
+				LocalPlayerKeys.bKeys[ePadKeys::KEY_YES] = true;
+				break;
+			}
+			case 8: // N
+			{
+				LocalPlayerKeys.bKeys[ePadKeys::KEY_NO] = true;
+				break;
+			}
+			case 9: // C
+			{
+				LocalPlayerKeys.bKeys[ePadKeys::KEY_CROUCH] = true;
+				break;
+			}
+			case 10: // G (enter vehicle as passenger)
+			{
+				if (pGame && pNetGame && pGame->FindPlayerPed() && !pGame->FindPlayerPed()->IsInVehicle() && !pGame->FindPlayerPed()->IsAPassenger())
+				{
+					CVehiclePool* pVehiclePool = pNetGame->GetVehiclePool();
+					CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+					if (pVehiclePool && pPlayerPool && pPlayerPool->GetLocalPlayer())
+					{
+						uint16_t vehId = pVehiclePool->FindNearestToLocalPlayerPed();
+						CVehicle* pVehicle = pVehiclePool->GetAt(vehId);
+						if (pVehicle && pVehicle->GetDistanceFromLocalPlayerPed() < 6.0f && !pPlayerPool->GetLocalPlayer()->IsSpectating())
+						{
+							pGame->FindPlayerPed()->EnterVehicle(pVehicle->m_dwGTAId, true);
+							pPlayerPool->GetLocalPlayer()->SendEnterVehicleNotification(vehId, true);
+						}
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	JNIEXPORT jboolean JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_toggleVoiceInput(JNIEnv* pEnv, jobject thiz)
+	{
+		if (pVoice && g_IsVoiceServer())
+		{
+			if (pVoice->IsRecording())
+			{
+				pVoice->DisableInput();
+				return JNI_FALSE;
+			}
+			else if (!pVoice->IsDisconnected())
+			{
+				pVoice->TurnRecording();
+				if (pVoice->IsRecording())
+				{
+					g_uiLastTickVoice = GetTickCount();
+					return JNI_TRUE;
+				}
+			}
+		}
+		return JNI_FALSE;
 	}
 }
 

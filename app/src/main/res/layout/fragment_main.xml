@@ -1,69 +1,211 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/main_activity_root" android:focusable="true" android:focusableInTouchMode="true" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/launcher_main_bg">
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_activity_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="16dp">
 
-	<EditText
-		android:id="@+id/edit_text_name"
-		android:layout_width="140dp"
-		android:layout_height="40dp"
-		android:layout_margin="30dp"
-		android:background="@drawable/launcher_main_edit_text_bg"
-		android:digits="abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-		android:fontFamily="@font/montserrat_regular"
-		android:gravity="center"
-		android:hint="Nick_Name"
-		android:imeOptions="actionDone|flagNoFullscreen"
-		android:inputType="textCapSentences"
-		android:maxLength="23"
-		android:paddingStart="8dp"
-		android:paddingEnd="8dp"
-		android:singleLine="true"
-		android:textColor="@color/white"
-		android:textColorHint="@color/white15"
-		android:textSize="11.0sp"
-		android:textStyle="italic"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
-	<ImageButton android:id="@+id/ib_info" android:background="@drawable/launcher_red_buttons_bg" android:layout_width="40dp" android:layout_height="40dp" android:src="@drawable/launcher_main_info_ic" android:contentDescription="info" android:layout_marginStart="10dp" app:layout_constraintBottom_toBottomOf="@+id/edit_text_name" app:layout_constraintStart_toEndOf="@+id/edit_text_name" app:layout_constraintTop_toTopOf="@+id/edit_text_name" />
-	<EditText
-		android:id="@+id/edit_text_server"
-		android:layout_width="220dp"
-		android:layout_height="40dp"
-		android:layout_marginTop="12dp"
-		android:background="@drawable/launcher_main_edit_text_bg"
-		android:fontFamily="@font/montserrat_regular"
-		android:gravity="center"
-		android:hint="IP:Port server (cth. play.server.com:7777)"
-		android:imeOptions="actionDone|flagNoFullscreen"
-		android:inputType="textUri|textNoSuggestions"
-		android:maxLength="127"
-		android:paddingStart="10dp"
-		android:paddingEnd="10dp"
-		android:singleLine="true"
-		android:textColor="@color/white"
-		android:textColorHint="@color/white15"
-		android:textSize="11.0sp"
-		app:layout_constraintStart_toStartOf="@+id/edit_text_name"
-		app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
-	<androidx.appcompat.widget.AppCompatButton android:textColor="@color/white" android:id="@+id/button_play" android:background="@drawable/launcher_red_buttons_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="30dp" android:text="Main" android:drawablePadding="10dp" android:drawableStart="@drawable/launcher_main_play_ic" android:fontFamily="@font/montserrat_bold" android:paddingStart="28dp" android:paddingEnd="36dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" />
+    <LinearLayout
+        android:id="@+id/alyn_launcher_card"
+        android:layout_width="420dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/alyn_card_bg"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-	<androidx.appcompat.widget.AppCompatButton
-		android:id="@+id/button_clean_game"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_margin="30dp"
-		android:background="@drawable/launcher_main_button_blue_bg"
-		android:drawablePadding="10dp"
-		android:fontFamily="@font/montserrat_regular"
-		android:paddingStart="10dp"
-		android:paddingEnd="10dp"
-		android:text="Instal ulang game"
-		android:textAllCaps="false"
-		android:textColor="@color/white"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
-	<ImageButton android:id="@+id/button_vk" android:background="@drawable/launcher_main_social_buttons_blue_bg" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginTop="10dp" android:src="@drawable/launcher_main_vk_ic" android:contentDescription="vk" app:layout_constraintEnd_toEndOf="@+id/button_discord" app:layout_constraintTop_toBottomOf="@+id/button_discord" />
-	<ImageButton android:id="@+id/button_discord" android:background="@drawable/launcher_main_social_buttons_blue_bg" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginBottom="10dp" android:src="@drawable/launcher_main_discord_ic" android:contentDescription="discord" android:layout_marginEnd="30dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent" />
-	<ImageButton android:id="@+id/button_telegram" android:background="@drawable/launcher_main_social_buttons_blue_bg" android:layout_width="48dp" android:layout_height="48dp" android:layout_marginBottom="10dp" android:src="@drawable/launcher_main_telegram_ic" android:contentDescription="telegram" android:layout_marginEnd="30dp" app:layout_constraintBottom_toTopOf="@+id/button_discord" app:layout_constraintEnd_toEndOf="parent" />
-	<TextView android:textSize="10.0sp" android:textStyle="italic" android:textColor="@color/white" android:text="· format: Nick_Name\n· panjang nama 3–23 karakter\n· dilarang memakai kata kasar atau\n tidak pantas di nama\n· nama hanya boleh huruf Latin\n· dilarang memakai angka dan simbol\n" android:id="@+id/text_view_info_about_nickname" android:background="@drawable/launcher_main_info_bg" android:paddingTop="16dp" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:importantForAccessibility="no" android:paddingStart="8dp" android:paddingEnd="8dp" android:layout_marginEnd="32dp" app:layout_constraintStart_toStartOf="@+id/ib_info" app:layout_constraintTop_toBottomOf="@+id/ib_info" />
-	<ProgressBar android:id="@+id/progress_bar" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:indeterminateDrawable="@drawable/progressbar_custom" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="ryzn SA-MP"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:text="SA-MP 0.3.7 Mobile • UI ala Alyn"
+                    android:textColor="#9E9E9E"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/ib_info"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/alyn_btn_secondary"
+                android:contentDescription="Info nama karakter"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/launcher_main_info_ic" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edit_text_name"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/alyn_input_bg"
+            android:digits="abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center_vertical"
+            android:hint="Nick_Name"
+            android:imeOptions="actionDone|flagNoFullscreen"
+            android:inputType="textCapSentences"
+            android:maxLength="23"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="#8A8A8A"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/edit_text_server"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/alyn_input_bg"
+            android:fontFamily="@font/montserrat_regular"
+            android:gravity="center_vertical"
+            android:hint="IP:Port server (cth. play.server.com:7777)"
+            android:imeOptions="actionDone|flagNoFullscreen"
+            android:inputType="textUri|textNoSuggestions"
+            android:maxLength="127"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textColorHint="#8A8A8A"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_clean_game"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/alyn_btn_secondary"
+                android:fontFamily="@font/montserrat_regular"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Instal ulang game"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/button_play"
+                android:layout_width="0dp"
+                android:layout_height="42dp"
+                android:layout_weight="1"
+                android:background="@drawable/alyn_btn_primary"
+                android:drawableStart="@drawable/launcher_main_play_ic"
+                android:drawablePadding="8dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:paddingStart="22dp"
+                android:paddingEnd="22dp"
+                android:text="Main"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text_view_info_about_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/alyn_samp_border"
+        android:importantForAccessibility="no"
+        android:padding="10dp"
+        android:text="• Format: Nick_Name (contoh: Andi_Saputra)\n• Panjang nama 4–23 karakter\n• Hanya huruf Latin dan simbol underscore (_)"
+        android:textColor="#E2E2E6"
+        android:textSize="10sp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="@id/alyn_launcher_card"
+        app:layout_constraintTop_toTopOf="@id/alyn_launcher_card" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/button_telegram"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/alyn_btn_secondary"
+            android:contentDescription="telegram"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/launcher_main_telegram_ic" />
+
+        <ImageButton
+            android:id="@+id/button_discord"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/alyn_btn_secondary"
+            android:contentDescription="discord"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/launcher_main_discord_ic" />
+
+        <ImageButton
+            android:id="@+id/button_vk"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/alyn_btn_secondary"
+            android:contentDescription="vk"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/launcher_main_vk_ic" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/progressbar_custom"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -412,6 +412,10 @@ public abstract class NvEventQueueActivity
 
     public native void showTab();
 
+    public native void sendButtonPanelKey(int keyId);
+
+    public native boolean toggleVoiceInput();
+
     public native void togglePlayer(int toggle);
 
     /**
@@ -1555,13 +1559,9 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
     }
 
     public void showDialog(int dialogId, int dialogTypeId, String caption, String content, String leftBtnText, String rightBtnText) {
-        runOnUiThread(() -> { if(dialogId == 1) {
-            mReg.ShowAuth();
-        } else if(dialogId == 2 && dialogTypeId == 1) {
-            mReg.ShowReg();
-        } else {
+        runOnUiThread(() -> {
             this.mDialog.show(dialogId, dialogTypeId, caption, content, leftBtnText, rightBtnText);
-        }});
+        });
     }
 
     public byte[] getClipboardText()
@@ -1715,56 +1715,31 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
     public void buy_carpodtv(int cost, int id) { runOnUiThread(() -> { mDonate.buy_carpodt(cost, id); } );}
     public void getNameOfCar(String name) { runOnUiThread(() -> { mDonate.GetCarName(name);});}
 
-    public void ShowHelper(int type) { runOnUiThread(() -> { mHelper.ShowHelper(type); } ); }
-    public void HideHelper() { runOnUiThread(() -> { mHelper.HideHelper(); } ); }
+    public void ShowHelper(int type) { runOnUiThread(() -> { if (mHelper != null) mHelper.HideHelper(); } ); }
+    public void HideHelper() { runOnUiThread(() -> { if (mHelper != null) mHelper.HideHelper(); } ); }
 
 
     public void showHudAndLogo() {
-
-    	runOnUiThread(() -> {
-    	   if(logo)
-    	        findViewById(R.id.logobr).setVisibility(View.VISIBLE);
-           if(hudd)
-    	        findViewById(R.id.hud_main).setVisibility(View.VISIBLE);
+        runOnUiThread(() -> {
+            if (mHudManager != null) mHudManager.ShowHud();
         });
     }
     
     public void hideHudAndLogo() {
-    	runOnUiThread(() -> {
-    	   logo = (findViewById(R.id.logobr).getVisibility() == View.VISIBLE) ? true : false;
-    	   findViewById(R.id.logobr).setVisibility(View.GONE);
-           hudd = (findViewById(R.id.hud_main).getVisibility() == View.VISIBLE) ? true : false;
-    	   findViewById(R.id.hud_main).setVisibility(View.GONE);
+        runOnUiThread(() -> {
+            if (mHudManager != null) mHudManager.HideHud();
         });
     }
     
     public void showHudFeatures() {
-    	runOnUiThread(() -> {
-    	    if(gps)
-                findViewById(R.id.imageView16).setVisibility(View.VISIBLE);
-    	    if(logo)
-    	        findViewById(R.id.logobr).setVisibility(View.VISIBLE);
-            if(gz)
-                findViewById(R.id.grzona).setVisibility(View.VISIBLE);
-            if(x2)
-                findViewById(R.id.imageView17).setVisibility(View.VISIBLE);
-            if(micro)
-                findViewById(R.id.imageView14).setVisibility(View.VISIBLE);
+        runOnUiThread(() -> {
+            if (mHudManager != null) mHudManager.ShowHud();
         });
     }
     
     public void hideHudFeatures() {
-    	runOnUiThread(() -> {
-    	    gps = (findViewById(R.id.imageView16).getVisibility() == View.VISIBLE) ? true : false;
-    	    findViewById(R.id.imageView16).setVisibility(View.GONE);
-    	    logo = (findViewById(R.id.logobr).getVisibility() == View.VISIBLE) ? true : false;
-    	    findViewById(R.id.logobr).setVisibility(View.GONE);
-            gz = (findViewById(R.id.grzona).getVisibility() == View.VISIBLE) ? true : false;
-    	    findViewById(R.id.grzona).setVisibility(View.GONE);
-            x2 = (findViewById(R.id.imageView17).getVisibility() == View.VISIBLE) ? true : false;
-    	    findViewById(R.id.imageView17).setVisibility(View.GONE);
-            micro = (findViewById(R.id.imageView14).getVisibility() == View.VISIBLE) ? true : false;
-    	    findViewById(R.id.imageView14).setVisibility(View.GONE);
+        runOnUiThread(() -> {
+            if (mHudManager != null) mHudManager.HideHud();
         });
     }
 }

@@ -287,7 +287,7 @@ void CSettings::LoadSettings(const char* szNickName, int iChatLines)
 	m_Settings.iPCMoney = ini_table_get_entry_as_int(config, "gui", "pcmoney", 0);
 	m_Settings.iSkyBox = ini_table_get_entry_as_int(config, "gui", "ctimecyc", 1);
 	m_Settings.iSnow = ini_table_get_entry_as_int(config, "gui", "snow", 1);
-	m_Settings.iHud = ini_table_get_entry_as_int(config, "gui", "hud", 1);
+	m_Settings.iHud = 0; // Native GTA:SA HUD + clean Alyn overlays (no Black Russia HUD)
 	m_Settings.iDialog = ini_table_get_entry_as_int(config, "gui", "dialog", 1);
 
 	for (int i = 0; i < E_HUD_ELEMENT::HUD_SIZE; i++)

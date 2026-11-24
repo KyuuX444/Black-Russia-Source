@@ -27,24 +27,18 @@ public class HudHelper {
 
     public void ShowHelper(int type)
     {
-        main_layout.setVisibility(View.VISIBLE);
-        String text = "";
-        switch (type) {
-            case 1:
-                text = "Anda sedang dalam antrean masuk server. Sambil menunggu, <font color='#56D12A'>jelajahi peta</font> dan <font color='#ffffff'>tempat baru.</font>";
-                break;
-            case 2:
-                text = "Server <font color='#56D12A'>ryzn SA-MP";
-                break;
-            default:
-                break;
+        if (main_layout != null) {
+            main_layout.setVisibility(View.GONE);
         }
-        helpertext.setText(Html.fromHtml(text));
     }
 
     public void HideHelper()
     {
-        main_layout.setVisibility(View.GONE);
-        helpertext.setText("");
+        if (main_layout != null) {
+            main_layout.setVisibility(View.GONE);
+        }
+        if (helpertext != null) {
+            helpertext.setText("");
+        }
     }
 }

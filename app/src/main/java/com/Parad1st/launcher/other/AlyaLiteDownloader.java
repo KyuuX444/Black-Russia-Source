@@ -177,6 +177,7 @@ public class AlyaLiteDownloader {
                     + "ScoreBoardSizeX = 1024.0\n"
                     + "ScoreBoardSizeY = 768.0\n"
                     + "androidKeyboard = 0\n"
+                    + "hud = 0\n"
                     + "Cutout = 0\n"
                     + "fps = 60\n";
             try (FileOutputStream fos = new FileOutputStream(settingsFile)) {

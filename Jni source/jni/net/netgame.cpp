@@ -247,7 +247,8 @@ void CNetGame::Process()
 		(GetTickCount() - m_dwLastConnectAttempt) > 3000)
 	{
 		if(pChatWindow) pChatWindow->AddDebugMessageNonFormatted(CLocalisation::GetMessage(E_MSG::CONNECTING));
-		g_pJavaWrapper->showHelper(1);
+		// Hide Black Russia helper popup for clean Alyn-style UI
+		g_pJavaWrapper->hideHelper();
 		
 		m_pRakClient->Connect(m_szHostOrIp, m_iPort, 0, 0, 5);
 		m_dwLastConnectAttempt = GetTickCount();

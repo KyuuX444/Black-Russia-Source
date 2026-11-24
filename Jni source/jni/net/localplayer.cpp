@@ -651,16 +651,8 @@ bool CLocalPlayer::Spawn()
 {
 	if(!m_bHasSpawnInfo) return false;
 
-	if(pSettings && pSettings->GetReadOnly().iHud)
-	{
-		*(uint8_t*)(g_libGTASA+0x7165E8) = 0;
-		g_pJavaWrapper->ShowHud();
-	}
-	else
-	{
-		*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
-		g_pJavaWrapper->HideHud();
-	}
+	*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
+	g_pJavaWrapper->ShowHud();
    
     //g_pJavaWrapper->ShowSpeed();
 	CCamera *pGameCamera;

@@ -338,7 +338,7 @@ public class BrDialogWindow {
                         linearLayout3.setLayoutParams(layoutParams2);
                         linearLayout3.setOrientation(LinearLayout.HORIZONTAL);
                         linearLayout3.setPadding(textView8.getPaddingLeft(), textView8.getPaddingTop(), textView8.getPaddingRight(), textView8.getPaddingBottom());
-                        linearLayout3.setBackground(ResourcesCompat.getDrawable(this.mActivity.getResources(), R.drawable.br_list_inactive, null));
+                        linearLayout3.setBackground(ResourcesCompat.getDrawable(this.mActivity.getResources(), R.drawable.alyn_list_inactive, null));
                         linearLayout2.addView(linearLayout3);
                         for (String str6 : getSplittedTabs(strArr2[i6])) {
                             TextView textView77 = createButtonFromOrig(textView, true, false);
@@ -352,7 +352,7 @@ public class BrDialogWindow {
                             mSelectedButton = linearLayout3;
                             mClickedButton = 1;
                             mListitemToSend = i6;
-                            mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_active, null));
+                            mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_active, null));
                         }
                         int finalI1 = i6;
                         linearLayout3.setOnClickListener(new View.OnClickListener() {
@@ -360,12 +360,12 @@ public class BrDialogWindow {
                             public void onClick(View view) {
                                 if (mSelectedButton != view) {
                                     if (mSelectedButton != null) {
-                                        mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_inactive, null));
+                                        mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_inactive, null));
                                     }
                                     mSelectedButton = view;
                                     mClickedButton = 1;
                                     mListitemToSend = finalI1;
-                                    mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_active, null));
+                                    mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_active, null));
                                     mSelectedButton.startAnimation(AnimationUtils.loadAnimation(BrDialogWindow.this.mActivity, R.anim.button_click));
                                     return;
                                 }
@@ -392,12 +392,12 @@ public class BrDialogWindow {
                             public void onClick(View view) {
                                 if (mSelectedButton != view) {
                                     if (mSelectedButton != null) {
-                                        mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_inactive, null));
+                                        mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_inactive, null));
                                     }
                                     mSelectedButton = view;
                                     mClickedButton = 1;
                                     mListitemToSend = finalI;
-                                    mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_active, null));
+                                    mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_active, null));
                                     mSelectedButton.startAnimation(AnimationUtils.loadAnimation(BrDialogWindow.this.mActivity, R.anim.button_click));
                                     return;
                                 }
@@ -415,7 +415,7 @@ public class BrDialogWindow {
                             mSelectedButton = textView2;
                             mClickedButton = 1;
                             mListitemToSend = i6;
-                            mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.br_list_active, null));
+                            mSelectedButton.setBackground(ResourcesCompat.getDrawable(BrDialogWindow.this.mActivity.getResources(), R.drawable.alyn_list_active, null));
                         }
                     }
                     i6++;

@@ -1,116 +1,167 @@
-<FrameLayout android:id="@+id/br_serverselect_layout" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent" android:layout_height="match_parent">
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/br_serverselect_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121212">
 
+    <!-- Alyn-style clean loading screen -->
     <LinearLayout
         android:id="@+id/choose_server_root_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/launcher_downloader_bg"
-        android:gravity="top"
+        android:background="#121212"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:visibility="visible"
-        android:weightSum="1">
-     <androidx.constraintlayout.widget.ConstraintLayout
-         android:layout_width="fill_parent" android:layout_height="fill_parent">
+        android:padding="20dp"
+        android:visibility="visible">
 
-         <TextView
-             android:id="@+id/tv_br"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:layout_marginBottom="100dp"
-             android:fontFamily="@font/montserrat_bold"
-             android:lineSpacingMultiplier="0.9"
-             android:paddingStart="-3dp"
-             android:text="ryzn SA-MP"
-             android:textAlignment="viewStart"
-             android:textAllCaps="true"
-             android:textColor="@color/white"
-             android:textSize="50.0sp"
-             app:layout_constraintBottom_toBottomOf="parent"
-             app:layout_constraintStart_toStartOf="@+id/progress_bar"
-             app:layout_constraintTop_toTopOf="parent"
-             app:layout_constraintVertical_bias="0.504" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-         <TextView
-             android:id="@+id/tv_play_black"
-             android:layout_width="wrap_content"
-             android:layout_height="20dp"
-             android:layout_marginTop="16dp"
-             android:fontFamily="@font/montserrat_regular"
-             android:text="Server SA-MP terbaik di ponselmu!"
-             android:textColor="@color/white"
-             android:textSize="12.0sp"
-             app:layout_constraintStart_toStartOf="@+id/progress_bar"
-             app:layout_constraintTop_toBottomOf="@+id/tv_br" />
-	<ImageView android:id="@+id/iv_smile" android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/launcher_downloader_smile_ic_2" app:layout_constraintBottom_toBottomOf="@+id/tv_play_black" app:layout_constraintStart_toEndOf="@+id/tv_play_black" app:layout_constraintTop_toTopOf="@+id/tv_play_black" />
-	<com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar android:id="@+id/progress_bar" android:layout_width="fill_parent" android:layout_height="@dimen/_5sdp" android:layout_marginTop="60dp" android:layout_marginStart="100dp" android:layout_marginEnd="100dp" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/tv_play_black" app:rcBackgroundColor="#25ffffff" app:rcBackgroundPadding="0dp" app:rcMax="100.0" app:rcProgress="0.0" app:rcProgressColor="@color/gradient1" app:rcRadius="@dimen/_3sdp" app:rcReverse="false" app:rcSecondaryProgress="0.0" app:rcSecondaryProgressColor="@color/gradient2" />
-	<TextView android:textStyle="italic" android:textColor="@color/white" android:id="@+id/loading_text"  android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:text="Sedang memuat..." app:layout_constraintBottom_toTopOf="@+id/progress_bar" app:layout_constraintStart_toStartOf="@+id/progress_bar" style="@style/MontserratRegular14sp" />
-	<TextView android:textStyle="italic" android:id="@+id/loading_percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/progress_bar" app:layout_constraintEnd_toEndOf="@+id/progress_bar" style="@style/MontserratRegular14sp" />
+            <TextView
+                android:id="@+id/tv_br"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="ryzn SA-MP"
+                android:textColor="@color/white"
+                android:textSize="38sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_play_black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_play_black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                android:fontFamily="@font/montserrat_regular"
+                android:text="Memuat game dan klien SA-MP 0.3.7..."
+                android:textColor="#9E9E9E"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toTopOf="@id/loading_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_smile"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/loading_text"
+                style="@style/MontserratRegular14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Sedang memuat..."
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+                app:layout_constraintStart_toStartOf="@+id/progress_bar" />
+
+            <TextView
+                android:id="@+id/loading_percent"
+                style="@style/MontserratRegular14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textColor="#9ECAFF"
+                app:layout_constraintBottom_toTopOf="@+id/progress_bar"
+                app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
+
+            <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_5sdp"
+                android:layout_marginStart="90dp"
+                android:layout_marginEnd="90dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.64"
+                app:rcBackgroundColor="#25FFFFFF"
+                app:rcBackgroundPadding="0dp"
+                app:rcMax="100.0"
+                app:rcProgress="0.0"
+                app:rcProgressColor="#1E88E5"
+                app:rcRadius="@dimen/_3sdp"
+                app:rcReverse="false"
+                app:rcSecondaryProgress="0.0"
+                app:rcSecondaryProgressColor="#64B5F6" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
+    <!-- Alyn-style clean Direct Connect / Server Select screen -->
     <LinearLayout
         android:id="@+id/choose_server_root_choose"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/server_select_background"
+        android:background="#121212"
         android:orientation="vertical"
-        android:paddingLeft="40dp"
-        android:paddingTop="20dp"
-        android:paddingRight="40dp"
-        android:paddingBottom="20dp"
+        android:paddingLeft="32dp"
+        android:paddingTop="18dp"
+        android:paddingRight="32dp"
+        android:paddingBottom="18dp"
         android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat_bold"
                 android:text="Pilih Server SA-MP"
-                android:textColor="#ffffff"
-                android:textSize="24sp" />
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/servers_btn_my_server"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/button_red_rectangle"
-                android:fontFamily="@font/muller_bold"
-                android:minWidth="110dp"
+                android:layout_height="36dp"
+                android:background="@drawable/alyn_btn_primary"
+                android:fontFamily="@font/montserrat_bold"
+                android:minWidth="130dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:text="Sambung Langsung"
                 android:textAllCaps="false"
-                android:textColor="#ffffff"
+                android:textColor="#FFFFFF"
                 android:textSize="11sp" />
 
             <Button
                 android:id="@+id/all_servers_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_br_red_unfilled_ss"
-                android:fontFamily="@font/muller_bold"
-                android:minWidth="100dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/alyn_btn_secondary"
+                android:fontFamily="@font/montserrat_bold"
+                android:minWidth="110dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:text="Daftar Server"
                 android:textAllCaps="false"
-                android:textColor="#ffffff"
+                android:textColor="#FFFFFF"
                 android:textSize="11sp" />
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="-10dp"
-            android:background="@drawable/gradient_select_server" />
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="#2A2A2A" />
 
         <ScrollView
             android:id="@+id/main_servers_choose"
@@ -120,152 +171,126 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:paddingTop="14dp">
 
                 <FrameLayout
                     android:id="@+id/server_main_frame"
-                    android:layout_width="320dp"
-                    android:layout_height="100dp"
-                    android:layout_centerInParent="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical">
+                    android:layout_width="360dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/alyn_card_bg"
+                    android:padding="14dp">
 
                     <View
                         android:id="@+id/server_list_back_color"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:alpha="0.4"
-                        android:background="@drawable/server_rectangle_choose" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/server_rectangle_gradient" />
+                        android:layout_height="0dp"
+                        android:visibility="gone" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:paddingLeft="5dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="4dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:id="@+id/br_server_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="10dp"
-                                android:fontFamily="@font/muller_bold"
-                                android:text="Server Bebas (SA-MP 0.3.7)"
-                                android:textColor="#ffffff"
-                                android:textSize="14sp" />
-                        </FrameLayout>
+                        <TextView
+                            android:id="@+id/br_server_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:text="Server Bebas (SA-MP 0.3.7)"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp" />
 
                         <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
                             android:id="@+id/br_server_progress"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/_10sdp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_height="@dimen/_6sdp"
                             android:layout_marginTop="8dp"
-                            android:layout_marginRight="10dp"
-                            app:rcBackgroundColor="#40000000"
+                            app:rcBackgroundColor="#25FFFFFF"
                             app:rcBackgroundPadding="0dp"
                             app:rcMax="100"
                             app:rcProgress="100"
-                            app:rcProgressColor="@color/gradient1"
-                            app:rcRadius="@dimen/_5sdp"
+                            app:rcProgressColor="#1E88E5"
+                            app:rcRadius="@dimen/_3sdp"
                             app:rcReverse="false"
                             app:rcSecondaryProgress="0"
-                            app:rcSecondaryProgressColor="@color/gradient2" />
+                            app:rcSecondaryProgressColor="#64B5F6" />
 
                         <TextView
                             android:id="@+id/br_server_online"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
-                            android:layout_marginRight="5dp"
-                            android:fontFamily="@font/muller_bold"
-                            android:gravity="center"
+                            android:fontFamily="@font/montserrat_regular"
                             android:text="Masukkan IP:Port server di bawah"
-                            android:textColor="#ffffff"
-                            android:textSize="12sp" />
+                            android:textColor="#B8B8B8"
+                            android:textSize="11sp" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/br_server_image"
-                        android:layout_width="@dimen/_35sdp"
-                        android:layout_height="@dimen/_35sdp"
-                        android:layout_gravity="bottom|left|center_vertical|center_horizontal|center"
-                        android:visibility="visible"
-                        app:srcCompat="@drawable/br_peaw_servers" />
+                        android:layout_width="1dp"
+                        android:layout_height="1dp"
+                        android:visibility="gone" />
                 </FrameLayout>
 
                 <LinearLayout
-                    android:layout_width="320dp"
+                    android:layout_width="360dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
                     android:orientation="vertical">
 
                     <EditText
                         android:id="@+id/br_server_ip_input"
                         android:layout_width="match_parent"
-                        android:layout_height="38dp"
-                        android:background="@drawable/launcher_main_edit_text_bg"
+                        android:layout_height="40dp"
+                        android:background="@drawable/alyn_input_bg"
                         android:fontFamily="@font/montserrat_regular"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:hint="IP:Port server (cth. 127.0.0.1:7777)"
                         android:imeOptions="actionDone|flagNoFullscreen"
                         android:inputType="textUri|textNoSuggestions"
                         android:maxLength="127"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
                         android:singleLine="true"
-                        android:textColor="#ffffff"
-                        android:textColorHint="#99ffffff"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#8A8A8A"
                         android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/br_server_pass_input"
                         android:layout_width="match_parent"
-                        android:layout_height="34dp"
-                        android:layout_marginTop="6dp"
-                        android:background="@drawable/launcher_main_edit_text_bg"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/alyn_input_bg"
                         android:fontFamily="@font/montserrat_regular"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:hint="Password server (kosongkan jika tidak ada)"
                         android:imeOptions="actionDone|flagNoFullscreen"
                         android:inputType="textPassword"
                         android:maxLength="127"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
                         android:singleLine="true"
-                        android:textColor="#ffffff"
-                        android:textColorHint="#99ffffff"
-                        android:textSize="11sp" />
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#8A8A8A"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/br_servers_play"
                     android:layout_width="220dp"
-                    android:layout_height="56dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/br_highlight_button_play"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="14dp"
+                    android:background="@drawable/alyn_btn_primary"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Main"
                     android:textAllCaps="false"
-                    android:textColor="#ffffff"
-                    android:textSize="18sp" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
             </LinearLayout>
         </ScrollView>
 
@@ -273,7 +298,7 @@
             android:id="@+id/list_servers_choose"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="12dp"
             android:visibility="gone">
 
             <LinearLayout
@@ -281,7 +306,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingRight="14dp" />
+                android:paddingEnd="10dp" />
         </ScrollView>
     </LinearLayout>
 </FrameLayout>

@@ -176,7 +176,7 @@ void CGUI::Render()
 	}
 
 	if (pChatWindow) pChatWindow->Render();
-	if(pGame) CGUI::ShowSpeed();
+	// Black Russia speedometer overlay disabled for clean Alyn-style UI
 	if (pScoreBoard) pScoreBoard->Draw();
 	if (pKeyBoard) pKeyBoard->Render();
 	if (pDialogWindow) pDialogWindow->Render();
@@ -357,32 +357,7 @@ void CGUI::RenderGUI()
 
 void CGUI::RenderServer()
 {
-	if (pNetGame)
-	{
-		if (pVoice && g_IsVoiceServer())
-		{
-			if (pVoice->IsRecording() && GetTickCount() - g_uiLastTickVoice >= 20000)
-			{
-				char buf[64];
-				sprintf(&buf[0], "%d", (int)((30000 - (GetTickCount() - g_uiLastTickVoice)) / 1000) + 1);
-				ImVec2 test(ScaleX(pSettings->GetReadOnly().fButtonMicrophoneX + pSettings->GetReadOnly().fButtonMicrophoneSize / 2.0f) - ImGui::CalcTextSize(&buf[0]).x / 2.0f, ScaleY(g_fMicrophoneButtonPosY) - GetFontSize() * 2.6f);
-				//RenderText(test, 0xFF0000FF, true, &buf[0]);
-			}
-			ImVec2 centre(ScaleX(35.0f), ScaleY(35.0f));
-			if (pVoice->IsDisconnected())
-			{
-				ImGui::GetBackgroundDrawList()->AddCircleFilled(centre, 18.0f, ImColor(1.0f, 0.0f, 0.0f));
-			}
-			if (pVoice->GetNetworkState() == VOICECHAT_CONNECTING || pVoice->GetNetworkState() == VOICECHAT_WAIT_CONNECT)
-			{
-				ImGui::GetBackgroundDrawList()->AddCircleFilled(centre, 18.0f, ImColor(1.0f, 1.0f, 0.0f));
-			}
-			if (pVoice->GetNetworkState() == VOICECHAT_CONNECTED)
-			{
-				ImGui::GetBackgroundDrawList()->AddCircleFilled(centre, 18.0f, ImColor(0.0f, 1.0f, 0.0f));
-			}
-		}
-	}
+	// Removed Black Russia debug status circle overlay at (35, 35) over radar
 }
 
 
@@ -543,45 +518,5 @@ void CGUI::SetFuel(float fuel){
 }
 
 void CGUI::ShowSpeed(){
-	if(pKeyBoard->m_bEnable)
-	    return;
-	if (!pGame || !pNetGame || !pGame->FindPlayerPed()->IsInVehicle()) {
-		g_pJavaWrapper->HideSpeed();
-		bMeliage =0;
-		m_fuel = 0;
-		return;
-	}
-	if (pGame->FindPlayerPed()->IsAPassenger()) {
-		g_pJavaWrapper->HideSpeed();
-		bMeliage =0;
-		m_fuel = 0;
-		return;
-	}
-
-	int i_speed = 0;
-	bDoor =0;
-	bEngine = 0;
-	bLights = 0;
-	float fHealth = 0;
-	CVehicle *pVehicle = nullptr;
-	CVehiclePool *pVehiclePool = pNetGame->GetVehiclePool();
-	CPlayerPed *pPlayerPed = pGame->FindPlayerPed();
-    VEHICLEID id = pVehiclePool->FindIDFromGtaPtr(pPlayerPed->GetGtaVehicle());
-    pVehicle = pVehiclePool->GetAt(id);
-    
-    if(pPlayerPed)
-    {
-        if(pVehicle)
-        {
-            VECTOR vecMoveSpeed;
-            pVehicle->GetMoveSpeedVector(&vecMoveSpeed);
-            i_speed = sqrt((vecMoveSpeed.X * vecMoveSpeed.X) + (vecMoveSpeed.Y * vecMoveSpeed.Y) + (vecMoveSpeed.Z * vecMoveSpeed.Z)) * 180;
-            bHealth = pVehicle->GetHealth();
-            bDoor = pVehicle->GetDoorState();
-            bEngine = pVehicle->GetEngineState();
-            bLights = pVehicle->GetLightsState();
-        }
-    }
-	g_pJavaWrapper->ShowSpeed();
-	g_pJavaWrapper->UpdateSpeedInfo(i_speed, m_fuel, bHealth, bMeliage, bEngine, bLights, 0, bDoor);
+	if (g_pJavaWrapper) g_pJavaWrapper->HideSpeed();
 }

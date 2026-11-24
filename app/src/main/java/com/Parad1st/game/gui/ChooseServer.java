@@ -55,16 +55,10 @@ public class ChooseServer {
     Button myButton, allButton;
     EditText ipInput, passInput;
     boolean uiInitialized = false;
-    public ImageView hud_x2;
-    public ImageView hud_gps;
-    public ImageView hud_zona;
     RoundCornerProgressBar progressbar;
 
     public ChooseServer(Activity activity){
         aactivity = activity;
-        hud_gps = aactivity.findViewById(R.id.imageView16);
-        hud_zona = aactivity.findViewById(R.id.grzona);
-        hud_x2 = aactivity.findViewById(R.id.imageView17);
         serverLayout = activity.findViewById(R.id.br_serverselect_layout);
         percentText = activity.findViewById(R.id.loading_percent);
         chooseServerLayout = activity.findViewById(R.id.choose_server_root_choose);
@@ -202,7 +196,7 @@ public class ChooseServer {
                 serverOnlineView.setText(Html.fromHtml(s.getOnline() + "<font color='#808080'>/" + s.getmaxOnline()));
             }
         } else {
-            int color = parseColorSafe("#FF0000");
+            int color = parseColorSafe("#1E88E5");
             if (serverNameView != null) {
                 serverNameView.setText(!savedServer.isEmpty() ? ("Target: " + savedServer) : "Server Bebas (SA-MP 0.3.7)");
             }
@@ -342,8 +336,8 @@ public class ChooseServer {
 
         myButton.setOnClickListener(view -> {
             view.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-            view.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.button_red_rectangle, null));
-            allButton.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.button_br_red_unfilled_ss, null));
+            view.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.alyn_btn_primary, null));
+            allButton.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.alyn_btn_secondary, null));
             if (findViewById.getVisibility() != View.VISIBLE) {
                 findViewById2.animate().alpha(0.0f).setDuration(100).setListener(new Animator.AnimatorListener() {
                     @Override
@@ -371,8 +365,8 @@ public class ChooseServer {
         });
         allButton.setOnClickListener(view -> {
             view.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-            view.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.button_red_rectangle, null));
-            myButton.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.button_br_red_unfilled_ss, null));
+            view.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.alyn_btn_primary, null));
+            myButton.setBackground(ResourcesCompat.getDrawable(aactivity.getResources(), R.drawable.alyn_btn_secondary, null));
             if (findViewById2.getVisibility() != View.VISIBLE) {
                 findViewById.animate().alpha(0.0f).setDuration(100).setListener(new Animator.AnimatorListener() {
                     @Override

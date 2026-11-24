@@ -202,14 +202,7 @@ void ShowHud()
 					pGame->GetLocalMoney(), pGame->GetWantedLevel()
 					);
 				}
-				if(pSettings && pSettings->GetReadOnly().iHud)
-				{
-					*(uint8_t*)(g_libGTASA+0x7165E8) = 0;
-				}
-				else if(pSettings && !pSettings->GetReadOnly().iHud)
-				{
-					*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
-				}
+				*(uint8_t*)(g_libGTASA+0x7165E8) = 1;
 			}
 		}
 	}
@@ -2423,10 +2416,6 @@ void CSprite2d__DrawBarChart_hook(float x, float y, unsigned short width, unsign
 			color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).G;
 			color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).B;
 		}
-		color->A = 0;
-		color->R = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).R;
-		color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).G;
-		color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).B;
 	}
 	else if (dwRetAddr == 0x0027D83E + 1)
 	{
@@ -2455,10 +2444,6 @@ void CSprite2d__DrawBarChart_hook(float x, float y, unsigned short width, unsign
 			color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).G;
 			color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).B;
 		}
-		color->A = 0;
-		color->R = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).R;
-		color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).G;
-		color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).B;
 	}
 	CSprite2d__DrawBarChart(fX, fY, usWidth, usHeight, progress, progressAdd, drawPercentage, drawBlackBorder, color, addColor);
 }
@@ -2593,10 +2578,10 @@ void CSprite2d__Draw_hook(CSprite2d* a1, CRect* a2, CRGBA* a3)
 		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_RADAR))
 		{
 			CRGBA col = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_RADAR);
-			a3->A = 255;
-			a3->B = 155;
-			a3->G = 5;
-			a3->R = 7;
+			a3->A = col.A;
+			a3->B = col.B;
+			a3->G = col.G;
+			a3->R = col.R;
 		}
 		float* thiz = (float*) * (uintptr_t*)(g_libGTASA + 0x6580C8);
 		if (thiz)
@@ -2605,39 +2590,14 @@ void CSprite2d__Draw_hook(CSprite2d* a1, CRect* a2, CRGBA* a3)
 			{
 				thiz[3] = (float)CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).X;
 			}
-			else
-			{
-				thiz[3] = 50.0f;
-			}
-
 			if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).Y != -1)
 			{
 				thiz[4] = (float)CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).Y;
 			}
-			else
-			{
-				thiz[4] = 70.0f;
-			}
-
 			if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X != -1)
 			{
-				thiz[5] = 45.0f * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
-			}
-			else
-			{
-				thiz[5] = 45.0f;
-			}
-
-			if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X != -1)
-			{
-				thiz[6] = 45.0f * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
-			}
-			else
-			{
-				thiz[6] = 45.0f;
-				
-			CRect* rect = (CRect*)&thiz[3];
-            pGUI->CoordsRadar(rect);
+				thiz[5] = thiz[5] * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
+				thiz[6] = thiz[6] * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
 			}
 		}
 		
@@ -2686,13 +2646,6 @@ void CWidgetPlayerInfo__DrawWeaponIcon_hook(float* thiz, void* ped, CRect rect, 
 void(*CHud__Draw)();
 void CHud__Draw_hook()
 {
-	float* thiz = (float*) * (uintptr_t*)(g_libGTASA + 0x6580C8);
-	if (thiz)
-	{
-		thiz[5] = 45.0f;
-		thiz[6] = 45.0f;
-	}
-
 	CHud__Draw();
 }
 
