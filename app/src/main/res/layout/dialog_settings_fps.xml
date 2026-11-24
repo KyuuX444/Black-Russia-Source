@@ -45,7 +45,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Смещение пешком"
+                    android:text="Posisi Jalan Kaki"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 
@@ -143,7 +143,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Смещение в транспорте"
+                    android:text="Posisi di Kendaraan"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 

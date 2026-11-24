@@ -26,7 +26,7 @@
                 android:textColor="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Донат"
+                android:text="Donasi"
                 android:fontFamily="@font/pt_root_ui_medium" />
             <TextView
                 android:textSize="@dimen/_10sdp"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
-                android:text="Данные"
+                android:text="Data"
                 android:alpha="0.5"
                 android:fontFamily="@font/pt_root_ui_medium" />
             <LinearLayout
@@ -57,7 +57,7 @@
                     android:layout_width="0.0dip"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:hint="Имя_Фамилия"
+                    android:hint="Nama_Karakter"
                     android:singleLine="true"
                     android:maxLength="20"
                     android:digits="abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -85,7 +85,7 @@
                     android:layout_width="0.0dip"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:hint="Введите ваш Email"
+                    android:hint="Masukkan Email Anda"
                     android:singleLine="true"
                     android:maxLength="100"
                     android:layout_weight="1.0"
@@ -112,7 +112,7 @@
                     android:layout_width="0.0dip"
                     android:layout_height="fill_parent"
                     android:layout_marginRight="@dimen/_10sdp"
-                    android:hint="Введите сумму"
+                    android:hint="Masukkan jumlah"
                     android:singleLine="true"
                     android:maxLength="100"
                     android:digits="\ 1234567890"
@@ -129,7 +129,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_14sdp"
-                android:text="Пополнить счёт"
+                android:text="Isi Saldo"
                 android:fontFamily="@font/pt_root_ui_medium" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

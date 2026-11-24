@@ -28,7 +28,7 @@
         android:paddingTop="10.0dip"
         android:paddingRight="10.0dip"
         android:paddingBottom="10.0dip"
-        android:text="Введите пароль чтобы войти в игру."
+        android:text="Masukkan kata sandi untuk masuk ke game."
         android:textColor="#ffffffff"
         android:textSize="12.0sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -94,7 +94,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
                         android:fontFamily="@font/montserrat_regular"
-                        android:text="Автовход"
+                        android:text="Masuk Otomatis"
                         android:textColor="#ffffffff" />
 
                     <ImageView
@@ -140,7 +140,7 @@
                     android:drawablePadding="2.0dip"
                     android:fontFamily="@font/montserrat_regular"
                     android:gravity="center_vertical"
-                    android:text="Вернуться"
+                    android:text="Kembali"
                     android:textColor="#ff848ba2"
                     android:textSize="12.0sp" />
             </LinearLayout>
@@ -179,7 +179,7 @@
                 android:drawablePadding="2.0dip"
                 android:fontFamily="@font/montserrat_regular"
                 android:gravity="center_vertical"
-                android:text="Вернуться"
+                android:text="Kembali"
                 android:textColor="#ff848ba2"
                 android:textSize="12.0sp" />
         </LinearLayout>
@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1.0"
                     android:fontFamily="@font/montserrat_regular"
-                    android:text="Автовход"
+                    android:text="Masuk Otomatis"
                     android:textColor="#ffffffff" />
 
                 <ImageView
@@ -241,7 +241,7 @@
             android:layout_marginBottom="80dp"
             android:background="@drawable/donate_tile_button"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Играть"
+            android:text="Main"
             android:textColor="#ffffffff"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -260,7 +260,7 @@
             android:ems="10"
             android:fontFamily="@font/montserrat_regular"
             android:gravity="center"
-            android:hint="Введите пароль"
+            android:hint="Masukkan kata sandi"
             android:imeOptions="actionSend|flagNoExtractUi|flagNoFullscreen"
             android:inputType="textPassword"
             android:longClickable="true"
@@ -302,7 +302,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
-                android:text="Войти по отпечатку пальца"
+                android:text="Masuk dengan sidik jari"
                 android:textColor="#ff000000"
                 android:textSize="11.0sp" />
         </LinearLayout>
@@ -335,7 +335,7 @@
         android:layout_marginStart="24.0dip"
         android:layout_marginTop="16.0dip"
         android:fontFamily="@font/montserrat_bold"
-        android:text="авторизация"
+        android:text="login"
         android:textAllCaps="true"
         android:textColor="#ffffffff"
         android:textSize="30.0sp"
@@ -399,7 +399,7 @@
             android:layout_marginBottom="102dp"
             android:background="@drawable/donate_tile_button"
             android:fontFamily="@font/montserrat_bold"
-            android:text="назад"
+            android:text="kembali"
             android:textColor="#ffffffff"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -413,7 +413,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/muller_bold"
-            android:text="Сканер"
+            android:text="Pemindai"
             android:textColor="#ffffffff"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -439,7 +439,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_regular"
-            android:text="Приложите палец к сканеру\n                 опечатков"
+            android:text="Tempelkan jari ke pemindai\n                 sidik jari"
             android:textColor="#ffffffff"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

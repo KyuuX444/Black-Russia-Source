@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/pt_root_ui_medium"
-        android:text="Мониторинг"
+        android:text="Pemantauan"
         android:textColor="@color/white"
         android:textSize="@dimen/_20sdp" />
 
@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/_10sdp"
             android:alpha="0.8"
             android:fontFamily="@font/pt_root_ui_bold"
-            android:text="Истории"
+            android:text="Cerita"
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp" />
 
@@ -51,7 +51,7 @@
         android:layout_marginTop="@dimen/_10sdp"
         android:alpha="0.8"
         android:fontFamily="@font/pt_root_ui_bold"
-        android:text="Наши сервера"
+        android:text="Server Kami"
         android:textColor="@color/white"
         android:textSize="@dimen/_16sdp" />
 

@@ -53,7 +53,7 @@ public class ServersAdapter extends RecyclerView.Adapter<ServersAdapter.ServersV
 		holder.container.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 view.startAnimation(AnimationUtils.loadAnimation(context, R.anim.button_click));
-                Toast.makeText(context, "Для начала игры нажмите красную кнопку", 0).show();
+                Toast.makeText(context, "Tekan tombol merah di bawah untuk mulai bermain", 0).show();
             }
         });
     }

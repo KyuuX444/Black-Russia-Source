@@ -1,6 +1,8 @@
 package com.byparad1st.launcher.activity;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -81,9 +83,10 @@ public class SplashActivity extends AppCompatActivity{
 			public void onResponse(Call<List<Servers>> call, Response<List<Servers>> response) {
 
 				List<Servers> servers = response.body();
-
-				for (Servers server : servers) {
-					Lists.slist.add(new Servers(server.getColor(), server.getDopname(), server.getname(), server.getOnline(), server.getmaxOnline()));
+				if (servers != null) {
+					for (Servers server : servers) {
+						Lists.slist.add(new Servers(server.getColor(), server.getDopname(), server.getname(), server.getOnline(), server.getmaxOnline()));
+					}
 				}
 			}
 
@@ -100,9 +103,10 @@ public class SplashActivity extends AppCompatActivity{
 			public void onResponse(Call<List<News>> call, Response<List<News>> response) {
 
 				List<News> news = response.body();
-
-				for (News storie : news) {
-					Lists.nlist.add(new News(storie.getImageUrl(), storie.getTitle(), storie.getUrl()));
+				if (news != null) {
+					for (News storie : news) {
+						Lists.nlist.add(new News(storie.getImageUrl(), storie.getTitle(), storie.getUrl()));
+					}
 				}
 			}
 
@@ -112,7 +116,13 @@ public class SplashActivity extends AppCompatActivity{
 			}
 		});
 		
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 30) {
+            if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1000);
+            } else {
+                startTimer();
+            }
+        } else if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
                     || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, 1000);
@@ -133,16 +143,30 @@ public class SplashActivity extends AppCompatActivity{
     private void startLauncher()
     {
         startActivity(new Intent(this, MainActivity.class));
+        if (Build.VERSION.SDK_INT >= 26) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    "Notifikasi ryzn SA-MP",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
 		NotificationCompat.Builder builder =
 				new NotificationCompat.Builder(SplashActivity.this, CHANNEL_ID)
 						.setSmallIcon(R.drawable.logo_splash)
-						.setContentTitle("LUX RUSSIA")
-						.setContentText("Вводи промокод #LUX и получай бонус")
+						.setContentTitle("ryzn SA-MP")
+						.setContentText("Selamat datang di ryzn SA-MP! Ayo bermain sekarang.")
 						.setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
 		NotificationManagerCompat notificationManager =
 				NotificationManagerCompat.from(SplashActivity.this);
-		notificationManager.notify(NOTIFY_ID, builder.build());
+        try {
+            notificationManager.notify(NOTIFY_ID, builder.build());
+        } catch (SecurityException ignored) {
+        }
         finish();
     }
 	

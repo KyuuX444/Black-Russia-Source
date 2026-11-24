@@ -23,7 +23,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := sampvoice
 LOCAL_LDLIBS := -llog -lOpenSLES
 
-LOCAL_C_INCLUDES += $(wildcard $(LOCAL_PATH)/vendor/)
+LOCAL_C_INCLUDES += $(LOCAL_PATH) $(wildcard $(LOCAL_PATH)/vendor/)
 
 # samp
 FILE_LIST := $(wildcard $(LOCAL_PATH)/*.cpp)
@@ -40,8 +40,8 @@ FILE_LIST += $(wildcard $(LOCAL_PATH)/../santrope-tea-gtasa/encryption/*.c)
 
 # vendor
 FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/ini/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/RakNet/*.cpp)
-FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/RakNet/SAMP/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/raknet/*.cpp)
+FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/raknet/SAMP/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/imgui/*.cpp)
 FILE_LIST += $(wildcard $(LOCAL_PATH)/vendor/hash/md5.cpp)
 

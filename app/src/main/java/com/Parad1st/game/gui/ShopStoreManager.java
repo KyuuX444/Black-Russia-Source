@@ -61,7 +61,7 @@ public class ShopStoreManager {
 
     public void showshop(int price)
     {
-        String strprice = String.format("ЦЕНА: %s", price);
+        String strprice = String.format("HARGA: %s", price);
         shopstore_buyinfo.setText(strprice);
 
         br_shopstroreselect_layout.setVisibility(View.VISIBLE);

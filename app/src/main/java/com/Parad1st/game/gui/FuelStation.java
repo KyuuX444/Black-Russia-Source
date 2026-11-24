@@ -32,7 +32,7 @@ public class FuelStation extends AppCompatActivity {
         br_fuelstation_layout = aactivity.findViewById(R.id.br_fuelstation_layout);
 
         fuelstation_literinfo = aactivity.findViewById(R.id.fuelstation_literinfo);
-        fuelstation_literinfo.setText("0 Л");
+        fuelstation_literinfo.setText("0 L");
 
         fuelstation_buyinfo = aactivity.findViewById(R.id.fuelstation_buyinfo);
         fuelstation_buyinfo.setText("0 P");
@@ -77,8 +77,8 @@ public class FuelStation extends AppCompatActivity {
                 else if (fuelstation_active == 3) { fuelprice = fuelprice3 * progress; }
                 else if (fuelstation_active == 4) { fuelprice = fuelprice4 * progress; }
                 else if (fuelstation_active == 5) { fuelprice = fuelprice5 * progress; }
-                String strpriceinfo = String.format("%s р", fuelprice);
-                String strliterinfo = String.format("%s л", progress);
+                String strpriceinfo = String.format("Rp%s", fuelprice);
+                String strliterinfo = String.format("%s L", progress);
                 fuelstation_buyinfo.setText(String.valueOf(strpriceinfo));
                 fuelstation_literinfo.setText(String.valueOf(strliterinfo));
             }
@@ -152,11 +152,11 @@ public class FuelStation extends AppCompatActivity {
         fuelprice4 = price5;
         fuelprice5 = price4;
 
-        String strprice1 = String.format("%sр/литр", price1);
-        String strprice2 = String.format("%sр/литр", price2);
-        String strprice3 = String.format("%sр/литр", price3);
-        String strprice4 = String.format("%sр/литр", price5);
-        String strprice5 = String.format("%sр/литр", price4);
+        String strprice1 = String.format("Rp%s/L", price1);
+        String strprice2 = String.format("Rp%s/L", price2);
+        String strprice3 = String.format("Rp%s/L", price3);
+        String strprice4 = String.format("Rp%s/L", price5);
+        String strprice5 = String.format("Rp%s/L", price4);
         fuelstation_1_info.setText(String.valueOf(strprice1));
         fuelstation_2_info.setText(String.valueOf(strprice2));
         fuelstation_3_info.setText(String.valueOf(strprice3));
@@ -168,23 +168,23 @@ public class FuelStation extends AppCompatActivity {
 
         fuelstation_active = type;
         if (type == 1) {
-            fuelstation_info.setText("Рекомендуемый тип топлива: АИ-92");
+            fuelstation_info.setText("Bahan bakar disarankan: Pertalite");
             fuelstation_1.setBackgroundResource(R.drawable.fuelstation_item_active_bg);
         }
         else if (type == 2) {
-            fuelstation_info.setText("Рекомендуемый тип топлива: АИ-95");
+            fuelstation_info.setText("Bahan bakar disarankan: Pertamax");
             fuelstation_2.setBackgroundResource(R.drawable.fuelstation_item_active_bg);
         }
         else if (type == 3) {
-            fuelstation_info.setText("Рекомендуемый тип топлива: АИ-98");
+            fuelstation_info.setText("Bahan bakar disarankan: Pertamax+");
             fuelstation_3.setBackgroundResource(R.drawable.fuelstation_item_active_bg);
         }
         else if (type == 4) {
-            fuelstation_info.setText("Рекомендуемый тип топлива: ДТ");
+            fuelstation_info.setText("Bahan bakar disarankan: Solar");
             fuelstation_4.setBackgroundResource(R.drawable.fuelstation_item_active_bg);
         }
         else if (type == 5) {
-            fuelstation_info.setText("Рекомендуемый тип топлива: АИ-100");
+            fuelstation_info.setText("Bahan bakar disarankan: Turbo");
             fuelstation_5.setBackgroundResource(R.drawable.fuelstation_item_active_bg);
         }
         

@@ -309,7 +309,7 @@ void CVoiceChatClient::Disconnect()
 }
 void CVoiceChatClient::FullDisconnect()
 {
-	if (pChatWindow) pChatWindow->AddDebugMessage("Вы отключены от войс чата");
+	if (pChatWindow) pChatWindow->AddDebugMessage("Anda terputus dari obrolan suara");
 	SetNetworkState(VOICECHAT_FULLDISCONNECTED);
 }
 bool CVoiceChatClient::IsDisconnected()

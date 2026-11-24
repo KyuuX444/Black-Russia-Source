@@ -53,9 +53,9 @@ public class regandlogin {
         reg_layout_sx.setVisibility(View.GONE);
 
         reg_info = aactivity.findViewById(R.id.reg_info);
-        reg_info.setText("Введите пароль чтобы войти в игру.\n\nИнформация: если данный аккаунт\nявляется не вашим, то выйдите\nиз игры и смените игровое имя на новое!");
+        reg_info.setText("Masukkan kata sandi untuk masuk ke game.\n\nInfo: jika akun ini bukan milik Anda,\nkeluarlah dari game dan ganti\nnama karakter Anda dengan yang baru!");
         reg_info2 = aactivity.findViewById(R.id.textView8);
-        reg_info2.setText("Для начала игры, заполни все поля\n \n  •Пароль должен состоять от 6 до 16 символов\n \n  •Пароль чувствителен к регистру");
+        reg_info2.setText("Isi semua kolom untuk mulai bermain\n \n  •Kata sandi harus 6 hingga 16 karakter\n \n  •Kata sandi peka huruf besar/kecil");
 
         reg_header = aactivity.findViewById(R.id.reg_header);
         parad1stpon = aactivity.findViewById(R.id.parad1st_pon);
@@ -133,7 +133,7 @@ public class regandlogin {
 
         finger_but_parad1st.setOnClickListener(view -> {
             view.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-            NvEventQueueActivity.getInstance().showNotification(2, "Произошла ошибка, попробуйте позже", 4, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Terjadi kesalahan, coba lagi nanti", 4, "", "");
             finn_layout.setVisibility(View.VISIBLE);
         });
 
@@ -146,7 +146,7 @@ public class regandlogin {
                     if(isChecked) {
                         isTurned = true;
                         reg.setAL(true);
-                        NvEventQueueActivity.getInstance().showNotification(2, "Временно недоступно", 4, "", "");
+                        NvEventQueueActivity.getInstance().showNotification(2, "Sementara tidak tersedia", 4, "", "");
                     } else {
                         isTurned = false;
                         reg.setAL(false);
@@ -259,7 +259,7 @@ public class regandlogin {
                     HideAuth();
                 }
             } catch (UnsupportedEncodingException e) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Произошла неизвестная ошибка", 5, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Terjadi kesalahan tidak diketahui", 5, "", "");
                 e.printStackTrace();
             }
         });
@@ -274,15 +274,15 @@ public class regandlogin {
             try {
                 if(checkValidReg() && input2.getText().toString().equals(input3.getText().toString())) {
                     NvEventQueueActivity.getInstance().sendDialogResponse(1, 2, reg.GetListitemToSend(), input2.getText().toString().getBytes("windows-1251"));
-                    resume2.setText("ПРОДОЛЖИТЬ");
+                    resume2.setText("LANJUTKAN");
                     input3.setInputType(View.AUTOFILL_TYPE_TEXT);
-                    input3.setHint("Никнейм пригласившего игрока");
-                    NvEventQueueActivity.getInstance().showNotification(2, "Необязательный пункт регистрации, можете пропустить", 5, "", "");
+                    input3.setHint("Nama karakter pengundang");
+                    NvEventQueueActivity.getInstance().showNotification(2, "Langkah opsional pendaftaran, dapat dilewati", 5, "", "");
                     input3.setText("");
                     input2.setVisibility(View.GONE);
                     input4.setVisibility(View.GONE);
-                    reg_info2.setText("Никнейм друга должен быть в \nформате: Nick_Name");
-                    reg_header.setText("ТЕБЯ ПРИГЛАСИЛ ДРУГ?");
+                    reg_info2.setText("Nama teman harus menggunakan \nformat: Nick_Name");
+                    reg_header.setText("APAKAH TEMAN MENGUNDANGMU?");
                     parad1stpon.setVisibility(View.VISIBLE);
                     text_layout.setVisibility(View.VISIBLE);
 
@@ -338,9 +338,9 @@ public class regandlogin {
                         }
                         HideReg();
                     });
-                } else NvEventQueueActivity.getInstance().showNotification(2, "Пароли не совпадают", 5, "", "");
+                } else NvEventQueueActivity.getInstance().showNotification(2, "Kata sandi tidak cocok", 5, "", "");
             } catch (UnsupportedEncodingException e) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Произошла неизвестная ошибка", 5, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Terjadi kesalahan tidak diketahui", 5, "", "");
                 e.printStackTrace();
             }
         });
@@ -378,7 +378,7 @@ public class regandlogin {
     public void HideRegSX()
     {
         Utils.HideLayout(reg_layout_sx, true);
-        NvEventQueueActivity.getInstance().showNotification(3, "Добро пожаловать!", 4, "", "");
+        NvEventQueueActivity.getInstance().showNotification(3, "Selamat datang!", 4, "", "");
     }
 
     public void ShowPerson(){
@@ -391,11 +391,11 @@ public class regandlogin {
     public boolean checkValid(){
         EditText nick = activity.findViewById(R.id.password_enter);
         if(nick.getText().toString().isEmpty()) {
-            NvEventQueueActivity.getInstance().showNotification(2, "Введите пароль", 5, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Masukkan kata sandi", 5, "", "");
             return false;
         }
         if(nick.getText().toString().length() < 6) {
-            NvEventQueueActivity.getInstance().showNotification(2, "Длина пароля должна быть не менее 6 символов", 5, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Panjang kata sandi minimal 6 karakter", 5, "", "");
             return false;
         }
         return true;
@@ -405,15 +405,15 @@ public class regandlogin {
         EditText nick2 = activity.findViewById(R.id.password_enter2);
         EditText nick3 = activity.findViewById(R.id.password_enter3);
         if(nick2.getText().toString().isEmpty()) {
-            NvEventQueueActivity.getInstance().showNotification(2, "Введите пароль", 5, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Masukkan kata sandi", 5, "", "");
             return false;
         }
         if(nick2.getText().toString().length() < 6 && !nick2.getText().toString().isEmpty()) {
-            NvEventQueueActivity.getInstance().showNotification(2, "Длина пароля должна быть не менее 6 символов", 5, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Panjang kata sandi minimal 6 karakter", 5, "", "");
             return false;
         }
         if(nick3.getText().toString().isEmpty()) {
-            NvEventQueueActivity.getInstance().showNotification(2, "Повторите пароль", 5, "", "");
+            NvEventQueueActivity.getInstance().showNotification(2, "Ulangi kata sandi", 5, "", "");
             return false;
         }
         return true;

@@ -30,7 +30,7 @@
         android:ems="10"
         android:fontFamily="@font/muller_regular"
         android:gravity="left"
-        android:hint="Нажмите для ввода"
+        android:hint="Ketuk untuk mengetik"
         android:imeOptions="actionSend|flagNoFullscreen|flagNoExtractUi"
         android:inputType="text"
         android:longClickable="true"
@@ -46,6 +46,6 @@
 
     <LinearLayout android:gravity="center" android:layout_gravity="center_horizontal" android:orientation="horizontal" android:id="@+id/dw_root_buttons" android:layout_width="wrap_content" android:layout_height="35dp" android:layout_marginLeft="20dp" android:layout_marginTop="16dp" android:layout_marginRight="20dp">
         <Button android:textSize="13sp" android:textColor="#ffffff" android:id="@+id/dw_button_ok" android:background="@drawable/button_br_red" android:paddingLeft="10dp" android:paddingRight="10dp" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="match_parent" android:minWidth="100dp" android:text="OK" android:layout_weight="1" android:textAllCaps="false" android:fontFamily="@font/muller_bold"/>
-        <Button android:textSize="13sp" android:textColor="#ffffff" android:id="@+id/dw_button_cancel" android:background="@drawable/button_br_red_unfilled" android:paddingLeft="10dp" android:paddingRight="10dp" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="16dp" android:minWidth="100dp" android:text="Cancel" android:layout_weight="1" android:textAllCaps="false" android:fontFamily="@font/muller_bold"/>
+        <Button android:textSize="13sp" android:textColor="#ffffff" android:id="@+id/dw_button_cancel" android:background="@drawable/button_br_red_unfilled" android:paddingLeft="10dp" android:paddingRight="10dp" android:visibility="visible" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_marginLeft="16dp" android:minWidth="100dp" android:text="Batal" android:layout_weight="1" android:textAllCaps="false" android:fontFamily="@font/muller_bold"/>
     </LinearLayout>
 </LinearLayout>

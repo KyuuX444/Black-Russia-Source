@@ -105,11 +105,11 @@ void InitBASSFuncs()
 {
 	void* handle;
 
-#ifdef GAME_EDITION_CR
-	handle = dlopen("/data/data/com.viskigames.game/lib/libbass.so", 3);
-#else
-	handle = dlopen("/data/data/com.viskigames.game/lib/libbass.so", 3);
-#endif
+	handle = dlopen("libbass.so", 3);
+	if (!handle)
+	{
+		handle = dlopen("/data/data/com.parad1stgames.game/lib/libbass.so", 3);
+	}
 	if (!handle)
 	{
 		Log("Cannot load libbass.so");
@@ -196,11 +196,11 @@ bool ProcessVoiceCommands(const char* str)
 		g_bShowVoiceList ^= 1;
 		if (g_bShowVoiceList)
 		{
-			pChatWindow->AddDebugMessage("                              ");
+			pChatWindow->AddDebugMessage("Daftar obrolan suara aktif");
 		}
 		else
 		{
-			pChatWindow->AddDebugMessage("                               ");
+			pChatWindow->AddDebugMessage("Daftar obrolan suara nonaktif");
 		}
 		return true;
 	}
@@ -231,16 +231,16 @@ bool ProcessVoiceCommands(const char* str)
 		int id = 0;
 		if (sscanf(str, "%d", &id) == -1)
 		{
-			pChatWindow->AddDebugMessage("         : /vmute [playerid]");
+			pChatWindow->AddDebugMessage("Gunakan: /vmute [playerid]");
 			return true;
 		}
 		if (id < 0 || id > 1000)
 		{
-			pChatWindow->AddDebugMessage("         : ID                           0    1000");
+			pChatWindow->AddDebugMessage("Kesalahan: ID pemain harus 0 sampai 1000");
 			return true;
 		}
 		pVoice->MutePlayer(id);
-		pChatWindow->AddDebugMessage("                        : %d", id);
+		pChatWindow->AddDebugMessage("Pemain dibisukan: %d", id);
 		return true;
 	}
 
@@ -258,16 +258,16 @@ bool ProcessVoiceCommands(const char* str)
 		int id = 0;
 		if (sscanf(str, "%d", &id) == -1)
 		{
-			pChatWindow->AddDebugMessage("         : /vunmute [playerid]");
+			pChatWindow->AddDebugMessage("Gunakan: /vunmute [playerid]");
 			return true;
 		}
 		if (id < 0 || id > 1000)
 		{
-			pChatWindow->AddDebugMessage("         : ID                           0    1000");
+			pChatWindow->AddDebugMessage("Kesalahan: ID pemain harus 0 sampai 1000");
 			return true;
 		}
 		pVoice->UnMutePlayer(id);
-		pChatWindow->AddDebugMessage("                         : %d", id);
+		pChatWindow->AddDebugMessage("Suara pemain diaktifkan: %d", id);
 		return true;
 	}
 
@@ -285,10 +285,10 @@ bool ProcessVoiceCommands(const char* str)
 		int volume = 0;
 		if (sscanf(str, "%d", &volume) == -1)
 		{
-			pChatWindow->AddDebugMessage("         : /voicevolume [value]");
+			pChatWindow->AddDebugMessage("Gunakan: /voicevolume [nilai]");
 			return true;
 		}
-		pChatWindow->AddDebugMessage("           :                       %d", volume);
+		pChatWindow->AddDebugMessage("Volume suara diatur ke: %d", volume);
 		pVoice->SetVolume(volume);
 		return true;
 	}
@@ -308,16 +308,16 @@ bool ProcessVoiceCommands(const char* str)
 		int volume = 0;
 		if (sscanf(str, "%d %d", &id, &volume) == -1)
 		{
-			pChatWindow->AddDebugMessage("         : /vplayer [playerid] [volume]");
+			pChatWindow->AddDebugMessage("Gunakan: /vplayer [playerid] [volume]");
 			return true;
 		}
 		if (id < 0 || id > 1000)
 		{
-			pChatWindow->AddDebugMessage("         : ID                           0    1000");
+			pChatWindow->AddDebugMessage("Kesalahan: ID pemain harus 0 sampai 1000");
 			return true;
 		}
 		pVoice->SetVolumePlayer(id, volume);
-		pChatWindow->AddDebugMessage("                      %d            %d", volume, id);
+		pChatWindow->AddDebugMessage("Volume diatur ke %d untuk pemain %d", volume, id);
 		return true;
 	}
 	return false;

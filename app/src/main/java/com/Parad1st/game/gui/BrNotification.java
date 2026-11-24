@@ -71,7 +71,7 @@ public class BrNotification {
         String actionforBtn = jSONObject.optString("a");
         String optString2 = jSONObject.optString("k");
         if (optString2.equalsIgnoreCase("")) {
-            optString2 = "Продолжить";
+            optString2 = "Lanjutkan";
         }
         this.mDuration = optInt2;
         Button button = (Button) this.mView.findViewById(R.id.br_not_button);

@@ -95,7 +95,7 @@ public class ChooseServer {
 
 			@Override
 			public void onFailure(Call<List<Servers>> call, Throwable t) {
-				Toast.makeText(activity, "Не удалось подключится к серверу, попробуйте перезайти", Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, "Gagal terhubung ke server, silakan coba masuk kembali", Toast.LENGTH_SHORT).show();
 			}
 		});
 		

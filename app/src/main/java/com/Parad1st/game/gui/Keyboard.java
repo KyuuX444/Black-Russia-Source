@@ -51,7 +51,7 @@ public class Keyboard {
     private LinearLayout layout_main, layout_history, layout_input;
     private FrameLayout keyboard_main;
     private FrameLayout history_up, history_down, des_bth, krik_bth, rp_bth, nrp_bth;
-    private boolean isEn = false, isSimbol = false, isOneShift = true, isDobleShift = false;
+    private boolean isEn = true, isSimbol = false, isOneShift = true, isDobleShift = false;
     public static boolean isDialog = false;
     public CustomEditText keyboardTextInput;
     public static String text;
@@ -330,7 +330,7 @@ public class Keyboard {
                 } else {
                     noShiftEn();
                 }
-                tw.setText("рус");
+                tw.setText("rus");
             } else {
                 if (keyboardTextInput.getText().toString().isEmpty() || isOneShift || isDobleShift) {
                     ShiftRU();

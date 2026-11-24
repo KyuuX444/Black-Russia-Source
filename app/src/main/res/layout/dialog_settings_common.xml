@@ -47,7 +47,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Квадратный радар"
+                        android:text="Radar Kotak"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -59,7 +59,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Безграничный экран"
+                        android:text="Layar Penuh"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -71,7 +71,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Оружие за спиной"
+                        android:text="Senjata di Punggung"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -83,7 +83,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Улучшенное небо"
+                        android:text="Langit Ditingkatkan"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -95,7 +95,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Новые диалоги"
+                        android:text="Dialog Baru"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -115,7 +115,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Цифры HP и брони"
+                        android:text="Angka HP &amp; Armor"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -127,7 +127,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Android клавиатура"
+                        android:text="Keyboard Android"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -139,7 +139,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="Счётчик FPS"
+                        android:text="Penghitung FPS"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -151,7 +151,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="PC вид денег"
+                        android:text="Tampilan Uang PC"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -163,7 +163,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
                         android:fontFamily="@font/roboto_regular"
-                        android:text="HUD новый"
+                        android:text="HUD Baru"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -187,7 +187,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Интенсивность снега"
+                    android:text="Intensitas Salju"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 

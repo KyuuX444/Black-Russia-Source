@@ -516,12 +516,12 @@ void ScrPlayAudioStream(RPCParameters* rpcParams)
 	{
 		pAudioStream->PlayByURL(szURL, X, Y, Z, fRadius, bUsePos);
 		if (pChatWindow)
-			pChatWindow->AddInfoMessage("Audio Stream: %s", szURL);
+			pChatWindow->AddInfoMessage("Aliran Audio: %s", szURL);
 	}
 	else
 	{
 		if (pChatWindow)
-			pChatWindow->AddInfoMessage("Failed to play Sound! Audio Stream is not initialized!");
+			pChatWindow->AddInfoMessage("Gagal memutar audio! Audio Stream belum siap!");
 	}
 }
 

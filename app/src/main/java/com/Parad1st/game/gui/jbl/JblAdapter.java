@@ -56,7 +56,7 @@ public class JblAdapter extends RecyclerView.Adapter<JblAdapter.PassViewHolder> 
         holder.jbl_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                names.setText("Сейчас играет: "+Jbl.get(position).getName());
+                names.setText("Sedang diputar: "+Jbl.get(position).getName());
                 NvEventQueueActivity.getInstance().playUrlSound(url);
             }
         });

@@ -1102,8 +1102,8 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
                                      public void run()
                                      {
                                          new AlertDialog.Builder(act)
-                                                 .setMessage("Application initialization failed. The application will exit.")
-                                                 .setPositiveButton("Ok",
+                                                 .setMessage("Gagal memulai aplikasi. Pastikan data Lite sudah terpasang di penyimpanan, lalu buka ulang ryzn SA-MP.")
+                                                 .setPositiveButton("Tutup",
                                                          new DialogInterface.OnClickListener ()
                                                          {
                                                              public void onClick(DialogInterface i, int a)
@@ -1519,15 +1519,16 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.blackrussia.launcher");
-                launchIntent.putExtra("minimize", true);
-                if(ResumeEventDone)
-                {
-                    pauseEvent();
+                Intent launchIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                if (launchIntent != null) {
+                    launchIntent.putExtra("minimize", true);
+                    if (ResumeEventDone) {
+                        pauseEvent();
+                    }
+                    System.out.println("Calling launcher activity");
+                    startActivity(launchIntent);
+                    System.out.println("Called launcher activity");
                 }
-                System.out.println("Calling launcher activity");
-                startActivity(launchIntent);
-                System.out.println("Called launcher activity");
             }
         });
 

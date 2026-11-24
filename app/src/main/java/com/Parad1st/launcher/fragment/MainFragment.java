@@ -28,6 +28,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import com.byparad1st.game.R;
+import com.byparad1st.launcher.activity.LoaderActivity;
+import com.byparad1st.launcher.other.AlyaLiteDownloader;
 
 import org.ini4j.Wini;
 
@@ -53,7 +55,9 @@ public class MainFragment extends Fragment {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       onClickPlay();
+                       if (getActivity() != null) {
+                           getActivity().runOnUiThread(() -> onClickPlay());
+                       }
                    }
                 }, 200L);
             }
@@ -77,7 +81,7 @@ public class MainFragment extends Fragment {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://vk.com/luxrussiacrmp")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                    }
                 }, 200L);
             }
@@ -90,7 +94,7 @@ public class MainFragment extends Fragment {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://discrord.com/")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://discord.com/")));
                    }
                 }, 200L);
             }
@@ -103,7 +107,7 @@ public class MainFragment extends Fragment {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://t.me/LUXRUSSIACRIMINAL")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                    }
                 }, 200L);
             }
@@ -138,7 +142,7 @@ public class MainFragment extends Fragment {
                                         File f =
                                                 new File(
                                                         Environment.getExternalStorageDirectory()
-                                                                + "/LUXRUSSIA/SAMP/settings.ini");
+                                                                + "/ryznSAMP/SAMP/settings.ini");
                                         if (!f.exists()) {
                                             f.createNewFile();
                                             f.mkdirs();
@@ -147,12 +151,12 @@ public class MainFragment extends Fragment {
                                                 new Wini(
                                                         new File(
                                                                 Environment.getExternalStorageDirectory()
-                                 + "/LUXRUSSIA/SAMP/settings.ini"));
+                                 + "/ryznSAMP/SAMP/settings.ini"));
 								 if(checkValidNick()){
 									 w.put("client", "name", nickname.getText().toString());
                                         Toast.makeText(
                                                 getActivity(),
-                                                "Ваш новый никнейм успешно сохранен!",
+                                                "Nama karakter baru berhasil disimpan!",
                                                 Toast.LENGTH_SHORT).show();
 								 } else {
 									 checkValidNick();
@@ -160,7 +164,7 @@ public class MainFragment extends Fragment {
                                         w.store();
                                     } catch (IOException e) {
                                         e.printStackTrace();
-										Toast.makeText(getActivity(), "Установите игру!", Toast.LENGTH_SHORT).show();
+										Toast.makeText(getActivity(), "Silakan instal game terlebih dahulu!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 return false;
@@ -176,21 +180,19 @@ public class MainFragment extends Fragment {
              @Override
              public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                  try {
-                     File f = new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini");
+                     File f = new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini");
                      if (!f.exists()) {
-                         f.createNewFile();
-                         f.mkdirs();
+                         AlyaLiteDownloader.ensureClientConfigAndFonts(nickname.getText().toString());
+                     } else {
+                         Wini w = new Wini(f);
+                         if (checkValidNick()) {
+                             w.put("client", "name", nickname.getText().toString());
+                             w.store();
+                         }
                      }
-                     Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
-					 if(checkValidNick()){
-						w.put("client", "name", nickname.getText().toString());        
-					  } else {
-					      checkValidNick();
-					   }
-                       w.store();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
                  }
 
              @Override
@@ -203,24 +205,28 @@ public class MainFragment extends Fragment {
     }
     
     public void onClickPlay() {
-        if(IsGameInstalled()) {
+        if (getActivity() != null && !AlyaLiteDownloader.hasStoragePermission(getActivity())) {
+            AlyaLiteDownloader.requestAllFilesPermissionIfNeeded(getActivity());
+            return;
+        }
+        if (IsGameInstalled()) {
+            AlyaLiteDownloader.ensureClientConfigAndFonts(nickname != null ? nickname.getText().toString() : "");
             startActivity(new Intent(getActivity(), com.byparad1st.game.core.GTASA.class));
-		} else {
-		   /* MainActivity activity = getActivity();
-		    activity.toLoaderFragment();*/
-		}
+        } else {
+            startActivity(new Intent(getActivity(), LoaderActivity.class));
+        }
     }
     
     private boolean IsGameInstalled()
     {
-        String CheckFile = Environment.getExternalStorageDirectory() + "/LUXRUSSIA/texdb/gta3.img";
+        String CheckFile = Environment.getExternalStorageDirectory() + "/ryznSAMP/texdb/gta3.img";
         File file = new File(CheckFile);
         return file.exists();
     }
 	
 	private void InitLogic() {
         try {
-            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
+            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini"));
             nickname.setText(w.get("client", "name"));
             w.store();
         } catch (IOException e) {
@@ -229,17 +235,17 @@ public class MainFragment extends Fragment {
     }
 	
 	public boolean checkValidNick(){
-		EditText nick = (EditText)  getActivity().findViewById(R.id.editText);
-		if(nick.getText().toString().isEmpty()) {
-			Toast.makeText(getActivity(), "Введите ник", Toast.LENGTH_SHORT).show();
+		EditText nick = nickname != null ? nickname : (EditText) getActivity().findViewById(R.id.edit_text_name);
+		if(nick == null || nick.getText().toString().isEmpty()) {
+			Toast.makeText(getActivity(), "Masukkan nama karakter", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if(!(nick.getText().toString().contains("_"))){
-			Toast.makeText(getActivity(), "Ник должен содержать символ \"_\"", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Nama karakter harus mengandung simbol \"_\"", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if(nick.getText().toString().length() < 4){
-			Toast.makeText(getActivity(), "Длина ника должна быть не менее 4 символов", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Panjang nama karakter minimal 4 karakter", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		return true;

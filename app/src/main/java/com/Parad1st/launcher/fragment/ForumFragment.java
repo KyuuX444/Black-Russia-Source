@@ -21,7 +21,7 @@ public class ForumFragment extends Fragment {
 
         webView = (WebView) inflate.findViewById(R.id.webView);
         webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("youtube.com/@Parad1st");
+        webView.loadUrl("https://github.com/KyuuX444/Black-Russia-Source");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setLoadWithOverviewMode(false);
         webView.getSettings().setUseWideViewPort(false);

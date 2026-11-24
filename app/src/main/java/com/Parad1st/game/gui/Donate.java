@@ -147,7 +147,7 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-                maintext.setText("СКИНЫ");
+                maintext.setText("SKIN");
                 auto.setBackgroundColor(Color.parseColor("#00990055"));
                 auto.setTextColor(Color.parseColor("#ff666666"));
                 vips.setBackgroundColor(Color.parseColor("#00990055"));
@@ -176,7 +176,7 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-                maintext.setText("АКЦИИ И СПЕЦПРЕДЛОЖЕНИЯ");
+                maintext.setText("PROMO & PENAWARAN KHUSUS");
                 auto.setBackgroundColor(Color.parseColor("#00990055"));
                 auto.setTextColor(Color.parseColor("#ff666666"));
                 vips.setBackgroundColor(Color.parseColor("#00990055"));
@@ -197,7 +197,7 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 v.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
-                maintext.setText("VIP ПАКЕТЫ");
+                maintext.setText("PAKET VIP");
                 auto.setBackgroundColor(Color.parseColor("#00990055"));
                 auto.setTextColor(Color.parseColor("#ff666666"));
                 actija.setBackgroundColor(Color.parseColor("#00990055"));
@@ -251,7 +251,7 @@ public class Donate extends AppCompatActivity {
             public void onClick(View v) {
                 v.startAnimation(AnimationUtils.loadAnimation(aactivity, R.anim.button_click));
                 donate_akijas.setVisibility(View.GONE);
-                maintext.setText("ТРАНСПОРТ");
+                maintext.setText("KENDARAAN");
                 actija.setBackgroundColor(Color.parseColor("#00990055"));
                 actija.setTextColor(Color.parseColor("#ff666666"));
                 vips.setBackgroundColor(Color.parseColor("#00990055"));
@@ -383,20 +383,20 @@ public class Donate extends AppCompatActivity {
         this.bc = bc;
         sc_don.setVisibility(View.VISIBLE);
         if(money == -1) {
-            sc1.setText("ВЫ УСПЕШНО ПРИОБРЕЛИ ДАННЫЙ ТОВАР");
-            sc2.setText("СПАСИБО ЗА ОПЕРАЦИЮ!");
+            sc1.setText("ANDA BERHASIL MEMBELI ITEM INI");
+            sc2.setText("TERIMA KASIH ATAS TRANSAKSINYA!");
         }
         else if(money == -777) {
-            sc1.setText(format("ВЫ УСПЕШНО ПРИОБРЕЛИ %s", getNameAuto()));
-            sc2.setText("ДЛЯ ТОГО ЧТОБЫ ЗАГРУЗИТЬ АВТО,\nИСПОЛЬЗУЙТЕ /CAR");
+            sc1.setText(format("ANDA BERHASIL MEMBELI %s", getNameAuto()));
+            sc2.setText("UNTUK MEMUAT KENDARAAN,\nGUNAKAN /CAR");
         }
         else if(money == -666) {
-            sc1.setText("ВЫ УСПЕШНО ПРИОБРЕЛИ НОВУЮ ОДЕЖДУ\nОНА НАДЕТА НА ВАС");
-            sc2.setText("ТЕПЕРЬ ВЫ ВЫГЛЯДИТЕ КАК\nНАСТОЯЩИЙ МОДНИК!");
+            sc1.setText("ANDA BERHASIL MEMBELI PAKAIAN BARU\nSUDAH DIPAKAI DI KARAKTER");
+            sc2.setText("SEKARANG PENAMPILANMU\nTERLIHAT KEREN!");
         }
         else {
-            sc1.setText(new Formatter().format("ВЫ ПЕРЕВЕЛИ %d BC В %d РУБЛЕЙ", Integer.valueOf(money), Integer.valueOf(bc)).toString());
-            sc2.setText("СПАСИБО ЗА ОПЕРАЦИЮ!");
+            sc1.setText(new Formatter().format("ANDA MENUKAR %d RC KE Rp %d", Integer.valueOf(money), Integer.valueOf(bc)).toString());
+            sc2.setText("TERIMA KASIH ATAS TRANSAKSINYA!");
         }
 
     }
@@ -438,17 +438,17 @@ public class Donate extends AppCompatActivity {
     public void show_uslugi() {
 
         List<Donat> donatList = new ArrayList<>();
-        donatList.add(new Donat(1, "ИЗМЕНИТЬ ИМЯ", "50", "change_nickname"));
-        donatList.add(new Donat(2, "СНЯТЬ ВАРН", "100", "delete_warn"));
-        donatList.add(new Donat(3, "ВСЕ ЛИЦЕНЗИИ", "150", "licenses"));
-        donatList.add(new Donat(4, "ПОКУПКА СИЛЫ", "300", "power"));
-        donatList.add(new Donat(5, "САБВУФЕР PIONEER", "1000", "subwoofer"));
-        donatList.add(new Donat(6, "ДОП. СЛОТ НА АВТО", "100", "add_car_slot"));
-        donatList.add(new Donat(7, "НОМЕРА НА АВТО", "85", "buy_car_number"));
-        donatList.add(new Donat(8, "НОМЕР ТЕЛЕФОНА", "70", "phone_number"));
+        donatList.add(new Donat(1, "UBAH NAMA", "50", "change_nickname"));
+        donatList.add(new Donat(2, "HAPUS WARN", "100", "delete_warn"));
+        donatList.add(new Donat(3, "SEMUA LISENSI", "150", "licenses"));
+        donatList.add(new Donat(4, "BELI KEKUATAN", "300", "power"));
+        donatList.add(new Donat(5, "SUBWOOFER PIONEER", "1000", "subwoofer"));
+        donatList.add(new Donat(6, "SLOT MOBIL TAMBAHAN", "100", "add_car_slot"));
+        donatList.add(new Donat(7, "PLAT NOMOR MOBIL", "85", "buy_car_number"));
+        donatList.add(new Donat(8, "NOMOR TELEPON", "70", "phone_number"));
         setDonatRecycler(donatList);
         uslugiRecycler.setVisibility(View.VISIBLE);
-        topusl.setText("ИЗМЕНИТЬ ИМЯ");
+        topusl.setText("UBAH NAMA");
         costuscl.setText("50 BC");
         imgusl.setImageResource(R.drawable.change_nickname);
         costpodt = "50";
@@ -467,13 +467,13 @@ public class Donate extends AppCompatActivity {
     public void show_auto() {
 
         List<Donatee> donateList = new ArrayList<>();
-        donateList.add(new Donatee(1, "ЭКОНОМ", "", "", "auto_econom", 0));
-        donateList.add(new Donatee(2, "СРЕДНИЙ", "","", "auto_middle",0 ));
-        donateList.add(new Donatee(3, "ПРЕМИУМ", "","", "auto_premium",0 ));
-        donateList.add(new Donatee(4, "МОТО", "","","auto_moto", 0));
-        donateList.add(new Donatee(5, "УНИКАЛЬНЫЕ","", "","auto_unique",0 ));
-        donateList.add(new Donatee(6, "ГРУЗОВОЙ","", "","auto_gruz", 0));
-        donateList.add(new Donatee(7, "ЯХТЫ", "","","auto_yacht", 0));
+        donateList.add(new Donatee(1, "EKONOMI", "", "", "auto_econom", 0));
+        donateList.add(new Donatee(2, "MENENGAH", "","", "auto_middle",0 ));
+        donateList.add(new Donatee(3, "PREMIUM", "","", "auto_premium",0 ));
+        donateList.add(new Donatee(4, "MOTOR", "","","auto_moto", 0));
+        donateList.add(new Donatee(5, "UNIK","", "","auto_unique",0 ));
+        donateList.add(new Donatee(6, "TRUK","", "","auto_gruz", 0));
+        donateList.add(new Donatee(7, "YACHT", "","","auto_yacht", 0));
         setDonateRecycler(donateList);
         autoRecycler.setVisibility(View.VISIBLE);
     }
@@ -491,22 +491,22 @@ public class Donate extends AppCompatActivity {
 
         close_auto();
         List<Donatee> donateList = new ArrayList<>();
-        donateList.add(new Donatee(8, "ЗАЗ", "968М","auto_zaz", "",10));
-        donateList.add(new Donatee(9, "ВАЗ", "1111", "auto_1111","", 15));
-        donateList.add(new Donatee(10, "ВАЗ", "2101", "auto_2101", "",30));
-        donateList.add(new Donatee(11, "ГАЗ", "Волга 2410", "auto_volga","", 40));
-        donateList.add(new Donatee(12, "ВАЗ", "2106", "auto_2106", "",42));
+        donateList.add(new Donatee(8, "ZAZ", "968M","auto_zaz", "",10));
+        donateList.add(new Donatee(9, "VAZ", "1111", "auto_1111","", 15));
+        donateList.add(new Donatee(10, "VAZ", "2101", "auto_2101", "",30));
+        donateList.add(new Donatee(11, "GAZ", "Volga 2410", "auto_volga","", 40));
+        donateList.add(new Donatee(12, "VAZ", "2106", "auto_2106", "",42));
         donateList.add(new Donatee(13, "VOLKSWAGEN", "Golf GTI 2", "auto_golfnizk","", 70));
-        donateList.add(new Donatee(14, "ВАЗ", "2107", "auto_2107","", 75));
-        donateList.add(new Donatee(15, "ВАЗ", "2108", "auto_2108", "",85));
-        donateList.add(new Donatee(16, "ВАЗ", "2109", "auto_2108","", 90));
-        donateList.add(new Donatee(17, "ВАЗ", "2110", "auto_2110","", 95));
-        donateList.add(new Donatee(18, "ВАЗ", "2114", "auto_2114","",97));
-        donateList.add(new Donatee(19, "ВАЗ", "2115", "auto_2115","", 105));
+        donateList.add(new Donatee(14, "VAZ", "2107", "auto_2107","", 75));
+        donateList.add(new Donatee(15, "VAZ", "2108", "auto_2108", "",85));
+        donateList.add(new Donatee(16, "VAZ", "2109", "auto_2108","", 90));
+        donateList.add(new Donatee(17, "VAZ", "2110", "auto_2110","", 95));
+        donateList.add(new Donatee(18, "VAZ", "2114", "auto_2114","",97));
+        donateList.add(new Donatee(19, "VAZ", "2115", "auto_2115","", 105));
         donateList.add(new Donatee(20, "VOLVO", "242 DL", "auto_volvo242dl", "",125));
-        donateList.add(new Donatee(21, "ВАЗ", "2170", "auto_priora", "",150));
+        donateList.add(new Donatee(21, "VAZ", "2170", "auto_priora", "",150));
         donateList.add(new Donatee(22, "BMW", "M3 E30", "auto_bmwe30","", 150));
-        donateList.add(new Donatee(23, "НИВА", "Urban", "auto_niva", "",175));
+        donateList.add(new Donatee(23, "NIVA", "Urban", "auto_niva", "",175));
         donateList.add(new Donatee(24, "MAZDA", "Sedan 3", "auto_mazda", "",190));
         donateList.add(new Donatee(25, "TOYOTA", "Mark II", "auto_mark2", "",210));
         donateList.add(new Donatee(26, "MERSEDES-BENZ", "W124", "auto_mersw124", "",220));
@@ -582,7 +582,7 @@ public class Donate extends AppCompatActivity {
 // donateList.add(new Donatee(11, "", "", "auto_", " BC"));
         close_auto();
         List<Donatee> donateList = new ArrayList<>();
-        donateList.add(new Donatee(71, "RACER SPORT", "Скутер", "auto_racer", "",10));
+        donateList.add(new Donatee(71, "RACER SPORT", "Skuter", "auto_racer", "",10));
         donateList.add(new Donatee(72, "APRILLA", "MXV 450", "auto_aprilla", "",45));
         donateList.add(new Donatee(73, "DUCATI", "SuperSport S", "auto_ducatisupersport","", 915));
         donateList.add(new Donatee(74, "DUCATI", "XDiavel S", "auto_ducatixdiavels", "",1000));
@@ -598,7 +598,7 @@ public class Donate extends AppCompatActivity {
     public  void show_skins() {
         close_auto();
         List<Donatee> donateList = new ArrayList<>();
-        donateList.add(new Donatee(83, "ФИРМЕННАЯ\nОДЕЖДА", "Скин администратора", "skin_adm", "",30000));
+        donateList.add(new Donatee(83, "PAKAIAN\nKHUSUS", "Skin Admin", "skin_adm", "",30000));
         setDonateRecycler(donateList);
         autoRecycler.setVisibility(View.VISIBLE);
         back.setVisibility(View.VISIBLE);
@@ -607,10 +607,10 @@ public class Donate extends AppCompatActivity {
     public  void show_uniq() {
         close_auto();
         List<Donatee> donateList = new ArrayList<>();
-        donateList.add(new Donatee(79, "ВАЗ", "2170 (ППС)", "auto_priora", "",20000));
-        donateList.add(new Donatee(80, "ГАЗ", "ТИГР", "auto_tigr", "",30000));
-        donateList.add(new Donatee(81, "VOLKSWAGEN", "Polo (ППС)", "auto_polo","", 35000));
-        donateList.add(new Donatee(82, "BMW", "M5 F90 (ППС)", "auto_bmwf90", "",50000));
+        donateList.add(new Donatee(79, "VAZ", "2170 (Polisi)", "auto_priora", "",20000));
+        donateList.add(new Donatee(80, "GAZ", "TIGR", "auto_tigr", "",30000));
+        donateList.add(new Donatee(81, "VOLKSWAGEN", "Polo (Polisi)", "auto_polo","", 35000));
+        donateList.add(new Donatee(82, "BMW", "M5 F90 (Polisi)", "auto_bmwf90", "",50000));
         setDonateRecycler(donateList);
         autoRecycler.setVisibility(View.VISIBLE);
         back.setVisibility(View.VISIBLE);
@@ -635,8 +635,8 @@ public class Donate extends AppCompatActivity {
     public void show_actions() {
 
         List<Actions> actionList = new ArrayList<>();
-        actionList.add(new Actions(28, "ДЛЯ ВАС", "Nissan", "auto_skyline", 327));
-        actionList.add(new Actions(54, "АКЦИЯ", "Cadilac", "auto_kadilac", 3300));
+        actionList.add(new Actions(28, "UNTUKMU", "Nissan", "auto_skyline", 327));
+        actionList.add(new Actions(54, "PROMO", "Cadilac", "auto_kadilac", 3300));
 
         setActionRecycler(actionList);
         actionsRecycler.setVisibility(View.VISIBLE);

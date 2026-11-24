@@ -31,4 +31,20 @@
     <string name="auth_client_needs_update_title">Aplikasi membutuhkan pembaruan untuk Layanan Google Play.</string>
     <string name="auth_client_play_services_err_notification_msg">Kesalahan layanan Google Play</string>
     <string name="auth_client_requested_by_msg">Diminta oleh %1$s</string>
+    <string name="app_name">ryzn SA-MP</string>
+    <string name="players_list_header_dialog">Daftar Pemain</string>
+    <string name="players_list_header_first_column">ID</string>
+    <string name="players_list_header_fourth_column">Ping</string>
+    <string name="players_list_header_second_column">Nama Pemain</string>
+    <string name="players_list_header_third_column">Level</string>
+    <string name="players_list_search_hint">Cari pemain</string>
+    <string name="menu_settings">Pengaturan</string>
+    <string name="dialog_join_from_launcher_msg">Anda harus masuk ke game menggunakan launcher</string>
+    <string name="dialog_join_from_launcher_ok">Terima</string>
+    <string name="autoshop_max_speed">Kecepatan Maks.</string>
+    <string name="autoshop_acceleration">Akselerasi 0 ke 100</string>
+    <string name="autoshop_available">Tersedia untuk dibeli</string>
+    <string name="autoshop_pricelabel">Harga kendaraan:</string>
+    <string name="music_list_search_hint">Cari</string>
+    <string name="image_load">Memuat gambar</string>
 </resources>

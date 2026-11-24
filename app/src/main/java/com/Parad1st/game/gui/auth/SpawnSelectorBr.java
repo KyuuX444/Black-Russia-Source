@@ -103,7 +103,7 @@ public class SpawnSelectorBr extends AppCompatActivity {
         voiti.setOnClickListener( view -> {
             if(type == 0){
                 view.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
-                NvEventQueueActivity.getInstance().showNotification(2, "Выберите место", 2, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Pilih lokasi", 2, "", "");
             }else {
                 NvEventQueueActivity.getInstance().sendSpawnClick(type);
                 hide();

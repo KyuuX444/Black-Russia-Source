@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/pt_root_ui_bold"
                 android:gravity="center"
-                android:text="Идет установка"
+                android:text="Sedang Memasang"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_16sdp" />
 
@@ -105,7 +105,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.0"
                         android:fontFamily="@font/pt_root_ui_medium"
-                        android:text="Загрузка файлов игры..."
+                        android:text="Mengunduh file game..."
                         android:textColor="@color/white"
                         android:textSize="@dimen/_12sdp" />
 
@@ -165,7 +165,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pt_root_ui_medium"
         android:gravity="center"
-        android:text="Если у вас возникли какие-то проблемы, советуем обратиться в Техничекую поддержку!"
+        android:text="Jika Anda mengalami kendala, silakan hubungi Dukungan Teknis!"
         android:textColor="#FFFFFF" />
 
 </LinearLayout>

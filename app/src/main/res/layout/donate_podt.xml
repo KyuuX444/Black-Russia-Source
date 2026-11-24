@@ -29,7 +29,7 @@
             android:fontFamily="@font/montserrat_bold"
             android:gravity="center"
             android:singleLine="true"
-            android:text="ПОДТВЕРЖДЕНИЕ"
+            android:text="KONFIRMASI"
             android:textAllCaps="true"
             android:textColor="#ffffffff"
             android:textSize="16sp" />
@@ -47,7 +47,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="ВЫ ДЕЙСТВИТЕЛЬНО ЖЕЛАЕТЕ"
+        android:text="APAKAH ANDA YAKIN INGIN"
         android:textAllCaps="true"
         android:textColor="#ffffff"
         android:textSize="14sp" />
@@ -61,7 +61,7 @@
         android:fontFamily="@font/muller_bold"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="ПРИОБРЕСТИ ДАННЫЙ ТОВАР ЗА"
+        android:text="MEMBELI ITEM INI SEHARGA"
         android:textAllCaps="true"
         android:textColor="#ffc107"
         android:textSize="14sp" />
@@ -74,7 +74,7 @@
         android:fontFamily="@font/muller_bold"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="777 BC?"
+        android:text="777 RC?"
         android:textAllCaps="true"
         android:textColor="#ffc107"
         android:textSize="14sp" />
@@ -99,7 +99,7 @@
             android:minWidth="120dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="ДА"
+            android:text="YA"
             android:layout_marginEnd="20dp"
             android:textAllCaps="true"
             android:textColor="#ffffff"
@@ -116,7 +116,7 @@
             android:minWidth="120dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="НЕТ"
+            android:text="TIDAK"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="13sp"

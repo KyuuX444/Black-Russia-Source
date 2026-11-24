@@ -31,10 +31,10 @@ public class HudHelper {
         String text = "";
         switch (type) {
             case 1:
-                text = "Вы находитесь в списке очереди на подключение к серверу. Чтобы скоротать время <font color='#56D12A'>исследуйте карту</font> и <font color='#ffffff'>новые места.</font>";
+                text = "Anda sedang dalam antrean masuk server. Sambil menunggu, <font color='#56D12A'>jelajahi peta</font> dan <font color='#ffffff'>tempat baru.</font>";
                 break;
             case 2:
-                text = "Проект <font color='#56D12A'>LUX RUSSIA";
+                text = "Server <font color='#56D12A'>ryzn SA-MP";
                 break;
             default:
                 break;

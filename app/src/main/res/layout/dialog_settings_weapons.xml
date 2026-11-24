@@ -45,7 +45,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Дополнительное смещение для всех оружий"
+                    android:text="Geser tambahan untuk semua senjata"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 
@@ -143,7 +143,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Дополнительный поворот для всех оружий"
+                    android:text="Rotasi tambahan untuk semua senjata"
                     android:textColor="@android:color/white"
                     android:textSize="12sp" />
 

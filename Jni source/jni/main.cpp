@@ -59,7 +59,7 @@ void MainLoop();
 
 void PrintBuildInfo()
 {
-       Log("Client by parad1st");
+       Log("Client ryzn SA-MP");
 }
 
 #ifdef GAME_EDITION_CR
@@ -75,7 +75,7 @@ extern uintptr_t g_dwRenderQueueOffset;
 
 void PrintBuildCrashInfo()
 {
-	CrashLog("LUX RUSSIA");
+	CrashLog("ryzn SA-MP");
 	CrashLog("Last processed auto and entity: %d %d", g_usLastProcessedModelIndexAutomobile, g_iLastProcessedModelIndexAutoEnt);
 	CrashLog("Last processed skin and entity: %d %d", g_iLastProcessedSkinCollision, g_iLastProcessedEntityCollision);
 }
@@ -108,7 +108,7 @@ void InitSAMP(JNIEnv* pEnv, jobject thiz)
 
                   //GraphicsHook();                    
 
-	g_pszStorage = "/storage/emulated/0/LUXRUSSIA/";
+	g_pszStorage = "/storage/emulated/0/ryznSAMP/";
 
 	if(!g_pszStorage)
 	{

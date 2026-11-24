@@ -11,8 +11,8 @@ public class NotificationDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Для применения безграничности экрана необходимо перезайти в игру")
-                .setPositiveButton("Закрыть", new DialogInterface.OnClickListener() {
+        builder.setMessage("Untuk menerapkan layar penuh, silakan masuk ulang ke dalam game")
+                .setPositiveButton("Tutup", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                     }

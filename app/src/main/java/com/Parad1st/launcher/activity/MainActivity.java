@@ -24,6 +24,7 @@ import android.view.animation.Animation;
 
 import com.byparad1st.game.R;
 import com.byparad1st.launcher.Registration.reg;
+import com.byparad1st.launcher.other.AlyaLiteDownloader;
 
 import org.ini4j.Wini;
 
@@ -44,7 +45,14 @@ public class MainActivity extends AppCompatActivity {
 		
 		Animation animation = AnimationUtils.loadAnimation(this, R.anim.button_click);
 		
-		if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+		if (android.os.Build.VERSION.SDK_INT >= 30) {
+			if (checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+				requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, 1000);
+			}
+			if (!AlyaLiteDownloader.hasStoragePermission(this)) {
+				AlyaLiteDownloader.requestAllFilesPermissionIfNeeded(this);
+			}
+		} else if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED || checkSelfPermission(Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO}, 1000);
         }
         
@@ -61,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       onClickPlay();
+                       runOnUiThread(() -> onClickPlay());
                    }
                 }, 200L);
             }
@@ -85,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://vk.com/blackrussia.online")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                    }
                 }, 200L);
             }
@@ -98,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://discord.gg/")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                    }
                 }, 200L);
             }
@@ -111,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 t.schedule(new TimerTask(){
                    @Override
                    public void run() {
-                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://t.me/br_dev")));
+                       startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                    }
                 }, 200L);
             }
@@ -145,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                                         File f =
                                                 new File(
                                                         Environment.getExternalStorageDirectory()
-                                                                + "/LUXRUSSIA/SAMP/settings.ini");
+                                                                + "/ryznSAMP/SAMP/settings.ini");
                                         if (!f.exists()) {
                                             f.createNewFile();
                                             f.mkdirs();
@@ -154,11 +162,11 @@ public class MainActivity extends AppCompatActivity {
                                                 new Wini(
                                                         new File(
                                                                 Environment.getExternalStorageDirectory()
-                                 + "/LUXRUSSIA/SAMP/settings.ini"));
+                                 + "/ryznSAMP/SAMP/settings.ini"));
 								 if(checkValidNick()){
 									 w.put("client", "name", nickname.getText().toString());
                                         //Toast.makeText(this, "Ваш новый никнейм успешно сохранен!", Toast.LENGTH_SHORT).show();
-                                        tost("Ваш новый никнейм успешно сохранен!");
+                                        tost("Nama karakter baru berhasil disimpan!");
                                      reg.setNick(String.valueOf(nickname.getText()));
 								 } else {
 									 checkValidNick();
@@ -166,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
                                         w.store();
                                     } catch (IOException e) {
                                         e.printStackTrace();
-                                        tost("Установите игру!");
+                                        tost("Silakan instal game terlebih dahulu!");
                                     }
                                 }
                                 return false;
@@ -182,21 +190,19 @@ public class MainActivity extends AppCompatActivity {
              @Override
              public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                  try {
-                     File f = new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini");
+                     File f = new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini");
                      if (!f.exists()) {
-                         f.createNewFile();
-                         f.mkdirs();
+                         AlyaLiteDownloader.ensureClientConfigAndFonts(nickname.getText().toString());
+                     } else {
+                         Wini w = new Wini(f);
+                         if (checkValidNick()) {
+                             w.put("client", "name", nickname.getText().toString());
+                             w.store();
+                         }
                      }
-                     Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
-					 if(checkValidNick()){
-						w.put("client", "name", nickname.getText().toString());        
-					  } else {
-					      checkValidNick();
-					   }
-                       w.store();
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
+                 } catch (IOException e) {
+                     e.printStackTrace();
+                 }
                  }
 
              @Override
@@ -215,16 +221,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickPlay() {
-        if(IsGameInstalled()) {
+        if (!AlyaLiteDownloader.hasStoragePermission(this)) {
+            AlyaLiteDownloader.requestAllFilesPermissionIfNeeded(this);
+            return;
+        }
+        if (IsGameInstalled()) {
+            String curNick = nickname != null ? nickname.getText().toString() : reg.getNick();
+            AlyaLiteDownloader.ensureClientConfigAndFonts(curNick);
             startActivity(new Intent(this, com.byparad1st.game.core.GTASA.class));
-		} else {
-		   ToLoad();
-		}
+        } else {
+            ToLoad();
+        }
     }
     
     private boolean IsGameInstalled()
     {
-        String CheckFile = Environment.getExternalStorageDirectory() + "/LUXRUSSIA/texdb/gta3.img";
+        String CheckFile = Environment.getExternalStorageDirectory() + "/ryznSAMP/texdb/gta3.img";
         File file = new File(CheckFile);
         return file.exists();
     }
@@ -236,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
 	
 	private void InitLogic() {
         try {
-            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
+            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini"));
             nickname = findViewById(R.id.edit_text_name);
             nickname.setText(w.get("client", "name"));
             w.store();
@@ -248,15 +260,15 @@ public class MainActivity extends AppCompatActivity {
 	public boolean checkValidNick(){
         EditText nick = (EditText) findViewById(R.id.edit_text_name);
 		if(nick.getText().toString().isEmpty()) {
-            tost("Введите ник");
+            tost("Masukkan nama karakter");
 			return false;
 		}
 		if(!(nick.getText().toString().contains("_"))){
-            tost("Ник должен содержать символ \"_\"");
+            tost("Nama karakter harus mengandung simbol \"_\"");
 			return false;
 		}
 		if(nick.getText().toString().length() < 4){
-            tost("Длина ника должна быть не менее 4 символов");
+            tost("Panjang nama karakter minimal 4 karakter");
 			return false;
 		}
 		return true;
@@ -264,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void LoadNick() {
         try {
-            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
+            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini"));
             reg.setNick(w.get("client", "name"));
             w.store();
         } catch (IOException e) {

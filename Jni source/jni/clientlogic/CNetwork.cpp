@@ -4,8 +4,8 @@
 #include "util/CJavaWrapper.h"
 
 const char* g_szServerNames[MAX_SERVERS] = {
-	"LUX RUSSIA | RED",
-	"LUX RUSSIA | TEST"
+	"ryzn SA-MP | SERVER 1",
+	"ryzn SA-MP | TEST"
 };
 
 const CSetServer::CServerInstanceEncrypted g_sEncryptedAddresses[MAX_SERVERS] = {

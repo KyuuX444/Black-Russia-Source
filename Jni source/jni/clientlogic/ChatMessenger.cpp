@@ -15,20 +15,20 @@ extern CGUI* pGUI;
 extern CChatWindow* pChatWindow;
 
 char CLocalisation::m_szMessages[E_MSG::MSG_COUNT][MAX_LOCALISATION_LENGTH] = {
-	"Соединение к LUX RUSSIA...",
-	"Соединено. Подготовка к игре...",
-	"Сервер закрыл соеденение, перезайдите",
-	"{ffffff}Клиент {ff0000}LUX RUSSIA {ffffff}запущен",
+	"Menghubungkan ke ryzn SA-MP...",
+	"Terhubung. Menyiapkan permainan...",
+	"Server menutup koneksi, silakan masuk kembali",
+	"{ffffff}Klien {ff0000}ryzn SA-MP {ffffff}dijalankan",
 	"unused",
-	"Вы были заблокированы сервером",
-	"Потеряно соеденение с сервером, переподключение через 15 секунд...",
-	"Потеряно соеденение с сервером, переподключение через 15 секунд...",
-	"Сервер полон. Переподключение..."
+	"Anda telah diblokir oleh server",
+	"Koneksi ke server terputus, menyambung ulang dalam 15 detik...",
+	"Koneksi ke server terputus, menyambung ulang dalam 15 detik...",
+	"Server penuh. Menyambung ulang..."
 };
 
 void CLocalisation::Initialise(const char* szFile)
 {
-	Log("Initializing loader | by Parad1st");
+	Log("Initializing ryzn SA-MP");
 	char buff[MAX_LOCALISATION_LENGTH];
 
 	sprintf(&buff[0], "%sSAMP/%s", g_pszStorage, szFile);

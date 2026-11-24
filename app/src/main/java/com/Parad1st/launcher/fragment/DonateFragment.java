@@ -50,13 +50,13 @@ public class DonateFragment extends Fragment {
 	
 	public void onClickDeposit() {
         if (nik.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Введите ник!", 1).show();
+            Toast.makeText(getActivity(), "Masukkan nama karakter!", Toast.LENGTH_LONG).show();
         } else if (!nik.getText().toString().contains("_")) {
-            Toast.makeText(getActivity(),"Ник должен иметь \"_\"!", 1).show();
+            Toast.makeText(getActivity(), "Nama karakter harus memakai \"_\"!", Toast.LENGTH_LONG).show();
         } else if (nik.getText().toString().length() < 4) {
-            Toast.makeText(getActivity(), "Минимальная длина ника 4 символа!", 1).show();
+            Toast.makeText(getActivity(), "Panjang nama minimal 4 karakter!", Toast.LENGTH_LONG).show();
         } else if (this.sum.getText().toString().isEmpty()) {
-            Toast.makeText(getActivity(), "Введите сумму!", 1).show();
+            Toast.makeText(getActivity(), "Masukkan nominal!", Toast.LENGTH_LONG).show();
         } else {
 
         }

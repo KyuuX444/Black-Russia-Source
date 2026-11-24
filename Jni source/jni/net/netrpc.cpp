@@ -599,7 +599,7 @@ void DialogBox(RPCParameters *rpcParams)
 
 void GameModeRestart(RPCParameters *rpcParams)
 {
-	pChatWindow->AddInfoMessage("На сервере происходит перезагрузка..Ожидайте..");
+	pChatWindow->AddInfoMessage("Server sedang dimulai ulang... Harap tunggu...");
 	pNetGame->ShutDownForGameRestart();
 }
 
@@ -618,21 +618,21 @@ void ConnectionRejected(RPCParameters *rpcParams)
 	bsData.Read(byteRejectReason);
 
 	if(byteRejectReason == REJECT_REASON_BAD_VERSION)
-		pChatWindow->AddInfoMessage("CONNECTION REJECTED: Incorrect Version.");
+		pChatWindow->AddInfoMessage("KONEKSI DITOLAK: Versi klien tidak sesuai.");
 	else if(byteRejectReason == REJECT_REASON_BAD_NICKNAME)
 	{
-		pChatWindow->AddInfoMessage("ПОДКЛЮЧЕНИЕ ЗАКРЫТО: Неверный никнейм");
-		pChatWindow->AddInfoMessage("Использовать никнейм можно от 3 до 20 символов");
-		pChatWindow->AddInfoMessage("Используйте только: a-z, A-Z, 0-9");
-		pChatWindow->AddInfoMessage("Выйдите из игры, зайдите в лаунчер и измените ник!");
+		pChatWindow->AddInfoMessage("KONEKSI DITOLAK: Nama karakter tidak valid");
+		pChatWindow->AddInfoMessage("Panjang nama karakter harus 3 hingga 20 karakter");
+		pChatWindow->AddInfoMessage("Gunakan hanya huruf/angka: a-z, A-Z, 0-9");
+		pChatWindow->AddInfoMessage("Keluar dari game, buka launcher dan ubah nama Anda!");
 	}
 	else if(byteRejectReason == REJECT_REASON_BAD_MOD)
 	{
-		pChatWindow->AddInfoMessage("CONNECTION REJECTED: Bad mod version.");
+		pChatWindow->AddInfoMessage("KONEKSI DITOLAK: Versi mod tidak sesuai.");
 	}
 	else if(byteRejectReason == REJECT_REASON_BAD_PLAYERID)
 	{
-		pChatWindow->AddInfoMessage("CONNECTION REJECTED: Unable to allocate a player slot.");
+		pChatWindow->AddInfoMessage("KONEKSI DITOLAK: Tidak dapat mengalokasikan slot pemain.");
 	}
 
 	pNetGame->GetRakClient()->Disconnect(500);

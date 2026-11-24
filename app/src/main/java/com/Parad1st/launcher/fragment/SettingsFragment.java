@@ -48,7 +48,7 @@ public class SettingsFragment extends Fragment {
                         new View.OnClickListener() {
                             public void onClick(View v) {
                                 v.startAnimation(animation);
-								File gameDirectory = (new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA"));
+								File gameDirectory = (new File(Environment.getExternalStorageDirectory() + "/ryznSAMP"));
 								Utils.delete(gameDirectory);
 								startActivity(new Intent(getActivity(), com.byparad1st.launcher.activity.LoaderActivity.class));
                             }
@@ -65,7 +65,7 @@ public class SettingsFragment extends Fragment {
                         new View.OnClickListener() {
                             public void onClick(View v) {
                                 v.startAnimation(animation);
-                                startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://t.me/")));
+                                startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                             }
         });
         /*((ImageView) inflate.findViewById(R.id.instagramButton))
@@ -82,7 +82,7 @@ public class SettingsFragment extends Fragment {
                             public void onClick(View v) {
                                 v.startAnimation(animation);
                                 startActivity(
-                                        new Intent("android.intent.action.VIEW", Uri.parse("https://vk.com/brilliantrussia.mobile")));
+                                        new Intent("android.intent.action.VIEW", Uri.parse("https://github.com/KyuuX444/Black-Russia-Source")));
                             }
                         });
         ((ImageView) inflate.findViewById(R.id.discordButton))
@@ -108,21 +108,23 @@ public class SettingsFragment extends Fragment {
                                         File f =
                                                 new File(
                                                         Environment.getExternalStorageDirectory()
-                                                                + "/LUXRUSSIA/SAMP/settings.ini");
+                                                                + "/ryznSAMP/SAMP/settings.ini");
                                         if (!f.exists()) {
+                                            if (f.getParentFile() != null) {
+                                                f.getParentFile().mkdirs();
+                                            }
                                             f.createNewFile();
-                                            f.mkdirs();
                                         }
                                         Wini w =
                                                 new Wini(
                                                         new File(
                                                                 Environment.getExternalStorageDirectory()
-                                 + "/LUXRUSSIA/SAMP/settings.ini"));
+                                 + "/ryznSAMP/SAMP/settings.ini"));
 								 if(checkValidNick(inflate)){
 									 w.put("client", "name", nickname.getText().toString());
                                         Toast.makeText(
                                                 getActivity(),
-                                                "Ваш новый никнейм успешно сохранен!",
+                                                "Nama karakter baru berhasil disimpan!",
                                                 Toast.LENGTH_SHORT).show();
 								 } else {
 									 checkValidNick(inflate);
@@ -130,7 +132,7 @@ public class SettingsFragment extends Fragment {
                                         w.store();
                                     } catch (IOException e) {
                                         e.printStackTrace();
-										Toast.makeText(getActivity(), "Установите игру!", Toast.LENGTH_SHORT).show();
+										Toast.makeText(getActivity(), "Silakan instal game terlebih dahulu!", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 return false;
@@ -141,7 +143,7 @@ public class SettingsFragment extends Fragment {
 
     private void InitLogic() {
         try {
-            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/LUXRUSSIA/SAMP/settings.ini"));
+            Wini w = new Wini(new File(Environment.getExternalStorageDirectory() + "/ryznSAMP/SAMP/settings.ini"));
             nickname.setText(w.get("client", "name"));
             w.store();
         } catch (IOException e) {
@@ -152,15 +154,15 @@ public class SettingsFragment extends Fragment {
 	public boolean checkValidNick(View inflate){
 		EditText nick = (EditText) inflate.findViewById(R.id.editText);
 		if(nick.getText().toString().isEmpty()) {
-			Toast.makeText(getActivity(), "Введите ник", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Masukkan nama karakter", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if(!(nick.getText().toString().contains("_"))){
-			Toast.makeText(getActivity(), "Ник должен содержать символ \"_\"", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Nama karakter harus mengandung simbol \"_\"", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if(nick.getText().toString().length() < 4){
-			Toast.makeText(getActivity(), "Длина ника должна быть не менее 4 символов", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), "Panjang nama karakter minimal 4 karakter", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		return true;

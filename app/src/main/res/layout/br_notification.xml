@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="@font/muller_bold"
-            android:text="₽"
+            android:text="Rp"
             android:textColor="#ffffffff"
             android:textSize="16sp" />
     </FrameLayout>
@@ -50,7 +50,7 @@
                 android:fontFamily="@font/muller_bold"
                 android:lineSpacingMultiplier="0.85"
                 android:minWidth="140dp"
-                android:text="lux russia"
+                android:text="ryzn sa-mp"
                 android:textColor="#ffffffff"
                 android:textSize="11sp" />
 
@@ -65,7 +65,7 @@
                 android:minHeight="30dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="parad1st"
+                android:text="ryzn"
                 android:textAllCaps="false"
                 android:textColor="#ffffffff"
                 android:textSize="11sp" />

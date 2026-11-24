@@ -769,7 +769,7 @@ void (*NvUtilInit)(void);
 void NvUtilInit_hook(void)
 {	
 	NvUtilInit();
-	*(char**)(g_libGTASA + 0x5D1608) = "/storage/emulated/0/LUXRUSSIA/";
+	*(char**)(g_libGTASA + 0x5D1608) = "/storage/emulated/0/ryznSAMP/";
 }
 
 void InstallSpecialHooks()

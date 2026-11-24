@@ -40,7 +40,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:rotation="-2"
-            android:text="Закрыть"
+            android:text="Tutup"
             android:textColor="#FF313131"
             android:textSize="10sp"
             android:visibility="visible" />
@@ -57,7 +57,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:rotation="-2"
-            android:text="Сбросить к стандартным"
+            android:text="Reset ke Default"
             android:textColor="#FFFCD32A"
             android:textSize="10sp"
             android:visibility="visible" />

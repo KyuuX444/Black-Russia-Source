@@ -27,7 +27,7 @@
         android:paddingTop="10.0dip"
         android:paddingRight="10.0dip"
         android:paddingBottom="10.0dip"
-        android:text="Клиент LUX RUSSIA by Parad1st\nЗаходи поиграть"
+        android:text="Klien ryzn SA-MP\nAyo masuk dan bermain"
         android:textColor="#ffffffff"
         android:textSize="10.0sp"
         android:visibility="visible"

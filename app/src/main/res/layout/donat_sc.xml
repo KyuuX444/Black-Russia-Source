@@ -27,7 +27,7 @@
             android:fontFamily="@font/montserrat_bold"
             android:gravity="center"
             android:singleLine="true"
-            android:text="ВЫПОЛНЕНО"
+            android:text="SELESAI"
             android:textAllCaps="true"
             android:textColor="#ffffffff"
             android:textSize="16sp" />
@@ -59,7 +59,7 @@
         android:fontFamily="@font/muller_regular"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="client BLACK RUSSIA BY Parad1st"
+        android:text="Klien ryzn SA-MP"
         android:textAllCaps="true"
         android:textColor="#ffffff"
         android:textSize="14sp" />
@@ -73,7 +73,7 @@
         android:fontFamily="@font/muller_bold"
         android:gravity="center"
         android:lineSpacingExtra="3sp"
-        android:text="BY PARAD1ST"
+        android:text="ryzn SA-MP"
         android:textAllCaps="true"
         android:textColor="#ffffff"
         android:textSize="14sp" />
@@ -98,7 +98,7 @@
             android:minWidth="120dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:text="Вернуться"
+            android:text="Kembali"
             android:textAllCaps="true"
             android:textColor="#ffffff"
             android:textSize="13sp"

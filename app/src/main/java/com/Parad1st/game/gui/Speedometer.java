@@ -61,7 +61,7 @@ public class Speedometer {
         //BY VISKI
         blink.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Поворотники находяться в разроботке!", 4, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Lampu sein sedang dalam pengembangan!", 4, "", "");
                 if (!isBlink) {
                     startPovoro_Blink();
                     isBlink = true;
@@ -73,7 +73,7 @@ public class Speedometer {
         });
         blinker.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Поворотники находяться в разроботке!", 4, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Lampu sein sedang dalam pengembangan!", 4, "", "");
                 if (!isBlink) {
                     startPovoro_Blink();
                     isBlink = true;
@@ -85,7 +85,7 @@ public class Speedometer {
         });
         speedo_arrow.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Поворотники находяться в разроботке!", 4, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Lampu sein sedang dalam pengembangan!", 4, "", "");
                 if (!isRight) {
                     startPovoro_Right();
                     isRight = true;
@@ -97,7 +97,7 @@ public class Speedometer {
         });
         speedo_arrow_left.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                NvEventQueueActivity.getInstance().showNotification(2, "Поворотники находяться в разроботке!", 4, "", "");
+                NvEventQueueActivity.getInstance().showNotification(2, "Lampu sein sedang dalam pengembangan!", 4, "", "");
                 if (!isLeft) {
                     startPovoro_Left();
                     isLeft = true;

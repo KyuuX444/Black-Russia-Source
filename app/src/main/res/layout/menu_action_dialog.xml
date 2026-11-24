@@ -1,6 +1,6 @@
 <LinearLayout android:id="@+id/main_menu_layout_new_layout" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical" android:background="@drawable/background_menu" android:layout_width="match_parent" android:layout_height="match_parent">
     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="70dp" android:layout_marginTop="50dp" android:layout_marginRight="70dp">
-        <TextView android:textSize="42sp" android:textColor="@color/common_signin_btn_dark_text_default" android:id="@+id/br_menu_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Действия" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:fontFamily="@font/muller_bold"/>
+        <TextView android:textSize="42sp" android:textColor="@color/common_signin_btn_dark_text_default" android:id="@+id/br_menu_title" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Aksi" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:fontFamily="@font/muller_bold"/>
 
         <Button
             android:id="@+id/br_menu_close_new"

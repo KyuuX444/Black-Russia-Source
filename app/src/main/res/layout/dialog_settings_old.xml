@@ -27,7 +27,7 @@
             android:layout_margin="8dp"
             android:fontFamily="@font/ttnorms_blackitalic"
             android:gravity="center"
-            android:text="Настройки клиента BLACK RUSSIA"
+            android:text="Pengaturan Klien ryzn SA-MP"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp" />
 
@@ -59,7 +59,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Общее"
+                    android:text="Umum"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -86,7 +86,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="start|center_vertical"
-                        android:text="Android клавиатура"
+                        android:text="Keyboard Android"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -100,7 +100,7 @@
                         android:layout_weight="0.5"
                         android:gravity="center_vertical|end"
                         android:singleLine="false"
-                        android:text="Безграничный экран"
+                        android:text="Layar Penuh"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -121,7 +121,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="start|center_vertical"
-                        android:text="Счётчик FPS"
+                        android:text="Penghitung FPS"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -135,7 +135,7 @@
                         android:layout_weight="0.5"
                         android:gravity="center_vertical|end"
                         android:singleLine="false"
-                        android:text="Оружие за спиной"
+                        android:text="Senjata di Punggung"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -156,7 +156,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="start|center_vertical"
-                        android:text="Кастомный таймцикл"
+                        android:text="Timecyc Kustom"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -178,7 +178,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Цвета интерфейса"
+                    android:text="Warna Antarmuka"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -208,7 +208,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет денег"
+                        android:text="Warna Uang"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -226,7 +226,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет HP"
+                        android:text="Warna HP"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -244,7 +244,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет брони"
+                        android:text="Warna Armor"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -263,7 +263,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет звёзд розыска"
+                        android:text="Warna Bintang Buronan"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -289,7 +289,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет HP текста"
+                        android:text="Warna Teks HP"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -307,7 +307,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет брони текста"
+                        android:text="Warna Teks Armor"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -325,7 +325,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет радара"
+                        android:text="Warna Radar"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -344,7 +344,7 @@
                         android:gravity="center"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
-                        android:text="Цвет патронов"
+                        android:text="Warna Peluru"
                         android:textColor="@android:color/white"
                         android:textSize="10sp"
                         android:visibility="visible" />
@@ -365,7 +365,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Настройки интерфейса"
+                    android:text="Pengaturan Antarmuka"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -392,7 +392,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="start|center_vertical"
-                        android:text="Цифры HP и брони"
+                        android:text="Angka HP &amp; Armor"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -404,7 +404,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="center_vertical|end"
-                        android:text="Квадратный радар"
+                        android:text="Radar Kotak"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -423,7 +423,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки вида от первого лица"
+                        android:text="Pengaturan Orang Pertama"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -450,7 +450,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Смещение пешком"
+                            android:text="Posisi Jalan Kaki"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -547,7 +547,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Смещение в транспорте"
+                            android:text="Posisi di Kendaraan"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -644,7 +644,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки радара"
+                        android:text="Pengaturan Radar"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -720,7 +720,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -748,7 +748,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки цифр HP"
+                        android:text="Pengaturan Angka HP"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -824,7 +824,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -852,7 +852,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки цифр брони"
+                        android:text="Pengaturan Angka Armor"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -928,7 +928,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -956,7 +956,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки полоски HP"
+                        android:text="Pengaturan Bar HP"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1034,7 +1034,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Ширина"
+                            android:text="Lebar"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1054,7 +1054,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Высота"
+                            android:text="Tinggi"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1082,7 +1082,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки полоски брони"
+                        android:text="Pengaturan Bar Armor"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1160,7 +1160,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Ширина"
+                            android:text="Lebar"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1180,7 +1180,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Высота"
+                            android:text="Tinggi"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1209,7 +1209,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки звёзд розыска"
+                        android:text="Pengaturan Bintang Buronan"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1285,7 +1285,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1313,7 +1313,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки денег"
+                        android:text="Pengaturan Uang"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1332,7 +1332,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_weight="0.5"
                         android:gravity="start|center_vertical"
-                        android:text="PC вид"
+                        android:text="Tampilan PC"
                         android:textColor="@android:color/white"
                         android:textSize="12sp" />
 
@@ -1353,7 +1353,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1431,7 +1431,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки чата"
+                        android:text="Pengaturan Obrolan"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1507,7 +1507,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки фиста"
+                        android:text="Pengaturan Ikon Tinju"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1583,7 +1583,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1611,7 +1611,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Настройки патронов"
+                        android:text="Pengaturan Peluru"
                         android:textColor="@android:color/white"
                         android:textSize="16sp" />
 
@@ -1687,7 +1687,7 @@
                             android:paddingTop="5dp"
                             android:paddingRight="10dp"
                             android:paddingBottom="5dp"
-                            android:text="Масштаб"
+                            android:text="Skala"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
 
@@ -1717,7 +1717,7 @@
                     android:paddingTop="5dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="5dp"
-                    android:text="Настройки кнопок"
+                    android:text="Pengaturan Tombol"
                     android:textColor="@android:color/white"
                     android:textSize="16sp" />
 
@@ -1741,7 +1741,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Позиция и размер кнопки голосового чата"
+                        android:text="Posisi &amp; ukuran tombol voice chat"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 
@@ -1815,7 +1815,7 @@
                                 android:paddingTop="5dp"
                                 android:paddingRight="10dp"
                                 android:paddingBottom="5dp"
-                                android:text="Размер"
+                                android:text="Ukuran"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp" />
 
@@ -1844,7 +1844,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Позиция и размер кнопки посадки в авто"
+                        android:text="Posisi &amp; ukuran tombol masuk mobil"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 
@@ -1918,7 +1918,7 @@
                                 android:paddingTop="5dp"
                                 android:paddingRight="10dp"
                                 android:paddingBottom="5dp"
-                                android:text="Размер"
+                                android:text="Ukuran"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp" />
 
@@ -1947,7 +1947,7 @@
                         android:paddingTop="5dp"
                         android:paddingRight="10dp"
                         android:paddingBottom="5dp"
-                        android:text="Позиция и размер кнопки смены камеры"
+                        android:text="Posisi &amp; ukuran tombol kamera"
                         android:textColor="@android:color/white"
                         android:textSize="14sp" />
 
@@ -2021,7 +2021,7 @@
                                 android:paddingTop="5dp"
                                 android:paddingRight="10dp"
                                 android:paddingBottom="5dp"
-                                android:text="Размер"
+                                android:text="Ukuran"
                                 android:textColor="@android:color/white"
                                 android:textSize="12sp" />
 
@@ -2066,7 +2066,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:rotation="-2"
-            android:text="Закрыть"
+            android:text="Tutup"
             android:textColor="#FF313131"
             android:textSize="10sp"
             android:visibility="visible" />
@@ -2084,7 +2084,7 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:rotation="-2"
-            android:text="Сбросить к стандартным"
+            android:text="Reset ke Default"
             android:textColor="#FFFCD32A"
             android:textSize="10sp"
             android:visibility="visible" />

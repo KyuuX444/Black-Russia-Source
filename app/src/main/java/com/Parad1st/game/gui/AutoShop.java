@@ -100,31 +100,31 @@ public class AutoShop {
     {
         switch (gear){
             case 1: {
-                autoshop_gear_value.setText("Задний");
+                autoshop_gear_value.setText("Belakang");
                 break;
             }
             case 2: {
-                autoshop_gear_value.setText("Передний");
+                autoshop_gear_value.setText("Depan");
                 break;
             }
             case 3: {
-                autoshop_gear_value.setText("Полный");
+                autoshop_gear_value.setText("Semua Roda");
                 break;
             }
             case 4: {
-                autoshop_gear_value.setText("Цепной");
+                autoshop_gear_value.setText("Rantai");
                 break;
             }
             default: {
-                autoshop_gear_value.setText("Не указан");
+                autoshop_gear_value.setText("Tidak diketahui");
                 break;
             }
         }
 
-        autoshop_pricevalue.setText(price_format.format(price)+" руб.");
+        autoshop_pricevalue.setText("Rp " + price_format.format(price));
         autoshop_available_value.setText(String.format("%d", count));
-        autoshop_acceleration_value.setText(String.format("%.1f", acceleration)+" с.");
-        autoshop_maxspeed_value.setText(String.format("%.0f", maxspeed)+" км/ч");
+        autoshop_acceleration_value.setText(String.format("%.1f", acceleration)+" dtk");
+        autoshop_maxspeed_value.setText(String.format("%.0f", maxspeed)+" km/j");
         autoshop_modelname.setText(String.valueOf(name));
     }
 
