@@ -24,6 +24,25 @@ android {
             abiFilters 'armeabi-v7a'
         }
     }
+    signingConfigs {
+        release {
+            def envPath = System.getenv("KEYSTORE_PATH")
+            storeFile envPath ? file(envPath) : file("${rootDir}/keystore/black-russia-release.jks")
+            storePassword System.getenv("STORE_PASSWORD") ?: "blackrussia123"
+            keyAlias System.getenv("KEY_ALIAS") ?: "blackrussia"
+            keyPassword System.getenv("KEY_PASSWORD") ?: "blackrussia123"
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+        debug {
+            signingConfig signingConfigs.release
+        }
+    }
     lintOptions {
         checkReleaseBuilds false
     }
