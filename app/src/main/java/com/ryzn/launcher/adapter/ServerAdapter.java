@@ -164,8 +164,9 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
 
             RyznGameDownloader.ensureClientConfigAndFonts(activity, nick);
             String rawHost = model.server_host != null ? model.server_host.trim() : "127.0.0.1";
-            int targetPort = model.server_port;
-            dialog.dismiss();
+            String targetPort = (model.server_port != null && !model.server_port.trim().isEmpty())
+                    ? model.server_port.trim()
+                    : "7777";
 
             btn.setEnabled(false);
             queryExecutor.execute(() -> {
@@ -189,6 +190,9 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
                 final String finalHost = connectHost;
                 activity.runOnUiThread(() -> {
                     btn.setEnabled(true);
+                    if (dialog.isShowing()) {
+                        dialog.dismiss();
+                    }
                     RyznGameDownloader.saveServerConfig(finalHost + ":" + targetPort, pass);
                     if (RyznGameDownloader.isGameInstalled()) {
                         activity.startActivity(new Intent(activity, GTASA.class));
