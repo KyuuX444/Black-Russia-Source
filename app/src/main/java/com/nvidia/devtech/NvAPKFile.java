@@ -1,7 +1,5 @@
 package com.nvidia.devtech;
-
 import java.io.InputStream;
-
 public class NvAPKFile
 {
     /** The actual data bytes. */

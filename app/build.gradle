@@ -1,25 +1,27 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.1"
+    namespace 'com.ryzn.game'
+    compileSdk 35
+    ndkVersion '25.1.8937393'
 
     defaultConfig {
-        minSdk 23
-        targetSdkVersion 28
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         applicationId 'com.ryzn.samp'
-        versionName "1.0-ryzn"
-        versionCode 10
+        minSdk 23
+        targetSdk 28
+        versionCode 20
+        versionName '2.0-ryzn'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
-
-        multiDexEnabled = true
+        multiDexEnabled true
 
         ndk {
-            abiFilters 'armeabi-v7a'
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
         }
     }
+
     signingConfigs {
         release {
             def envPath = System.getenv("KEYSTORE_PATH")
@@ -27,36 +29,56 @@ android {
             storePassword System.getenv("STORE_PASSWORD") ?: "blackrussia123"
             keyAlias System.getenv("KEY_ALIAS") ?: "blackrussia"
             keyPassword System.getenv("KEY_PASSWORD") ?: "blackrussia123"
-            v1SigningEnabled true
-            v2SigningEnabled true
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            minifyEnabled false
         }
         debug {
             signingConfig signingConfigs.release
         }
     }
-    packagingOptions {
-        exclude 'dump_syms/**'
-        exclude 'META-INF/*.kotlin_module'
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    lintOptions {
+
+    externalNativeBuild {
+        cmake {
+            path 'src/main/cpp/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    packaging {
+        resources {
+            excludes += ['dump_syms/**', 'META-INF/*.kotlin_module']
+        }
+    }
+
+    lint {
+        abortOnError false
         checkReleaseBuilds false
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation "com.github.skydoves:colorpickerpreference:2.0.4"
-    implementation 'ru.egslava:MaskedEditText:1.0.5'
+    implementation fileTree(dir: 'libs', includes: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'org.ini4j:ini4j:0.5.4'
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.2'
-    testImplementation 'junit:junit:4.12'
+    implementation 'com.intuit.sdp:sdp-android:1.1.1'
+    implementation 'com.intuit.ssp:ssp-android:1.1.1'
+    testImplementation 'junit:junit:4.13.2'
 }

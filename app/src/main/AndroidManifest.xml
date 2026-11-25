@@ -1,7 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.ryzn.game">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -54,8 +52,12 @@
 
         <activity
             android:name="com.ryzn.game.core.GTASA"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
+            android:exported="false"
+            android:launchMode="singleTask"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
+            android:theme="@style/Theme.RyznGame"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.ryzn.launcher.activity.SplashActivity"
             android:exported="true"

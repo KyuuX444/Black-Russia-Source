@@ -83,6 +83,10 @@ public class RyznGameDownloader {
         return new File(getGameDir(), "SAMP/settings.ini");
     }
 
+    public static File getSettingsJsonFile() {
+        return new File(getGameDir(), "SAMP/settings.json");
+    }
+
     public static boolean isGameInstalled() {
         File dir = getGameDir();
         return new File(dir, "texdb/gta3.img").exists() && getSettingsFile().exists();
@@ -211,6 +215,126 @@ public class RyznGameDownloader {
             } catch (Exception ignored) {
             }
         }
+        syncSettingsJson(context);
+    }
+
+    public static void syncSettingsJson(Context context) {
+        try {
+            File jsonFile = getSettingsJsonFile();
+            if (jsonFile.getParentFile() != null && !jsonFile.getParentFile().exists()) {
+                jsonFile.getParentFile().mkdirs();
+            }
+
+            String host = "127.0.0.1";
+            int port = DEFAULT_SERVER_PORT;
+            String password = "";
+            String nickName = "Player";
+            boolean timestamp = false;
+            boolean fullscreen = false;
+            boolean voiceChat = true;
+            boolean displayFps = false;
+            boolean radarRect = false;
+            int chatStrings = 8;
+            double fontSize = 30.0;
+            int fpsLimit = 60;
+
+            if (context != null) {
+                android.content.SharedPreferences sp =
+                        context.getSharedPreferences("samp_settings", Context.MODE_PRIVATE);
+                String spNick = sp.getString("nick_name", "");
+                if (spNick != null && !spNick.trim().isEmpty()) {
+                    nickName = spNick.trim();
+                }
+                timestamp = sp.getBoolean("timestamp", false);
+                fullscreen = sp.getBoolean("fullscreen", false);
+                voiceChat = sp.getBoolean("voice_chat", true);
+                displayFps = sp.getBoolean("display_fps", false);
+                radarRect = sp.getBoolean("radar_rect", false);
+                chatStrings = Math.max(5, Math.min(20, sp.getInt("chat_strings", 8)));
+                fontSize = sp.getFloat("font_size", 30.0f);
+            }
+
+            File ini = getSettingsFile();
+            if (ini.exists()) {
+                try {
+                    Wini w = new Wini(ini);
+                    String iniHost = w.get("server", "host");
+                    if (iniHost != null && !iniHost.trim().isEmpty()) host = iniHost.trim();
+                    String iniPort = w.get("server", "port");
+                    if (iniPort != null) {
+                        int parsedPort = Integer.parseInt(iniPort.trim());
+                        if (parsedPort > 0 && parsedPort <= 65535) port = parsedPort;
+                    }
+                    String iniPass = w.get("client", "password");
+                    if (iniPass != null) password = iniPass.trim();
+                    String iniNick = w.get("client", "name");
+                    if (iniNick != null && !iniNick.trim().isEmpty()) nickName = iniNick.trim();
+
+                    String iniTs = w.get("gui", "timestamp");
+                    if (iniTs != null) timestamp = "1".equals(iniTs.trim());
+                    String iniCut = w.get("gui", "cutout");
+                    if (iniCut != null) fullscreen = "1".equals(iniCut.trim());
+                    String iniVoice = w.get("gui", "voicelist");
+                    if (iniVoice != null) voiceChat = !"0".equals(iniVoice.trim());
+                    String iniFps = w.get("gui", "fpscounter");
+                    if (iniFps != null) displayFps = "1".equals(iniFps.trim());
+                    String iniRadar = w.get("gui", "radarrect");
+                    if (iniRadar != null) radarRect = "1".equals(iniRadar.trim());
+                    String iniChat = w.get("gui", "ChatMaxMessages");
+                    if (iniChat != null) {
+                        chatStrings = Math.max(5, Math.min(20, Integer.parseInt(iniChat.trim())));
+                    }
+                    String iniFont = w.get("gui", "FontSize");
+                    if (iniFont != null && !iniFont.trim().isEmpty()) {
+                        fontSize = Double.parseDouble(iniFont.trim());
+                    }
+                    String iniFpsLimit = w.get("gui", "fps");
+                    if (iniFpsLimit != null && !iniFpsLimit.trim().isEmpty()) {
+                        int parsedFps = Integer.parseInt(iniFpsLimit.trim());
+                        if (parsedFps >= 30 && parsedFps <= 120) fpsLimit = parsedFps;
+                    }
+                } catch (Exception ignored) {
+                }
+            }
+
+            JSONObject serverObj = new JSONObject();
+            serverObj.put("host", host);
+            serverObj.put("port", port);
+            serverObj.put("password", password);
+
+            JSONObject settingsObj = new JSONObject();
+            settingsObj.put("nick_name", nickName);
+            settingsObj.put("samp_version", 0);
+            settingsObj.put("game_version", 0);
+            settingsObj.put("new_interface", false);
+            settingsObj.put("system_keyboard", false);
+            settingsObj.put("timestamp", timestamp);
+            settingsObj.put("fullscreen", fullscreen);
+            settingsObj.put("fast_connect", false);
+            settingsObj.put("voice_chat", voiceChat);
+            settingsObj.put("display_fps", displayFps);
+            settingsObj.put("radar_rect", radarRect);
+            settingsObj.put("fps_limit", fpsLimit);
+            settingsObj.put("chat_strings", chatStrings);
+            settingsObj.put("font_size", fontSize);
+            settingsObj.put("chat_posx", 100);
+            settingsObj.put("chat_posy", 10);
+            settingsObj.put("chat_sizex", 400);
+            settingsObj.put("chat_sizey", 150);
+
+            JSONObject clientObj = new JSONObject();
+            clientObj.put("server", serverObj);
+            clientObj.put("settings", settingsObj);
+
+            JSONObject rootObj = new JSONObject();
+            rootObj.put("client", clientObj);
+
+            try (FileOutputStream fos = new FileOutputStream(jsonFile)) {
+                fos.write(rootObj.toString(4).getBytes(StandardCharsets.UTF_8));
+                fos.flush();
+            }
+        } catch (Exception ignored) {
+        }
     }
 
     public static File getSampGuiFile() {
@@ -293,6 +417,7 @@ public class RyznGameDownloader {
                 w.put("client", "password", password);
             }
             w.store();
+            syncSettingsJson(null);
             return true;
         } catch (Exception e) {
             return false;

@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ryzn.game.R;
 import com.ryzn.game.gui.util.Utils;
-import com.nvidia.devtech.NvEventQueueActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -69,31 +68,42 @@ public class BrDialogWindow {
     private String mButtonNegative = "";
     private int mCurrentListitem = -1;
     private String mCurrentInputtext = "";
+    public interface ResponseListener {
+        void onDialogResponse(int dialogId, int buttonId, int listItem, byte[] input);
+    }
+
+    private ResponseListener mResponseListener;
     public boolean isShow = false;
 
     public BrDialogWindow(Activity activity) {
         this.activity = activity;
-        this.mMainLayout = activity.findViewById(R.id.dw_root);
-        this.mDialogBody = activity.findViewById(R.id.dialog_body);
-        this.mDialogTextLayout = activity.findViewById(R.id.dialog_text_layout);
-        this.mDialogInputLayout = activity.findViewById(R.id.dialog_input_layout);
-        this.mDialogListLayout = activity.findViewById(R.id.dialog_list_layout);
-        this.mDialogTabListRow = activity.findViewById(R.id.dialog_tablist_row);
-        this.mDialogList = activity.findViewById(R.id.dialog_list);
-        this.mDialogCaption = activity.findViewById(R.id.dialog_caption);
-        this.mDialogText = activity.findViewById(R.id.dialog_text);
-        this.mDialogInput = activity.findViewById(R.id.dialog_input);
-        this.mDialogTabField[0] = activity.findViewById(R.id.dialog_field1);
-        this.mDialogTabField[1] = activity.findViewById(R.id.dialog_field2);
-        this.mDialogTabField[2] = activity.findViewById(R.id.dialog_field3);
-        this.mDialogTabField[3] = activity.findViewById(R.id.dialog_field4);
-        this.mDialogListRecycler = activity.findViewById(R.id.dialog_list_recycler);
-        this.mDialogButtonPositive = activity.findViewById(R.id.button_positive);
-        this.mDialogButtonNegative = activity.findViewById(R.id.button_negative);
-        this.mDialogButtonPositiveText = activity.findViewById(R.id.button_positive_text);
-        this.mDialogButtonNegativeText = activity.findViewById(R.id.button_negative_text);
-        this.mDialogTextScrollbar = activity.findViewById(R.id.dialog_text_scrollbar);
-        this.mDialogListScrollbar = activity.findViewById(R.id.dialog_list_scrollbar);
+        View rootView = activity.findViewById(R.id.dw_root);
+        if (rootView == null) {
+            rootView = activity.getLayoutInflater().inflate(R.layout.window_dialog, null);
+            activity.addContentView(rootView, new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+        this.mMainLayout = (ConstraintLayout) rootView;
+        this.mDialogBody = rootView.findViewById(R.id.dialog_body);
+        this.mDialogTextLayout = rootView.findViewById(R.id.dialog_text_layout);
+        this.mDialogInputLayout = rootView.findViewById(R.id.dialog_input_layout);
+        this.mDialogListLayout = rootView.findViewById(R.id.dialog_list_layout);
+        this.mDialogTabListRow = rootView.findViewById(R.id.dialog_tablist_row);
+        this.mDialogList = rootView.findViewById(R.id.dialog_list);
+        this.mDialogCaption = rootView.findViewById(R.id.dialog_caption);
+        this.mDialogText = rootView.findViewById(R.id.dialog_text);
+        this.mDialogInput = rootView.findViewById(R.id.dialog_input);
+        this.mDialogTabField[0] = rootView.findViewById(R.id.dialog_field1);
+        this.mDialogTabField[1] = rootView.findViewById(R.id.dialog_field2);
+        this.mDialogTabField[2] = rootView.findViewById(R.id.dialog_field3);
+        this.mDialogTabField[3] = rootView.findViewById(R.id.dialog_field4);
+        this.mDialogListRecycler = rootView.findViewById(R.id.dialog_list_recycler);
+        this.mDialogButtonPositive = rootView.findViewById(R.id.button_positive);
+        this.mDialogButtonNegative = rootView.findViewById(R.id.button_negative);
+        this.mDialogButtonPositiveText = rootView.findViewById(R.id.button_positive_text);
+        this.mDialogButtonNegativeText = rootView.findViewById(R.id.button_negative_text);
+        this.mDialogTextScrollbar = rootView.findViewById(R.id.dialog_text_scrollbar);
+        this.mDialogListScrollbar = rootView.findViewById(R.id.dialog_list_scrollbar);
 
         mDialogInput.setOnClickListener(view -> {
             mDialogInput.requestFocus();
@@ -198,6 +208,18 @@ public class BrDialogWindow {
         Utils.ShowLayout(mMainLayout, false);
     }
 
+    public void setResponseListener(ResponseListener listener) {
+        this.mResponseListener = listener;
+    }
+
+    public void showWithoutReset(boolean visible) {
+        if (isShow) {
+            mMainLayout.setVisibility(visible ? View.VISIBLE : View.GONE);
+        } else {
+            mMainLayout.setVisibility(View.GONE);
+        }
+    }
+
     public void close() {
         isShow = false;
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -255,10 +277,8 @@ public class BrDialogWindow {
             payload = finalText.getBytes();
         }
 
-        NvEventQueueActivity act = NvEventQueueActivity.getInstance();
-        if (act != null) {
-            // CJavaWrapper expects: sendDialogResponse(buttonId, dialogId, listItem, inputBytes)
-            act.sendDialogResponse(buttonId, mCurrentDialogId, resolvedListItem, payload);
+        if (mResponseListener != null) {
+            mResponseListener.onDialogResponse(mCurrentDialogId, buttonId, resolvedListItem, payload);
         }
         close();
     }

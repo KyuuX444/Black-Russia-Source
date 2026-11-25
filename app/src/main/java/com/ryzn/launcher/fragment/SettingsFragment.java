@@ -242,6 +242,7 @@ public class SettingsFragment extends Fragment {
                     updateIni("gui", "timestamp", "0");
                     updateIni("gui", "ChatMaxMessages", "8");
                     updateIni("gui", "FontSize", "30.0");
+                    RyznGameDownloader.syncSettingsJson(requireContext());
                     loadFromIni();
                     if (getActivity() instanceof MainActivity) {
                         ((MainActivity) getActivity()).refreshFooterClientState();
@@ -276,6 +277,7 @@ public class SettingsFragment extends Fragment {
                 w.put(section, key, value);
                 w.store();
             }
+            RyznGameDownloader.syncSettingsJson(ctx);
         } catch (Exception ignored) {
         }
     }

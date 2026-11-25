@@ -21,14 +21,9 @@
 //----------------------------------------------------------------------------------
 package com.nvidia.devtech;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-
 import android.app.Activity;
 import android.os.Environment;
+import java.util.HashMap;
 
 /**
  * A helper class used to aid native code.
@@ -44,40 +39,7 @@ public class NvUtil
 	private NvUtil()
 	{
 		appLocalValues = new HashMap<String, String>();
-		appLocalValues.put("STORAGE_ROOT", 
-			Environment.getExternalStorageDirectory().getAbsolutePath() + "/ryznSAMP/");
-	}
-
-	public void appendLog(String text)
-	{
-		String path = getAppLocalValue("STORAGE_ROOT");
-		path += "SAMP/javalog.txt";
-		File logFile = new File(path);
-		if (!logFile.exists())
-		{
-			try
-			{
-				logFile.createNewFile();
-			}
-			catch (IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		try
-		{
-			//BufferedWriter for performance, true to set append to file flag
-			BufferedWriter buf = new BufferedWriter(new FileWriter(logFile, true));
-			buf.append(text);
-			buf.newLine();
-			buf.close();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		appLocalValues.put("STORAGE_ROOT", Environment.getExternalStorageDirectory().getAbsolutePath());
 	}
 
 	public void setActivity(Activity activity)
