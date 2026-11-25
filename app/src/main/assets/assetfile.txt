@@ -1,4 +1,4 @@
-120
+114
 assetfile.txt
 scache.txt
 scache_small.txt
@@ -102,12 +102,6 @@ socialclub/PopUP/PopUp_Footer.png
 socialclub/PopUP/PopUp_Header.png
 socialclub/PopUP/PopUp_Lines.png
 Text/american.gxt
-Text/french.gxt
-Text/german.gxt
-Text/italian.gxt
-Text/japanese.gxt
-Text/russian.gxt
-Text/spanish.gxt
 Textures/fonts/JapaneseFont.met
 Textures/fonts/JapaneseFont.png
 Textures/fonts/RussianFont.met

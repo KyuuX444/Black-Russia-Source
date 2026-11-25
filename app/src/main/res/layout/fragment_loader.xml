@@ -4,83 +4,126 @@
     android:id="@+id/background_loader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="@color/alyn_bg"
     android:padding="24dp">
+
+    <TextView
+        android:id="@+id/loader_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Ryzn SA-MP"
+        android:textColor="#757575"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/loader_icon"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/logo_splash"
+        app:layout_constraintBottom_toTopOf="@id/tv_br"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.45"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
         android:id="@+id/tv_br"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/montserrat_bold"
         android:text="Ryzn SA-MP"
-        android:textColor="@color/white"
-        android:textSize="36sp"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
         app:layout_constraintBottom_toTopOf="@id/tv_play_black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loader_icon" />
 
     <TextView
         android:id="@+id/tv_play_black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="28dp"
+        android:layout_marginTop="2dp"
         android:fontFamily="@font/montserrat_regular"
-        android:text="Mengunduh aset Ryzn SA-MP..."
-        android:textColor="#9E9E9E"
+        android:text="Mobile"
+        android:textColor="#AFAFAF"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@id/loader_warning"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_br" />
+
+    <TextView
+        android:id="@+id/loader_warning"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="Jangan tutup atau minimalkan aplikasi saat mengunduh data game."
+        android:textColor="#FFFFFF"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@id/loading_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageView
-        android:id="@+id/iv_smile"
-        android:layout_width="1dp"
-        android:layout_height="1dp"
-        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv_play_black" />
 
     <TextView
         android:id="@+id/loading_text"
-        style="@style/MontserratRegular14sp"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Menyiapkan file game..."
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-        app:layout_constraintStart_toStartOf="@+id/progress_bar" />
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="6dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="Mempersiapkan file game..."
+        android:textColor="#AFAFAF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@id/loading_percent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/loading_percent"
-        style="@style/MontserratRegular14sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:textColor="#9ECAFF"
-        app:layout_constraintBottom_toTopOf="@+id/progress_bar"
-        app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="0%"
+        android:textColor="@color/alyn_primary"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toTopOf="@id/progress_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.akexorcist.roundcornerprogressbar.RoundCornerProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_6sdp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="80dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="54dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65"
         app:rcBackgroundColor="#26FFFFFF"
         app:rcBackgroundPadding="0dp"
         app:rcMax="100.0"
         app:rcProgress="0.0"
-        app:rcProgressColor="#1E88E5"
-        app:rcRadius="@dimen/_3sdp"
+        app:rcProgressColor="@color/alyn_primary"
+        app:rcRadius="6dp"
         app:rcReverse="false"
         app:rcSecondaryProgress="0.0"
-        app:rcSecondaryProgressColor="#64B5F6" />
+        app:rcSecondaryProgressColor="#9ECAFF" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

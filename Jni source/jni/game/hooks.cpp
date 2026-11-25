@@ -1044,31 +1044,6 @@ void CHud__DrawScriptText_hook(uintptr_t thiz, uint8_t unk)
 				g_pWidgetManager->New(WIDGET_CHATHISTORY_DOWN, 1700.0f, (io.DisplaySize.y * 0.3) - 30, 130.0f, 130.0f, "menu_down");
 				g_pWidgetManager->GetWidget(WIDGET_CHATHISTORY_DOWN)->SetPosWithoutScale(pGUI->ScaleX(1515.0f), io.DisplaySize.y * 0.3);
 			}
-			if (!g_pWidgetManager->GetSlotState(WIDGET_MICROPHONE))
-			{
-				if (g_IsVoiceServer())
-				{
-					// pVoice
-					g_fMicrophoneButtonPosX = pSettings->GetReadOnly().fButtonMicrophoneX;
-					g_fMicrophoneButtonPosY = pSettings->GetReadOnly().fButtonMicrophoneY;
-					g_pWidgetManager->New(WIDGET_MICROPHONE, 
-						pSettings->GetReadOnly().fButtonMicrophoneX, 
-						pSettings->GetReadOnly().fButtonMicrophoneY,
-						pSettings->GetReadOnly().fButtonMicrophoneSize,
-						pSettings->GetReadOnly().fButtonMicrophoneSize, "hud_dance");
-					g_pWidgetManager->GetWidget(WIDGET_MICROPHONE)->SetTexture("samp", "voice_button");
-				}
-			}
-
-			if (!g_pWidgetManager->GetSlotState(WIDGET_CAMERA_CYCLE))
-			{
-				g_pWidgetManager->New(WIDGET_CAMERA_CYCLE,
-					pSettings->GetReadOnly().fButtonCameraCycleX,
-					pSettings->GetReadOnly().fButtonCameraCycleY,
-					pSettings->GetReadOnly().fButtonCameraCycleSize,
-					pSettings->GetReadOnly().fButtonCameraCycleSize, "cam-toggle");
-				// cam-toggle
-			}
 		}
 	}
 }
@@ -1090,60 +1065,6 @@ int CWidgetButtonEnterCar_Draw_hook(uintptr_t thiz)
 		if (pWidget)
 		{
 			pWidget->SetDrawState(false);
-		}
-
-		pWidget = g_pWidgetManager->GetWidget(WIDGET_CAMERA_CYCLE);
-		if (pWidget)
-		{
-			pWidget->SetDrawState(true);
-		}
-
-		pWidget = g_pWidgetManager->GetWidget(WIDGET_MICROPHONE);
-		if (pWidget)
-		{
-			if (pVoice)
-			{
-				pWidget->SetDrawState(true);
-				static uint32_t lastTick = GetTickCount();
-				if (pWidget->GetState() == 2 && GetTickCount() - lastTick >= 250)
-				{
-					pVoice->TurnRecording();
-					if (pVoice->IsRecording())
-					{
-						g_uiLastTickVoice = GetTickCount();
-						if (pVoice->IsDisconnected())
-						{
-							pChatWindow->AddDebugMessage("                               ");
-							pVoice->DisableInput();
-						}
-					}
-					lastTick = GetTickCount();
-				}
-
-				if (pVoice->IsRecording() && GetTickCount() - g_uiLastTickVoice >= 30000)
-				{
-					pVoice->DisableInput();
-				}
-
-				if (pVoice->IsRecording())
-				{
-					if (pVoice->IsDisconnected())
-					{
-						pChatWindow->AddDebugMessage("                               ");
-						pVoice->DisableInput();
-					}
-					pWidget->SetColor(255, 0x9C, 0xCF, 0x9C);
-				}
-				else
-				{
-					pWidget->ResetColor();
-				}
-				/*if ((pWidget->GetState() == 2 || pWidget->GetState() == 0) && GetTickCount() - lastTick >= 250)
-				{
-					pVoice->DisableInput();
-					lastTick = GetTickCount();
-				}*/
-			}
 		}
 
 		if (!pGame->IsToggledHUDElement(HUD_ELEMENT_BUTTONS))
@@ -2383,167 +2304,20 @@ void CSprite2d__DrawBarChart_hook(float x, float y, unsigned short width, unsign
 	__asm__ volatile ("mov %0, lr" : "=r" (dwRetAddr));
 	dwRetAddr -= g_libGTASA;
 
-	float fX = x;
-	float fY = y;
-
-	unsigned short usWidth = width;
-	unsigned char usHeight = height;
-
-	if (dwRetAddr == 0x0027D524 + 1)
-	{
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_HP).X != -1)
-		{
-			fX = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_HP).X);
-		}
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_HP).Y != -1)
-		{
-			fY = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_HP).Y);
-		}
-
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_HP).X != -1)
-		{
-			usWidth = pGUI->ScaleX(CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_HP).X);
-		}
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_HP).Y != -1)
-		{
-			usHeight = pGUI->ScaleY(CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_HP).Y);
-		}
-
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_HP))
-		{
-			color->A = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).A;
-			color->R = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).R;
-			color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).G;
-			color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_HP).B;
-		}
-	}
-	else if (dwRetAddr == 0x0027D83E + 1)
-	{
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_ARMOR).X != -1)
-		{
-			fX = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_ARMOR).X);
-		}
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_ARMOR).Y != -1)
-		{
-			fY = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_ARMOR).Y);
-		}
-
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_ARMOR).X != -1)
-		{
-			usWidth = pGUI->ScaleX(CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_ARMOR).X);
-		}
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_ARMOR).Y != -1)
-		{
-			usHeight = pGUI->ScaleY(CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_ARMOR).Y);
-		}
-
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_ARMOR))
-		{
-			color->A = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).A;
-			color->R = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).R;
-			color->G = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).G;
-			color->B = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_ARMOR).B;
-		}
-	}
-	CSprite2d__DrawBarChart(fX, fY, usWidth, usHeight, progress, progressAdd, drawPercentage, drawBlackBorder, color, addColor);
+	CSprite2d__DrawBarChart(x, y, width, height, progress, progressAdd, drawPercentage, drawBlackBorder, color, addColor);
 }
 static int g_iCurrentWanted = 0;
 static float g_fInitialPos = 0.0f;
 void (*CWidgetPlayerInfo__DrawWanted)(void*);
 void CWidgetPlayerInfo__DrawWanted_hook(void* thiz)
 {
-	g_iCurrentWanted = 0;
-	g_fInitialPos = *((float*)thiz + 10);
 	CWidgetPlayerInfo__DrawWanted(thiz);
-	g_iCurrentWanted = 0;
 }
 
 void (*CFont__PrintString)(float x, float y, uint16_t* text);
 void CFont__PrintString_hook(float x, float y, uint16_t* text)
 {
-	uintptr_t dwRetAddr = 0;
-	__asm__ volatile ("mov %0, lr" : "=r" (dwRetAddr));
-	dwRetAddr -= g_libGTASA;
-
-	float fX = x;
-	float fY = y;
-
-	if (dwRetAddr == 0x0027E15C + 1) // money
-	{
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_MONEY))
-		{
-			CRGBA col = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_MONEY);
-			uint32_t m1 = col.ToInt();
-			CFont::SetColor(&m1);
-		}
-
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_MONEY).X != -1)
-		{
-			float value = (float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_MONEY).X / 100.0f;
-			CFont::SetScale(value, 0.0f);
-		}
-
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_MONEY).X != -1)
-		{
-			fX = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_MONEY).X);
-		}
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_MONEY).Y != -1)
-		{
-			fY = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_MONEY).Y);
-		}
-	}
-	else if (dwRetAddr == 0x0027D9E6 + 1) // wanted
-	{
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_WANTED))
-		{
-			CRGBA col = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_WANTED);
-			uint32_t m1 = col.ToInt();
-			CFont::SetColor(&m1);
-		}
-
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_WANTED).X != -1)
-		{
-			float value = (float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_WANTED).X / 100.0f;
-			CFont::SetScale(value, 0.0f);
-		}
-		
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_WANTED).X != -1)
-		{
-			fX -= g_fInitialPos;
-			fX += pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_WANTED).X);
-		}
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_WANTED).Y != -1)
-		{
-			fY = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_WANTED).Y);
-		}
-		g_iCurrentWanted++;
-
-	}
-	else if (dwRetAddr == 0x0027D330 + 1) // ammo text
-	{
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_AMMO))
-		{
-			CRGBA col = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_AMMO);
-			uint32_t m1 = col.ToInt();
-			CFont::SetColor(&m1);
-		}
-
-		if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_AMMO).X != -1)
-		{
-			float value = (float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_AMMO).X / 100.0f;
-			CFont::SetScale(value, 0.0f);
-		}
-
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_AMMO).X != -1)
-		{
-			fX = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_AMMO).X);
-		}
-		if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_AMMO).Y != -1)
-		{
-			fY = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_AMMO).Y);
-		}
-	}
-	CFont__PrintString(fX, fY, text);
+	CFont__PrintString(x, y, text);
 }
 
 void (*CSprite2d__Draw)(CSprite2d* a1, CRect* a2, CRGBA* a3);
@@ -2572,35 +2346,7 @@ void CSprite2d__Draw_hook(CSprite2d* a1, CRect* a2, CRGBA* a3)
 		else
 		{
 			a1->m_pRwTexture = CRadarRect::m_pDiscTexture;
-			//pChatWindow->AddDebugMessage("Replacing for disc");
 		}
-
-		if (CAdjustableHudColors::IsUsingHudColor(E_HUD_ELEMENT::HUD_RADAR))
-		{
-			CRGBA col = CAdjustableHudColors::GetHudColor(E_HUD_ELEMENT::HUD_RADAR);
-			a3->A = col.A;
-			a3->B = col.B;
-			a3->G = col.G;
-			a3->R = col.R;
-		}
-		float* thiz = (float*) * (uintptr_t*)(g_libGTASA + 0x6580C8);
-		if (thiz)
-		{
-			if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).X != -1)
-			{
-				thiz[3] = (float)CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).X;
-			}
-			if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).Y != -1)
-			{
-				thiz[4] = (float)CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_RADAR).Y;
-			}
-			if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X != -1)
-			{
-				thiz[5] = thiz[5] * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
-				thiz[6] = thiz[6] * ((float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_RADAR).X / 100.0f);
-			}
-		}
-		
 	}
 
 	return CSprite2d__Draw(a1, a2, a3);
@@ -2609,37 +2355,6 @@ void CSprite2d__Draw_hook(CSprite2d* a1, CRect* a2, CRGBA* a3)
 void (*CWidgetPlayerInfo__DrawWeaponIcon)(float* thiz, void* ped, CRect rect, float a4);
 void CWidgetPlayerInfo__DrawWeaponIcon_hook(float* thiz, void* ped, CRect rect, float a4)
 {
-	float diffX = rect.right - rect.left;
-	float diffY = rect.bottom - rect.top;
-	if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).X != -1)
-	{
-		rect.left = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).X);
-		rect.right = pGUI->ScaleX(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).X) + diffX;
-
-		thiz[38] = rect.left;
-		thiz[40] = rect.right;
-	}
-	if (CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).Y != -1)
-	{
-		rect.top = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).Y);
-		rect.bottom = pGUI->ScaleY(CAdjustableHudPosition::GetElementPosition(E_HUD_ELEMENT::HUD_FIST).Y) + diffY;
-
-		thiz[39] = rect.bottom;
-		thiz[41] = rect.top;
-	}
-
-	if (CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_FIST).X != -1)
-	{
-		float coef = (float)CAdjustableHudScale::GetElementScale(E_HUD_ELEMENT::HUD_FIST).X / 100.0f;
-		float diffX = rect.right - rect.left;
-		float diffY = rect.bottom - rect.top;
-		diffX *= coef;
-		diffY *= coef;
-
-		rect.right = rect.left + diffX;
-		rect.bottom = rect.top + diffY;
-	}
-
 	return CWidgetPlayerInfo__DrawWeaponIcon(thiz, ped, rect, a4);
 }
 

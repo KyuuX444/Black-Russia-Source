@@ -164,11 +164,15 @@ public class HudManager {
     }
 
     public void ShowChatj() {
+        NvEventQueueActivity act = NvEventQueueActivity.getInstance();
+        if (act == null) {
+            return;
+        }
         if (keybo == 0) {
-            NvEventQueueActivity.getInstance().showKey();
+            act.showInputLayout();
             keybo = 1;
         } else {
-            NvEventQueueActivity.getInstance().hideKey();
+            act.hideInputLayout();
             keybo = 0;
         }
     }

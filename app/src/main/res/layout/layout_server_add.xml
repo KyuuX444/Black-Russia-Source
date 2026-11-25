@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/alyn_dialog_card"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/add_server_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="Tambah Server"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="160dp"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/alyn_primary" />
+
+    <EditText
+        android:id="@+id/address_input_text"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/alyn_search_bg"
+        android:fontFamily="@font/montserrat_regular"
+        android:hint="HOST:PORT..."
+        android:imeOptions="actionDone"
+        android:inputType="textUri|textNoSuggestions"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:singleLine="true"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#9E9E9E"
+        android:textSize="14sp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/add_server"
+        android:layout_width="wrap_content"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/alyn_blue_btn"
+        android:drawableStart="@drawable/ic_add"
+        android:drawablePadding="8dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="Tambah Server"
+        android:textAllCaps="false"
+        android:textColor="@color/alyn_bg"
+        android:textSize="13sp" />
+
+</LinearLayout>

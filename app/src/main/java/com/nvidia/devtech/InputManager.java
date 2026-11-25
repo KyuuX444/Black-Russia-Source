@@ -109,18 +109,17 @@ public class InputManager {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent)
             {
-                if(i== EditorInfo.IME_ACTION_DONE || i == EditorInfo.IME_ACTION_NEXT)
+                if (i == EditorInfo.IME_ACTION_DONE
+                        || i == EditorInfo.IME_ACTION_SEND
+                        || i == EditorInfo.IME_ACTION_NEXT
+                        || (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                                && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER))
                 {
                     Editable editableText = mInputEt.getText();
-                    if(editableText != null)
-                    {
-                        String str = editableText.toString();
-
-                        mInputEt.setText("");
-
-                        OnInputEnd(str);
-                    }
-
+                    String str = editableText != null ? editableText.toString() : "";
+                    mInputEt.setText("");
+                    OnInputEnd(str);
+                    return true;
                 }
                 return false;
             }
@@ -164,10 +163,10 @@ public class InputManager {
 
         mCurrentHistoryMessage = 0;
 
-        if(mSavedInput != null)
+        mSavedInput = null;
+        if(mInputEt != null)
         {
-            mInputEt.setText(mSavedInput);
-            mInputEt.setSelection(mInputEt.getText().length());
+            mInputEt.setText("");
         }
     }
 

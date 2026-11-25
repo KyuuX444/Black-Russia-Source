@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/alyn_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:background="@color/alyn_bg"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="14dp">
+
+        <TextView
+            android:id="@+id/Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Pengaturan"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="110dp"
+            android:layout_height="1.5dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/white" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="72dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- Card 1: Karakter & Tampilan -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/alyn_settings_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/nicknameIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/nicknameIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Nama Karakter"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <EditText
+                        android:id="@+id/settings_nick_input"
+                        android:layout_width="140dp"
+                        android:layout_height="36dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_search_bg"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:hint="Nick_Name"
+                        android:imeOptions="actionDone"
+                        android:inputType="textNoSuggestions"
+                        android:maxLength="24"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:singleLine="true"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#8A8A8A"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/systemkeyboardIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/systemkeyboardIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Keyboard Sistem"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/systemkeyboard_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/displayfpsIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/displayfpsIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Tampilkan FPS"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/displayfps_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/fullscreenmodeIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/fullscreenmodeIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Mode Layar Penuh"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/fullscreen_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- Card 2: Voice Chat & Data Game -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/alyn_settings_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/voicechatIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/voicechatIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Daftar Voice Chat"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/voice_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/gameDataIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/gameDataIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Data Game"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/reinstallGame"
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_blue_btn"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="Unduh / Perbaiki"
+                        android:textAllCaps="false"
+                        android:textColor="@color/alyn_bg"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <!-- Card 3: Obrolan & Reset -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/alyn_settings_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/fontsizeIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/fontsizeIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Ukuran Font"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <EditText
+                        android:id="@+id/fontsize"
+                        android:layout_width="76dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_search_bg"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:gravity="center"
+                        android:hint="30.0"
+                        android:inputType="numberDecimal"
+                        android:maxLength="5"
+                        android:singleLine="true"
+                        android:textColor="#FFFFFF"
+                        android:textColorHint="#8A8A8A"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/chatstringsIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/chatstringsIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Baris Obrolan"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="34dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/chat_minus"
+                            android:layout_width="36dp"
+                            android:layout_height="34dp"
+                            android:background="@drawable/alyn_btn_secondary"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:text="-"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/chat_strings"
+                            android:layout_width="38dp"
+                            android:layout_height="34dp"
+                            android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp"
+                            android:background="@drawable/alyn_search_bg"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:gravity="center"
+                            android:text="8"
+                            android:textColor="#FFFFFF"
+                            android:textSize="12sp" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/chat_plus"
+                            android:layout_width="36dp"
+                            android:layout_height="34dp"
+                            android:background="@drawable/alyn_btn_secondary"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:minWidth="0dp"
+                            android:minHeight="0dp"
+                            android:text="+"
+                            android:textColor="#FFFFFF"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/resetIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/resetText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/resetIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Reset Pengaturan"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/restore_button"
+                        android:layout_width="86dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_blue_btn"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="RESET"
+                        android:textColor="@color/alyn_bg"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

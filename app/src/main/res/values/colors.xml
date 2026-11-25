@@ -53,4 +53,10 @@
     <color name="colorPrimary">#ff000000</color>
     <color name="colorPrimaryDark">#ff000000</color>
     <color name="yellow">#FAE207</color>
+    <color name="alyn_bg">#121212</color>
+    <color name="alyn_nav_bar">#212121</color>
+    <color name="alyn_primary">#7493E1</color>
+    <color name="alyn_primary_dark">#183174</color>
+    <color name="alyn_dialog_bg">#161B26</color>
+    <color name="alyn_text_muted">#AFAFAF</color>
 </resources>

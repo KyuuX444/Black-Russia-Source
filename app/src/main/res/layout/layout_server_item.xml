@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/server_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <ImageView
+        android:id="@+id/server_password"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:src="@drawable/ic_unlocked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/server_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
+        android:text="Memuat..."
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/server_password"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/server_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:maxLines="1"
+        android:text="Alamat: 127.0.0.1:7777"
+        android:textColor="#909090"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/server_name"
+        app:layout_constraintStart_toStartOf="@id/server_name"
+        app:layout_constraintTop_toBottomOf="@id/server_name" />
+
+    <TextView
+        android:id="@+id/server_gamemode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:maxLines="1"
+        android:text="Gamemode: Mobile / PC"
+        android:textColor="#909090"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@id/server_name"
+        app:layout_constraintStart_toStartOf="@id/server_name"
+        app:layout_constraintTop_toBottomOf="@id/server_address" />
+
+    <TextView
+        android:id="@+id/server_players"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:maxLines="1"
+        android:text="Pemain: 0 / 0"
+        android:textColor="#909090"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/server_name"
+        app:layout_constraintStart_toStartOf="@id/server_name"
+        app:layout_constraintTop_toBottomOf="@id/server_gamemode" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

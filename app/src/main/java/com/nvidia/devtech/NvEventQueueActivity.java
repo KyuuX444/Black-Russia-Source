@@ -57,24 +57,9 @@ import com.byparad1st.game.R;
 import com.byparad1st.game.core.DialogClientSettings;
 import com.byparad1st.game.gui.BrDialogWindow;
 import com.byparad1st.game.gui.BrNotification;
-import com.byparad1st.game.gui.Menu;
 import com.byparad1st.game.gui.ChooseServer;
-import com.byparad1st.game.gui.RadialMenu;
-import com.byparad1st.game.gui.Donate;
-import com.byparad1st.game.gui.parad1streg.regandlogin;
-import com.byparad1st.game.gui.AutoShop;
-import com.byparad1st.game.gui.ShopStoreManager;
-import com.byparad1st.game.gui.AdminRecon;
-import com.byparad1st.game.gui.FuelStation;
-import com.byparad1st.game.gui.auth.SpawnSelectorBr;
 import com.byparad1st.game.gui.tab.Tab;
-import com.byparad1st.game.gui.Inventory;
-import com.byparad1st.game.gui.jbl.Jbl;
-import com.byparad1st.game.gui.PreDeath;
-import com.byparad1st.game.gui.Speedometer;
 import com.byparad1st.game.gui.HudManager;
-import com.byparad1st.game.gui.Keyboard;
-import com.byparad1st.game.gui.br.HudHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -167,24 +152,9 @@ public abstract class NvEventQueueActivity
 
     private BrDialogWindow mDialog = null;
     private HudManager mHudManager = null;
-    private Speedometer mSpeedometer = null;
     private BrNotification mBrNotification = null;
-    private Menu mMenu = null;
     private ChooseServer mChooseServer = null;
-    private RadialMenu mRadialMenu = null;
-    private Donate mDonate = null;
-    private AutoShop mAutoShop = null;
-    private ShopStoreManager mShopStoreManager = null;
-    private AdminRecon mAdminRecon = null;
-    private regandlogin mReg = null;
-    private FuelStation mFuelStation = null;
-    private SpawnSelectorBr mSpawnSelectorBr = null;
     private Tab mTab = null;
-    private Inventory mInventory = null;
-    private Jbl mJbl = null;
-    private PreDeath mPreDeath = null;
-    private Keyboard mKeyboard = null;
-    private HudHelper mHelper = null;
 
     /* *
      * Helper function to select fixed window size.
@@ -1003,17 +973,17 @@ public abstract class NvEventQueueActivity
     @Override
     public void OnInputEnd(String str)
     {
-        byte[] toReturn = null;
-        try
-        {
-            toReturn = str.getBytes("windows-1251");
+        hideInputLayout();
+        if (mHudManager != null) {
+            mHudManager.keybo = 0;
         }
-        catch(UnsupportedEncodingException e)
-        {
-
+        if (str == null || str.trim().isEmpty()) {
+            return;
         }
-
-        onInputEnd(toReturn);
+        try {
+            Send(str.getBytes("windows-1251"));
+        } catch (UnsupportedEncodingException ignored) {
+        }
     }
 
     public SurfaceView GetSurfaceView()
@@ -1063,23 +1033,8 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         mBrNotification = new BrNotification();
         mDialog = new BrDialogWindow(this);
         mHudManager = new HudManager(this);
-        mSpeedometer = new Speedometer(this);
-        mMenu = new Menu(this);
         mChooseServer = new ChooseServer(this);
-        mRadialMenu = new RadialMenu(this);
-        mDonate = new Donate(this);
-        mReg = new regandlogin(this);
-        mAutoShop = new AutoShop(this);
-        mShopStoreManager = new ShopStoreManager(this);
-        mAdminRecon = new AdminRecon(this);
-        mFuelStation = new FuelStation(this);
-        mSpawnSelectorBr = new SpawnSelectorBr(this);
         mTab = new Tab(this);
-        mInventory = new Inventory(this);
-        mJbl = new Jbl(this);
-        mPreDeath = new PreDeath(this);
-        mKeyboard = new Keyboard(this);
-        mHelper = new HudHelper(this);
         DoResumeEvent();
 
         holder.addCallback(new Callback()
@@ -1630,9 +1585,9 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         runOnUiThread(() -> mAndroidUI.setVisibility(z2 ? View.GONE:View.VISIBLE));
     }
 
-    public void showSpeed() { runOnUiThread(() -> { mSpeedometer.ShowSpeed(); }); } //setNativeHudElementScale(6, 5, 5);
+    public void showSpeed() { }
 
-    public void hideSpeed() { runOnUiThread(() -> { mSpeedometer.HideSpeed(); }); }
+    public void hideSpeed() { }
 
     public void showNotification(int type, String text, int duration, String actionforBtn, String textBtn) {
         JSONObject jSONObject = new JSONObject();
@@ -1652,71 +1607,58 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         runOnUiThread(() -> mBrNotification.newInstance().show(jSONObject));
     }
 
-    //----------java systems-----------------------------------------------
-    //---auto salon--------------------------------------------------------
-    public void ShowAuto() { runOnUiThread(() -> { mAutoShop.ToggleShow(); }); }
-    public void UpdateAuto(String name, int price, int count, float maxspeed, float acceleration, int gear) { runOnUiThread(() -> { mAutoShop.Update(name, price, count, maxspeed, acceleration, gear); }); }
-    public void HideAuto() { runOnUiThread(() -> { mAutoShop.HideShow(); }); }
-    //---------------------------------------------------------------------
-    public void ShowShop(int price) { runOnUiThread(() -> { mShopStoreManager.showshop(price);});}
-    public void HideShop() { runOnUiThread(() -> { mShopStoreManager.hideshop();});}
-    public void ShowRecon(String nick, int id) { runOnUiThread(() -> { mAdminRecon.show(nick, id); }); }
-    public void HideRecon() { runOnUiThread(() -> { mAdminRecon.hide(); }); }
-    public void updateSpeedInfo(int speed, int fuel, int hp, int mileage, int engine, int light, int belt, int lock) { runOnUiThread(() -> { mSpeedometer.UpdateSpeedInfo(speed, fuel, hp, mileage, engine, light, belt, lock); }); }
-    public void showFuelStation(int type, int price1, int price2, int price3, int price4, int price5, int maxCount) { runOnUiThread(() -> { mFuelStation.ShowFuelStation(type, price1, price2, price3, price4, price5, maxCount); }); }
-    public void ShowSpawn() { runOnUiThread(() -> { mSpawnSelectorBr.showselect(); });}
-    public void HideSpawn() { runOnUiThread(() -> { mSpawnSelectorBr.hide();});}
-    public void showTabWindow() { runOnUiThread(() -> mTab.show(true)); }
-    public void setTabStat(int id, String name, int score, int ping) { runOnUiThread(() -> mTab.setStat(id, name, score, ping) ); }
-    public void showInventory(int hp, int hunger, int skin_id, int key, int sumka) { runOnUiThread(() -> { mInventory.ShowInventory(hp, hunger, skin_id, key, sumka); }); }
-    public void ShowJbl() { runOnUiThread(() -> { mJbl.showjbl();});}
-    public void HideJbl() { runOnUiThread(() -> { mJbl.hidejbl();});}
-    public void showPreDeath() { runOnUiThread(() -> { mPreDeath.ShowPreDeath(); }); }
-    public void addChatMessage(String messagge, int textcolor) { runOnUiThread(() -> { mHudManager.AddChatMessage(messagge, textcolor); } ); }
-    public void RadarBR() { runOnUiThread(() -> { setNativeHudElementPosition(6, 5, 5); }); }
-    public void showKey() { runOnUiThread(() -> { mKeyboard.ShowKey(); }); }
-    public void hideKey() { runOnUiThread(() -> { mKeyboard.HideKey(); }); }
-    public void closekey() { runOnUiThread(() -> { mHudManager.closekey(); }); }
+    // Legacy Black Russia custom server GUIs disabled for pure SA-MP / Alyn experience
+    public void ShowAuto() { }
+    public void UpdateAuto(String name, int price, int count, float maxspeed, float acceleration, int gear) { }
+    public void HideAuto() { }
+    public void ShowShop(int price) { }
+    public void HideShop() { }
+    public void ShowRecon(String nick, int id) { }
+    public void HideRecon() { }
+    public void updateSpeedInfo(int speed, int fuel, int hp, int mileage, int engine, int light, int belt, int lock) { }
+    public void showFuelStation(int type, int price1, int price2, int price3, int price4, int price5, int maxCount) { }
+    public void ShowSpawn() { }
+    public void HideSpawn() { }
+    public void showTabWindow() { runOnUiThread(() -> { if (mTab != null) mTab.show(true); }); }
+    public void setTabStat(int id, String name, int score, int ping) { runOnUiThread(() -> { if (mTab != null) mTab.setStat(id, name, score, ping); }); }
+    public void showInventory(int hp, int hunger, int skin_id, int key, int sumka) { }
+    public void ShowJbl() { }
+    public void HideJbl() { }
+    public void showPreDeath() { }
+    public void addChatMessage(String messagge, int textcolor) { runOnUiThread(() -> { if (mHudManager != null) mHudManager.AddChatMessage(messagge, textcolor); } ); }
+    public void RadarBR() { }
+    public void showKey() { showInputLayout(); }
+    public void hideKey() { hideInputLayout(); }
+    public void closekey() { runOnUiThread(() -> { if (mHudManager != null) mHudManager.closekey(); }); }
 
-    public void ShowPerson() { runOnUiThread(() -> { mReg.ShowPerson(); }); }
-    public void HidePerson() { runOnUiThread(() -> { mReg.HidePerson(); }); }
-    //---------------------------------------------------------------------
-    public void showMenu() { runOnUiThread(() -> { mMenu.ShowMenu(); }); }
+    public void ShowPerson() { }
+    public void HidePerson() { }
+    public void showMenu() { }
 
-    public void showradar() { runOnUiThread(() -> { mHudManager.ShowRadar(); }); }
+    public void showradar() { runOnUiThread(() -> { if (mHudManager != null) mHudManager.ShowRadar(); }); }
 
-    public void hideradar() { runOnUiThread(() -> { mHudManager.HideRadar(); }); }
+    public void hideradar() { runOnUiThread(() -> { if (mHudManager != null) mHudManager.HideRadar(); }); }
 
-    public void updateSplash(int percent) { runOnUiThread(() -> { mChooseServer.Update(percent); } ); }
+    public void updateSplash(int percent) { runOnUiThread(() -> { if (mChooseServer != null) mChooseServer.Update(percent); } ); }
 
-    public void showSplash() { runOnUiThread(() -> { mChooseServer.Show(); } ); }
+    public void showSplash() { runOnUiThread(() -> { if (mChooseServer != null) mChooseServer.Show(); } ); }
     
-    public void showRadial(boolean park, boolean key, boolean doors, boolean lights, boolean suspension, boolean launch_control, boolean engine, boolean turbo) { runOnUiThread(() -> { mRadialMenu.show(park, key, doors, lights, suspension, launch_control, engine, turbo); } ); }
+    public void showRadial(boolean park, boolean key, boolean doors, boolean lights, boolean suspension, boolean launch_control, boolean engine, boolean turbo) { }
 
-    public void showDonate(int money, int bc) { runOnUiThread(() -> { mDonate.show(money, bc); } ); }
-    public void updateDonate(int money, int bc) { runOnUiThread(() -> { mDonate.update(money, bc); } ); }
-    public void show_sc(int money, int bc) { runOnUiThread(() -> { mDonate.show_sc(money, bc); } ); }
-    public void show_nizkii() {
-        runOnUiThread(() -> { mDonate.show_nizk(); } );
-    }
-    public void show_srednii() {
-        runOnUiThread(() -> { mDonate.show_sredn(); } );
-    }
-    public void show_visokii() {
-        runOnUiThread(() -> { mDonate.show_visok(); } );
-    }
-    public void show_unique() {
-        runOnUiThread(() -> { mDonate.show_uniq(); } );
-    }
-    public void show_motos() {
-        runOnUiThread(() -> { mDonate.show_moto(); } );
-    }
-    public void upd_uslugi(String name, String cost, String img, int id) { runOnUiThread(() -> { mDonate.upd_usl(name, cost, img, id); } ); }
-    public void buy_carpodtv(int cost, int id) { runOnUiThread(() -> { mDonate.buy_carpodt(cost, id); } );}
-    public void getNameOfCar(String name) { runOnUiThread(() -> { mDonate.GetCarName(name);});}
+    public void showDonate(int money, int bc) { }
+    public void updateDonate(int money, int bc) { }
+    public void show_sc(int money, int bc) { }
+    public void show_nizkii() { }
+    public void show_srednii() { }
+    public void show_visokii() { }
+    public void show_unique() { }
+    public void show_motos() { }
+    public void upd_uslugi(String name, String cost, String img, int id) { }
+    public void buy_carpodtv(int cost, int id) { }
+    public void getNameOfCar(String name) { }
 
-    public void ShowHelper(int type) { runOnUiThread(() -> { if (mHelper != null) mHelper.HideHelper(); } ); }
-    public void HideHelper() { runOnUiThread(() -> { if (mHelper != null) mHelper.HideHelper(); } ); }
+    public void ShowHelper(int type) { }
+    public void HideHelper() { }
 
 
     public void showHudAndLogo() {

@@ -280,14 +280,14 @@ void CSettings::LoadSettings(const char* szNickName, int iChatLines)
 	m_Settings.iCutout = ini_table_get_entry_as_int(config, "gui", "cutout", 0);
 	m_Settings.iAndroidKeyboard = ini_table_get_entry_as_int(config, "gui", "androidKeyboard", 0);
 
-	m_Settings.iFPSCounter = ini_table_get_entry_as_int(config, "gui", "fpscounter", 1);
+	m_Settings.iFPSCounter = ini_table_get_entry_as_int(config, "gui", "fpscounter", 0);
 	m_Settings.iOutfitGuns = ini_table_get_entry_as_int(config, "gui", "outfit", 1);
 	m_Settings.iRadarRect = ini_table_get_entry_as_int(config, "gui", "radarrect", 0);
 	m_Settings.iHPArmourText = ini_table_get_entry_as_int(config, "gui", "hparmourtext", 0);
 	m_Settings.iPCMoney = ini_table_get_entry_as_int(config, "gui", "pcmoney", 0);
 	m_Settings.iSkyBox = ini_table_get_entry_as_int(config, "gui", "ctimecyc", 1);
-	m_Settings.iSnow = ini_table_get_entry_as_int(config, "gui", "snow", 1);
-	m_Settings.iHud = 0; // Native GTA:SA HUD + clean Alyn overlays (no Black Russia HUD)
+	m_Settings.iSnow = 0; // Disable Black Russia snow particles by default
+	m_Settings.iHud = 0; // Native GTA:SA HUD + clean overlays (no Black Russia HUD)
 	m_Settings.iDialog = ini_table_get_entry_as_int(config, "gui", "dialog", 1);
 
 	for (int i = 0; i < E_HUD_ELEMENT::HUD_SIZE; i++)
