@@ -187,6 +187,7 @@ public:
 	void ApplySpecialAction(uint8_t byteSpecialAction);
 	void SetSpawnInfo(PLAYER_SPAWN_INFO* pSpawnInfo);
 	void SetSpawnSkin(int iSkin) { m_SpawnInfo.iSkin = iSkin; }
+	bool HasSpawnInfo() const { return m_bHasSpawnInfo; }
 	void HandleClassSelectionOutcome(bool bOutcome);
 	uint8_t GetSpecialAction();
 	uint32_t GetPlayerColorAsARGB();
