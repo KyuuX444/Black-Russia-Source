@@ -353,21 +353,57 @@ static std::string find_real_file(const std::string& requestedPath)
 			std::string tryDec2 = resolve_case_insensitive_path(base, "data/Decision/Allowed/" + rel);
 			if (!tryDec2.empty()) return tryDec2;
 		}
+
+		// Bare config/data filenames requested without directory prefix (e.g. TouchDefaultPhoneWidescreen.cfg, ShopUVs.dat)
+		if (rel.find('/') == std::string::npos) {
+			std::string tryData = resolve_case_insensitive_path(base, "data/" + rel);
+			if (!tryData.empty()) return tryData;
+		}
 	}
 
 	return "";
 }
 
+static std::string to_storage_relative(const std::string& absPath)
+{
+	const char* rootBuf = g_saSym ? g_saSym->GetSymbol<const char*>("StorageRootBuffer") : nullptr;
+	const char* bases[] = {
+		rootBuf,
+		Client::gameDir()
+	};
+	for (const char* b : bases) {
+		if (!b || !b[0]) continue;
+		std::string base(b);
+		while (!base.empty() && base.back() == '/') {
+			base.pop_back();
+		}
+		if (!base.empty() && absPath.size() > base.size() + 1 &&
+			absPath.compare(0, base.size(), base) == 0 &&
+			absPath[base.size()] == '/') {
+			return absPath.substr(base.size() + 1);
+		}
+	}
+	return "";
+}
+
 DECL_HOOK(uintptr_t, CFileMgr_OpenFile, const char* filename, const char* mode)
 {
+	static thread_local bool s_retrying = false;
 	uintptr_t handle = CFileMgr_OpenFile(filename, mode);
 	if (!handle && filename) {
-		std::string real = find_real_file(filename);
-		if (!real.empty()) {
-			handle = CFileMgr_OpenFile(real.c_str(), mode);
-			if (handle) {
-				spdlog::info("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, real);
-				return handle;
+		if (!s_retrying && filename[0] != '/') {
+			std::string real = find_real_file(filename);
+			if (!real.empty()) {
+				std::string rel = to_storage_relative(real);
+				if (!rel.empty() && rel != filename) {
+					s_retrying = true;
+					handle = CFileMgr_OpenFile(rel.c_str(), mode);
+					s_retrying = false;
+					if (handle) {
+						spdlog::info("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, rel);
+						return handle;
+					}
+				}
 			}
 		}
 		spdlog::warn("CFileMgr::OpenFile(\"{}\", \"{}\") failed (NULL handle)", filename, mode ? mode : "null");
@@ -442,7 +478,9 @@ DECL_HOOK(void, CTimeCycle_Initialise, bool a1)
 
 DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 {
-	char path[0xff] = {0};
+	char path[512] = {0};
+
+	if (!name) goto ret;
 
 	if (!strncasecmp(name, "data\\surface.dat", 16) || !strncasecmp(name, "data/surface.dat", 16))
 	{
@@ -636,30 +674,42 @@ DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 		goto ret;
 	}
 
-	if (!strncmp(name, "data\\paths\\tracks2.dat", 22))
+	if (!strncasecmp(name, "data\\paths\\tracks2.dat", 22) || !strncasecmp(name, "data/paths/tracks2.dat", 22))
 	{
-		spdlog::info("Loading tracks2.dat...");
-		sprintf(path, "tracks2.dat");
-		name = path;
+		std::string extSamp = std::string(Client::gameDir()) + "SAMP/tracks2.dat";
+		if (check_file_readable(extSamp)) {
+			spdlog::info("Loading tracks2.dat -> SAMP/tracks2.dat...");
+			snprintf(path, sizeof(path), "SAMP/tracks2.dat");
+			name = path;
+		}
 		goto ret;
 	}
 
-	if (!strncmp(name, "data\\paths\\tracks4.dat", 22))
+	if (!strncasecmp(name, "data\\paths\\tracks4.dat", 22) || !strncasecmp(name, "data/paths/tracks4.dat", 22))
 	{
-		spdlog::info("Loading tracks4.dat...");
-		sprintf(path, "tracks4.dat");
-		name = path;
+		std::string extSamp = std::string(Client::gameDir()) + "SAMP/tracks4.dat";
+		if (check_file_readable(extSamp)) {
+			spdlog::info("Loading tracks4.dat -> SAMP/tracks4.dat...");
+			snprintf(path, sizeof(path), "SAMP/tracks4.dat");
+			name = path;
+		}
 		goto ret;
 	}
 
 ret:
+	char normBuf[512];
 	if (name) {
+		char* storageRoot = g_saSym ? g_saSym->GetSymbol<char*>("StorageRootBuffer") : nullptr;
+		if (storageRoot && Client::gameDir() && Client::gameDir()[0] && strcmp(storageRoot, Client::gameDir()) != 0) {
+			snprintf(storageRoot, 512, "%s", Client::gameDir());
+		}
+
 		std::string real = find_real_file(name);
-		if (!real.empty()) {
-			snprintf(path, sizeof(path), "%s", real.c_str());
+		std::string relName = !real.empty() ? to_storage_relative(real) : "";
+		if (!relName.empty()) {
+			snprintf(path, sizeof(path), "%s", relName.c_str());
 			name = path;
 		} else {
-			static char normBuf[512];
 			strncpy(normBuf, name, sizeof(normBuf) - 1);
 			normBuf[sizeof(normBuf) - 1] = '\0';
 			bool modified = false;

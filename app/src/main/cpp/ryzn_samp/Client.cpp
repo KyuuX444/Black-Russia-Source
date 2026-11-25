@@ -32,9 +32,23 @@ MaterialTextGenerator* pMaterialTextGenerator = nullptr;
 SymUtils* g_saSym = new SymUtils();
 JavaVM* g_vm = nullptr;
 
+static bool mkdir_p(const std::string& path)
+{
+	size_t pos = 0;
+	while ((pos = path.find_first_of('/', pos + 1)) != std::string::npos) {
+		std::string sub = path.substr(0, pos);
+		if (!sub.empty()) {
+			mkdir(sub.c_str(), 0777);
+		}
+	}
+	return mkdir(path.c_str(), 0777) == 0 || errno == EEXIST;
+}
+
 void init_logger(const std::string& gameDir)
 {
 	try {
+		mkdir_p(gameDir + "logcat/");
+
 		auto now = std::chrono::system_clock::now();
 		auto in_time_t = std::chrono::system_clock::to_time_t(now);
 		std::stringstream ss;
@@ -96,18 +110,6 @@ void* startGame(void*)
 	spdlog::info("pGame->StartGame() returned");
 
 	pthread_exit(nullptr);
-}
-
-static bool mkdir_p(const std::string& path)
-{
-	size_t pos = 0;
-	while ((pos = path.find_first_of('/', pos + 1)) != std::string::npos) {
-		std::string sub = path.substr(0, pos);
-		if (!sub.empty()) {
-			mkdir(sub.c_str(), 0777);
-		}
-	}
-	return mkdir(path.c_str(), 0777) == 0 || errno == EEXIST;
 }
 
 static void ensure_surface_dat(const std::string& gameDir)
