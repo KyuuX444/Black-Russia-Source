@@ -84,14 +84,6 @@ public class PcScrollbarView extends View {
         syncFromTarget();
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (w > 0 && h > 0) {
-            post(this::syncFromTarget);
-        }
-    }
-
     public void attachToScrollView(ScrollView sv) {
         this.targetScrollView = sv;
         this.targetRecycler = null;
