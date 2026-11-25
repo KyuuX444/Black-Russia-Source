@@ -6,7 +6,7 @@
     android:background="@drawable/bg_ryzn_root"
     android:orientation="vertical">
 
-    <!-- 1. Manga Ink Header -->
+    <!-- Compact Manga Header -->
     <LinearLayout
         android:id="@+id/header_bar"
         android:layout_width="match_parent"
@@ -14,20 +14,20 @@
         android:background="@color/manga_panel"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp">
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
 
         <ImageView
             android:id="@+id/header_logo"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_ryzn_logo" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -43,22 +43,22 @@
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/app_name"
                     android:textColor="@color/ryzn_text_primary"
-                    android:textSize="15.5sp" />
+                    android:textSize="13.5sp" />
 
                 <TextView
                     android:id="@+id/header_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="5dp"
                     android:background="@drawable/ryzn_badge_online"
                     android:fontFamily="@font/montserrat_bold"
-                    android:paddingStart="6dp"
+                    android:paddingStart="5dp"
                     android:paddingTop="1dp"
-                    android:paddingEnd="6dp"
+                    android:paddingEnd="5dp"
                     android:paddingBottom="1dp"
                     android:text="v2.0"
                     android:textColor="@color/manga_crimson"
-                    android:textSize="9.5sp" />
+                    android:textSize="8.5sp" />
             </LinearLayout>
 
             <TextView
@@ -67,29 +67,29 @@
                 android:fontFamily="@font/montserrat_regular"
                 android:text="SA-MP Mobile Client"
                 android:textColor="@color/ryzn_text_secondary"
-                android:textSize="10sp" />
+                android:textSize="9sp" />
         </LinearLayout>
 
         <!-- Client status pill inside header -->
         <LinearLayout
             android:id="@+id/footer_client_status"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
+            android:layout_height="24dp"
             android:background="@drawable/bg_btn_action_dark"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingTop="2dp"
-            android:paddingEnd="11dp"
-            android:paddingBottom="4dp">
+            android:paddingStart="8dp"
+            android:paddingTop="1dp"
+            android:paddingEnd="9dp"
+            android:paddingBottom="2dp">
 
             <View
                 android:id="@+id/footer_status_dot"
-                android:layout_width="7dp"
-                android:layout_height="7dp"
-                android:layout_marginEnd="6dp"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="5dp"
                 android:background="@drawable/bg_status_dot_online" />
 
             <TextView
@@ -99,13 +99,13 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="Client Siap"
                 android:textColor="@color/ryzn_text_primary"
-                android:textSize="10.5sp" />
+                android:textSize="9.5sp" />
         </LinearLayout>
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1.5dp"
         android:background="@color/manga_ink" />
 
     <!-- Fragment Host -->
@@ -117,40 +117,40 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1.5dp"
         android:background="@color/manga_ink" />
 
-    <!-- 2-Button Manga Bottom Navigation Bar -->
+    <!-- 2-Button Compact Manga Bottom Navigation Bar -->
     <LinearLayout
         android:id="@+id/bottom_nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="46dp"
         android:background="@color/manga_panel"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingTop="7dp"
-        android:paddingEnd="10dp"
-        android:paddingBottom="7dp">
+        android:paddingStart="8dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="5dp">
 
         <LinearLayout
             android:id="@+id/bottom_nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_nav_item_selected"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingBottom="2dp">
+            android:paddingBottom="1dp">
 
             <ImageView
                 android:id="@+id/bottom_nav_home_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="7dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="6dp"
                 android:contentDescription="@string/nav_home"
                 android:src="@drawable/ic_nav_home"
                 app:tint="#FFFFFF" />
@@ -162,14 +162,14 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/nav_home"
                 android:textColor="#FFFFFF"
-                android:textSize="12.5sp" />
+                android:textSize="11sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_nav_settings"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
             android:background="@drawable/bg_nav_item_normal"
             android:clickable="true"
@@ -179,9 +179,9 @@
 
             <ImageView
                 android:id="@+id/bottom_nav_settings_icon"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="7dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="6dp"
                 android:contentDescription="@string/nav_settings"
                 android:src="@drawable/ic_nav_settings"
                 app:tint="@color/manga_ink" />
@@ -193,7 +193,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/nav_settings"
                 android:textColor="@color/manga_ink"
-                android:textSize="12.5sp" />
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

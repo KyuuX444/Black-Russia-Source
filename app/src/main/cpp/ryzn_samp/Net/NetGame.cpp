@@ -92,8 +92,9 @@ NetGame::NetGame(const char* host, int port, const char* playerName, const char*
 	m_lanMode = false;
 
 	if (pUI) {
-		pUI->chat()->addDebugMessage("{FFFFFF}SA-MP {B9C9BF}" + Client::sampVersion() + " {FFFFFF}Started");
-		pUI->chat()->addInfoMessage("-> Use /clientcmds for client commands");
+		pUI->chat()->addDebugMessage("{FFFFFF}Ryzn SA-MP {B9C9BF}" + Client::sampVersion() + " {FFFFFF}Started");
+		pUI->chat()->addInfoMessage("-> Cmd: /rec, /c, /q, /pagesize, /fontsize, /timestamp, /fpslimit");
+		pUI->chat()->addInfoMessage("-> Lainnya: /headmove, /dl, /dw, /save, /interior, /mem (/help)");
 	}
 }
 
@@ -197,11 +198,26 @@ void NetGame::UninitializePools()
 void NetGame::Process()
 {
 	UpdateNetwork();
+	uint32_t now = GetTickCount();
 	if (m_netSet->holdTime) {
-		pGame->SetWorldTime(m_netSet->worldTime_Hour, m_netSet->worldTime_Minute);
+		static int s_lastHour = -1;
+		static int s_lastMinute = -1;
+		static uint32_t s_lastTimeSync = 0;
+		if (s_lastHour != m_netSet->worldTime_Hour || s_lastMinute != m_netSet->worldTime_Minute || (now - s_lastTimeSync) > 1000) {
+			pGame->SetWorldTime(m_netSet->worldTime_Hour, m_netSet->worldTime_Minute);
+			s_lastHour = m_netSet->worldTime_Hour;
+			s_lastMinute = m_netSet->worldTime_Minute;
+			s_lastTimeSync = now;
+		}
 	}
 
-	pGame->PreloadObjectsAnims();
+	static uint32_t s_lastPreloadTick = 0;
+	static int s_preloadPasses = 0;
+	if (s_preloadPasses < 5 && (s_lastPreloadTick == 0 || (now - s_lastPreloadTick) >= 2000)) {
+		pGame->PreloadObjectsAnims();
+		s_lastPreloadTick = now;
+		s_preloadPasses++;
+	}
 
 	if (GetGameState() == GAMESTATE_CONNECTED) {
 		ProcessPools();
@@ -352,6 +368,38 @@ void NetGame::ShutdownForGameModeRestart()
 	if (pUI) {
 		pUI->chat()->addInfoMessage("The server is restarting..");
 	}
+}
+
+void NetGame::Reconnect()
+{
+	if (m_rakClient) {
+		m_rakClient->Disconnect(0);
+	}
+
+	ShutdownForGameModeRestart();
+
+	CPlayerPool* pPlayerPool = GetPlayerPool();
+	if (pPlayerPool) {
+		for (PLAYERID playerId = 0; playerId < MAX_PLAYERS; playerId++) {
+			if (pPlayerPool->GetSlotState(playerId)) {
+				pPlayerPool->Delete(playerId, 0);
+			}
+		}
+	}
+
+	if (pAudioStream) {
+		pAudioStream->Stop(true);
+	}
+
+	if (pUI) {
+		if (pUI->dialog()) pUI->dialog()->setVisible(false);
+		if (pUI->spawn()) pUI->spawn()->setVisible(false);
+		if (pUI->voicebutton()) pUI->voicebutton()->setVisible(false);
+		pUI->chat()->addInfoMessage("-> Reconnecting to %s:%d...", m_host, m_port);
+	}
+
+	m_lastConnectAttempt = 0;
+	SetGameState(GAMESTATE_WAIT_CONNECT);
 }
 
 void NetGame::ProcessPools()

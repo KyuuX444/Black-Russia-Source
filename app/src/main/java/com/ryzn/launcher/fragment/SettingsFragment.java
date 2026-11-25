@@ -43,6 +43,7 @@ public class SettingsFragment extends Fragment {
     private Switch radarRectSwitch;
     private Switch voiceSwitch;
     private Switch timestampSwitch;
+    private Switch modifiedDataSwitch;
     private TextView chatStringsText;
     private Button chatMinusBtn;
     private Button chatPlusBtn;
@@ -65,6 +66,7 @@ public class SettingsFragment extends Fragment {
         radarRectSwitch = view.findViewById(R.id.radarrect_switch);
         voiceSwitch = view.findViewById(R.id.voice_switch);
         timestampSwitch = view.findViewById(R.id.timestamp_switch);
+        modifiedDataSwitch = view.findViewById(R.id.modifieddata_switch);
         chatStringsText = view.findViewById(R.id.chat_strings);
         chatMinusBtn = view.findViewById(R.id.chat_minus);
         chatPlusBtn = view.findViewById(R.id.chat_plus);
@@ -88,6 +90,8 @@ public class SettingsFragment extends Fragment {
                 showOptionInfo("Voice Chat", "Mengaktifkan tombol mikrofon dan indikator daftar pemain berbicara di dalam game."));
         view.findViewById(R.id.chattimestampIcon).setOnClickListener(v ->
                 showOptionInfo("Timestamp Obrolan", "Menambahkan penanda waktu [JJ:MM:DD] di depan setiap pesan obrolan."));
+        view.findViewById(R.id.modifiedDataIcon).setOnClickListener(v ->
+                showOptionInfo("Modified Data", "Membaca file modpack / data modifikasi yang ada langsung tanpa menimpanya saat unduh atau cek data."));
         view.findViewById(R.id.gameDataIcon).setOnClickListener(v ->
                 showOptionInfo("Data Game", "Mengunduh ulang atau memperbaiki file data Ryzn SA-MP."));
         view.findViewById(R.id.fontsizeIcon).setOnClickListener(v ->
@@ -106,6 +110,7 @@ public class SettingsFragment extends Fragment {
         boolean radar = prefs.getBoolean("radar_rect", false);
         boolean voice = prefs.getBoolean("voice_chat", true);
         boolean ts = prefs.getBoolean("timestamp", false);
+        boolean modData = prefs.getBoolean("modified_data", false);
         int chatLines = prefs.getInt("chat_strings", 8);
         String fontSz = String.valueOf(prefs.getFloat("font_size", 30.0f));
 
@@ -123,6 +128,8 @@ public class SettingsFragment extends Fragment {
                 if (voiceVal != null) voice = !"0".equals(voiceVal.trim());
                 String tsVal = w.get("gui", "timestamp");
                 if (tsVal != null) ts = "1".equals(tsVal.trim());
+                String modVal = w.get("gui", "modifieddata");
+                if (modVal != null) modData = "1".equals(modVal.trim());
                 String linesStr = w.get("gui", "ChatMaxMessages");
                 if (linesStr != null) {
                     chatLines = Math.max(5, Math.min(20, Integer.parseInt(linesStr.trim())));
@@ -139,6 +146,9 @@ public class SettingsFragment extends Fragment {
         radarRectSwitch.setChecked(radar);
         voiceSwitch.setChecked(voice);
         timestampSwitch.setChecked(ts);
+        if (modifiedDataSwitch != null) {
+            modifiedDataSwitch.setChecked(modData);
+        }
         chatStringsText.setText(String.valueOf(chatLines));
         fontSizeInput.setText(fontSz);
         bindingValues = false;
@@ -205,6 +215,17 @@ public class SettingsFragment extends Fragment {
             updateIni("gui", "timestamp", checked ? "1" : "0");
         });
 
+        if (modifiedDataSwitch != null) {
+            modifiedDataSwitch.setOnCheckedChangeListener((b, checked) -> {
+                if (bindingValues) return;
+                prefs.edit().putBoolean("modified_data", checked).apply();
+                updateIni("gui", "modifieddata", checked ? "1" : "0");
+                if (getActivity() instanceof MainActivity) {
+                    ((MainActivity) getActivity()).refreshFooterClientState();
+                }
+            });
+        }
+
         chatMinusBtn.setOnClickListener(v -> adjustChatStrings(-1));
         chatPlusBtn.setOnClickListener(v -> adjustChatStrings(1));
 
@@ -232,6 +253,7 @@ public class SettingsFragment extends Fragment {
                             .putBoolean("radar_rect", false)
                             .putBoolean("voice_chat", true)
                             .putBoolean("timestamp", false)
+                            .putBoolean("modified_data", false)
                             .putInt("chat_strings", 8)
                             .putFloat("font_size", 30.0f)
                             .apply();
@@ -240,6 +262,7 @@ public class SettingsFragment extends Fragment {
                     updateIni("gui", "radarrect", "0");
                     updateIni("gui", "voicelist", "1");
                     updateIni("gui", "timestamp", "0");
+                    updateIni("gui", "modifieddata", "0");
                     updateIni("gui", "ChatMaxMessages", "8");
                     updateIni("gui", "FontSize", "30.0");
                     RyznGameDownloader.syncSettingsJson(requireContext());

@@ -49,35 +49,35 @@
     <color name="white15">#40ffffff</color>
     <color name="blue">#ff3ea2ff</color>
     <color name="gray">#ff666666</color>
-    <color name="colorAccent">#D62839</color>
-    <color name="colorPrimary">#111111</color>
-    <color name="colorPrimaryDark">#111111</color>
+    <color name="colorAccent">#E11D48</color>
+    <color name="colorPrimary">#151824</color>
+    <color name="colorPrimaryDark">#151824</color>
     <color name="yellow">#FAE207</color>
 
-    <!-- Ryzn SA-MP Shonen Manga Palette -->
-    <color name="ryzn_bg">#F4F1EA</color>
-    <color name="ryzn_bg_black">#F4F1EA</color>
+    <!-- Ryzn SA-MP Cool Pearl & Neo-Manga Palette -->
+    <color name="ryzn_bg">#F3F6FB</color>
+    <color name="ryzn_bg_black">#F3F6FB</color>
     <color name="ryzn_nav_bar">#FFFFFF</color>
     <color name="ryzn_surface">#FFFFFF</color>
     <color name="ryzn_surface_dark">#FFFFFF</color>
     <color name="ryzn_dialog_bg">#FFFFFF</color>
-    <color name="ryzn_surface_elevated">#EDE8DC</color>
-    <color name="ryzn_surface_stroke">#111111</color>
-    <color name="ryzn_accent">#D62839</color>
-    <color name="ryzn_purple_primary">#D62839</color>
-    <color name="ryzn_purple_pressed">#B01C2A</color>
-    <color name="ryzn_purple_deep">#8B131F</color>
-    <color name="ryzn_purple_soft">#1CD62839</color>
-    <color name="ryzn_purple_light">#D62839</color>
-    <color name="ryzn_text_primary">#111111</color>
-    <color name="ryzn_text_secondary">#47474F</color>
-    <color name="ryzn_text_muted">#6E6E78</color>
-    <color name="ryzn_status_online">#15803D</color>
+    <color name="ryzn_surface_elevated">#ECF0F8</color>
+    <color name="ryzn_surface_stroke">#151824</color>
+    <color name="ryzn_accent">#E11D48</color>
+    <color name="ryzn_purple_primary">#E11D48</color>
+    <color name="ryzn_purple_pressed">#BE123C</color>
+    <color name="ryzn_purple_deep">#9F1239</color>
+    <color name="ryzn_purple_soft">#1CE11D48</color>
+    <color name="ryzn_purple_light">#E11D48</color>
+    <color name="ryzn_text_primary">#151824</color>
+    <color name="ryzn_text_secondary">#4E586E</color>
+    <color name="ryzn_text_muted">#7C879E</color>
+    <color name="ryzn_status_online">#16A34A</color>
     <color name="ryzn_status_offline">#DC2626</color>
     <color name="ryzn_status_pending">#D97706</color>
-    <color name="manga_ink">#111111</color>
-    <color name="manga_paper">#F4F1EA</color>
+    <color name="manga_ink">#151824</color>
+    <color name="manga_paper">#F3F6FB</color>
     <color name="manga_panel">#FFFFFF</color>
-    <color name="manga_tone">#E6E0D2</color>
-    <color name="manga_crimson">#D62839</color>
+    <color name="manga_tone">#DCE3F0</color>
+    <color name="manga_crimson">#E11D48</color>
 </resources>

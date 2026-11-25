@@ -23,6 +23,11 @@ void ListBox::removeItem(int index)
 	m_panel->removeItem(index);
 }
 
+void ListBox::clear()
+{
+	m_panel->clear();
+}
+
 /* ListBox::Panel */
 
 ListBox::Panel::Panel()
@@ -80,6 +85,16 @@ void ListBox::Panel::addItem(ListBoxItem* item)
 void ListBox::Panel::removeItem(int index)
 {
 	this->removeChild(index);
+	this->performLayout();
+}
+
+void ListBox::Panel::clear()
+{
+	while (childCount() > 0) {
+		this->removeChild(childCount() - 1);
+	}
+	m_activeItemIndex = -1;
+	m_itemsCount = 0;
 	this->performLayout();
 }
 

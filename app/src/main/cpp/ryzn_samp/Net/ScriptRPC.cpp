@@ -467,7 +467,15 @@ void ScrSetPlayerSkin(RPCParameters* rpcParams)
 
 	if (IsValidPedModel(iModel)) {
 		if (pPlayerPool->GetLocalPlayerID() == iPlayerID) {
-			pPlayerPool->GetLocalPlayer()->GetPlayerPed()->SetModelIndex(iModel);
+			CLocalPlayer* pLocal = pPlayerPool->GetLocalPlayer();
+			if (pLocal) {
+				if (!pLocal->m_bIsActive || pLocal->IsSpectating() || !pLocal->m_bHasSpawnInfo) {
+					pLocal->SetSpawnSkin(iModel);
+				}
+				if (pLocal->GetPlayerPed()) {
+					pLocal->GetPlayerPed()->SetModelIndex(iModel);
+				}
+			}
 		}
 		else {
 			if (pPlayerPool->GetSlotState(iPlayerID)) {

@@ -65,6 +65,7 @@ public:
 	void Process();
 
 	void ShutdownForGameModeRestart();
+	void Reconnect();
 	void UpdatePlayerScoresAndPings();
 	void InitGameLogic();
 

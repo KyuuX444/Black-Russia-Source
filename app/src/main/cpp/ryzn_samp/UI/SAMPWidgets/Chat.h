@@ -11,6 +11,9 @@ public:
 	void addInfoMessage(const std::string& format, ...);
 	void addDebugMessage(const std::string& format, ...);
 	void addClientMessage(const std::string& message, const ImColor& color);
+	void clear();
+	void setPageSize(int pagesize);
+	void updateFontSize(float fontsize);
 
 	void addClientCommand(const std::string& cmd_name, const std::function<void(const std::string&)>& callback);
 
@@ -32,6 +35,13 @@ private:
 		{
 			m_text = new Label(message, color, true, UISettings::fontSize() / 2);
 			this->addChild(m_text);
+		}
+
+		void setFontSize(float fontSize)
+		{
+			if (m_text) {
+				m_text->setFontSize(fontSize);
+			}
 		}
 
 		void performLayout() override

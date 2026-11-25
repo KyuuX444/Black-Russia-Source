@@ -22,7 +22,16 @@ CActor::CActor(int iSkin, float fX, float fY, float fZ, float fAngle)
 	if (!pGame->IsModelLoaded(iSkin)) {
 		pGame->RequestModel(iSkin);
 		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(iSkin)) usleep(1000);
+		int tries = 0;
+		while (!pGame->IsModelLoaded(iSkin)) {
+			usleep(1000);
+			if (++tries % 50 == 0) {
+				pGame->LoadRequestedModels();
+			}
+			if (tries >= 1000) {
+				break;
+			}
+		}
 	}
 
 	uint32_t dwRet;

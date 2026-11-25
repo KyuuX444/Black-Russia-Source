@@ -24,6 +24,7 @@ public:
 
 	void addItem(ListBoxItem* item);
 	void removeItem(int index);
+	void clear();
 
 	int itemsCount() { return m_panel->itemsCount(); }
 	int activeItemIndex() const { return m_panel->activeItemIndex(); }
@@ -38,6 +39,7 @@ public:
 
 		void addItem(ListBoxItem* item);
 		void removeItem(int index);
+		void clear();
 
 		int itemsCount() { return children().size(); }
 
@@ -52,6 +54,8 @@ public:
 		int m_activeItemIndex;
 		int m_itemsCount;
 	};
+
+	Panel* panel() { return m_panel; }
 
 private:
 	Panel* m_panel;

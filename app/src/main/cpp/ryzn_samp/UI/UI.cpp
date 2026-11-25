@@ -30,7 +30,7 @@ bool UI::initialize()
 	this->addChild(m_splashScreen);
 	m_splashScreen->setFixedSize(size());
 	m_splashScreen->setPosition(ImVec2(0.0f, 0.0f));
-	m_splashScreen->setVisible(true);
+	m_splashScreen->setVisible(false);
 
 	m_deathWindow = new DeathWindow();
 	this->addChild(m_deathWindow);

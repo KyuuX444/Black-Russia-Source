@@ -112,7 +112,40 @@ void* startGame(void*)
 	pthread_exit(nullptr);
 }
 
-static void ensure_surface_dat(const std::string& gameDir)
+static bool file_exists_readable(const std::string& p)
+{
+	struct stat st{};
+	return stat(p.c_str(), &st) == 0 && !S_ISDIR(st.st_mode);
+}
+
+static bool has_game_data_folder(const std::string& baseDir)
+{
+	struct stat st{};
+	const char* probes[] = {"texdb", "mods", "data", "SAMP"};
+	for (const char* p : probes) {
+		if (stat((baseDir + p).c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static void write_default_if_missing(const std::string& target, const void* data, size_t len, const char* label)
+{
+	if (file_exists_readable(target)) return;
+	size_t lastSlash = target.find_last_of('/');
+	if (lastSlash != std::string::npos) {
+		mkdir_p(target.substr(0, lastSlash));
+	}
+	FILE* out = fopen(target.c_str(), "wb");
+	if (out) {
+		fwrite(data, 1, len, out);
+		fclose(out);
+		spdlog::info("Created default {} at: {}", label, target);
+	}
+}
+
+static void ensure_data_files(const std::string& gameDir)
 {
 	static const char* default_surface_dat =
 		"; Surface.dat\n"
@@ -124,38 +157,36 @@ static void ensure_surface_dat(const std::string& gameDir)
 		"Sand     2.0   4.0   2.0   1.0   1.0\n"
 		"Wet      2.4   2.0   1.0   1.0   1.0   0.5\n";
 
-	std::string targetPaths[] = {
+	// In Modified Data mode, read directly from existing external/modpack data without writing /data/data/ shadow copies.
+	if (Settings::modifieddata()) {
+		if (!file_exists_readable(gameDir + "mods/data/surface.dat")
+				&& !file_exists_readable(gameDir + "data/surface.dat")
+				&& !file_exists_readable(gameDir + "SAMP/surface.dat")) {
+			write_default_if_missing(gameDir + "SAMP/surface.dat", default_surface_dat, strlen(default_surface_dat), "surface.dat");
+		}
+		if (!file_exists_readable(gameDir + "mods/data/timecyc.dat")
+				&& !file_exists_readable(gameDir + "data/timecyc.dat")
+				&& !file_exists_readable(gameDir + "SAMP/timecyc.dat")) {
+			write_default_if_missing(gameDir + "SAMP/timecyc.dat", default_timecyc_dat, default_timecyc_dat_len, "timecyc.dat");
+		}
+		if (!file_exists_readable(gameDir + "mods/data/colorcycle.dat")
+				&& !file_exists_readable(gameDir + "data/colorcycle.dat")
+				&& !file_exists_readable(gameDir + "SAMP/colorcycle.dat")) {
+			write_default_if_missing(gameDir + "SAMP/colorcycle.dat", default_colorcycle_dat, default_colorcycle_dat_len, "colorcycle.dat");
+		}
+		return;
+	}
+
+	std::string surfaceTargets[] = {
 		gameDir + "SAMP/surface.dat",
 		gameDir + "data/surface.dat",
 		"/data/data/com.ryzn.samp/files/SAMP/surface.dat",
 		"/data/data/com.ryzn.samp/files/data/surface.dat"
 	};
-
-	for (const auto& target : targetPaths) {
-		FILE* check = fopen(target.c_str(), "rb");
-		if (check) {
-			fclose(check);
-			continue;
-		}
-		size_t lastSlash = target.find_last_of('/');
-		if (lastSlash != std::string::npos) {
-			std::string dir = target.substr(0, lastSlash);
-			mkdir_p(dir);
-		}
-		FILE* out = fopen(target.c_str(), "wb");
-		if (out) {
-			fwrite(default_surface_dat, 1, strlen(default_surface_dat), out);
-			fclose(out);
-			spdlog::info("Created default surface.dat at: {}", target);
-		}
+	for (const auto& target : surfaceTargets) {
+		write_default_if_missing(target, default_surface_dat, strlen(default_surface_dat), "surface.dat");
 	}
-}
 
-static void ensure_data_files(const std::string& gameDir)
-{
-	ensure_surface_dat(gameDir);
-
-	// Ensure timecyc.dat
 	std::string timecycTargets[] = {
 		gameDir + "SAMP/timecyc.dat",
 		gameDir + "data/timecyc.dat",
@@ -163,25 +194,9 @@ static void ensure_data_files(const std::string& gameDir)
 		"/data/data/com.ryzn.samp/files/data/timecyc.dat"
 	};
 	for (const auto& target : timecycTargets) {
-		FILE* check = fopen(target.c_str(), "rb");
-		if (check) {
-			fclose(check);
-			continue;
-		}
-		size_t lastSlash = target.find_last_of('/');
-		if (lastSlash != std::string::npos) {
-			std::string dir = target.substr(0, lastSlash);
-			mkdir_p(dir);
-		}
-		FILE* out = fopen(target.c_str(), "wb");
-		if (out) {
-			fwrite(default_timecyc_dat, 1, default_timecyc_dat_len, out);
-			fclose(out);
-			spdlog::info("Created default timecyc.dat at: {}", target);
-		}
+		write_default_if_missing(target, default_timecyc_dat, default_timecyc_dat_len, "timecyc.dat");
 	}
 
-	// Ensure colorcycle.dat
 	std::string colorcycleTargets[] = {
 		gameDir + "data/colorcycle.dat",
 		gameDir + "SAMP/colorcycle.dat",
@@ -189,22 +204,7 @@ static void ensure_data_files(const std::string& gameDir)
 		"/data/data/com.ryzn.samp/files/SAMP/colorcycle.dat"
 	};
 	for (const auto& target : colorcycleTargets) {
-		FILE* check = fopen(target.c_str(), "rb");
-		if (check) {
-			fclose(check);
-			continue;
-		}
-		size_t lastSlash = target.find_last_of('/');
-		if (lastSlash != std::string::npos) {
-			std::string dir = target.substr(0, lastSlash);
-			mkdir_p(dir);
-		}
-		FILE* out = fopen(target.c_str(), "wb");
-		if (out) {
-			fwrite(default_colorcycle_dat, 1, default_colorcycle_dat_len, out);
-			fclose(out);
-			spdlog::info("Created default colorcycle.dat at: {}", target);
-		}
+		write_default_if_missing(target, default_colorcycle_dat, default_colorcycle_dat_len, "colorcycle.dat");
 	}
 }
 
@@ -222,9 +222,7 @@ void Client::initialize(const std::string& gameDir, bool offlineMode)
 	sigaction(SIGSEGV, &sig_action, nullptr);
 
 	std::string resolvedGameDir = gameDir;
-	struct stat st;
-	std::string texdbCheck = resolvedGameDir + "texdb";
-	if (stat(texdbCheck.c_str(), &st) != 0) {
+	if (!has_game_data_folder(resolvedGameDir)) {
 		const char* candidatePaths[] = {
 			"/storage/emulated/0/ryznSAMP/",
 			"/storage/emulated/0/Android/data/com.ryzn.samp/files/",
@@ -232,8 +230,7 @@ void Client::initialize(const std::string& gameDir, bool offlineMode)
 			"/storage/emulated/0/Android/data/com.rockstargames.gtasa/files/"
 		};
 		for (const char* cand : candidatePaths) {
-			std::string candTexdb = std::string(cand) + "texdb";
-			if (stat(candTexdb.c_str(), &st) == 0) {
+			if (has_game_data_folder(cand)) {
 				resolvedGameDir = cand;
 				break;
 			}
@@ -241,7 +238,6 @@ void Client::initialize(const std::string& gameDir, bool offlineMode)
 	}
 
 	init_logger(resolvedGameDir);
-	ensure_data_files(resolvedGameDir);
 
 	spdlog::info("Initializing Ryzn SA-MP client...");
 
@@ -250,12 +246,13 @@ void Client::initialize(const std::string& gameDir, bool offlineMode)
 	offline_mode = false; // Always force online multiplayer mode
 	samp_version = "0.3.7";
 
+	Settings::initialize();
+	ensure_data_files(resolvedGameDir);
+
 	spdlog::info("Java VM: 0x{:X}", reinterpret_cast<uintptr_t>(java_vm));
 	spdlog::info("Game version: {}", VER_x32 ? "GTA: SA v2.10 (armeabi-v7a)" : "GTA: SA v2.10 (arm64-v8a)");
 	spdlog::info("Game directory: {}", game_dir);
 	spdlog::info("Offline mode: {}", offline_mode);
-
-	Settings::initialize();
 
 	if (Settings::sampversion() == 0) {
 		samp_version = "0.3.7";
@@ -395,8 +392,15 @@ void Client::process()
 			pAudioStream->Process();
 		}
 
-		if (g_java && !Game::IsGamePaused()) {
-			g_java->showWantedLevel(true);
+		if (g_java) {
+			static bool s_wantedShown = false;
+			bool paused = Game::IsGamePaused();
+			if (!paused && !s_wantedShown) {
+				g_java->showWantedLevel(true);
+				s_wantedShown = true;
+			} else if (paused && s_wantedShown) {
+				s_wantedShown = false;
+			}
 		}
 	}
 }

@@ -586,9 +586,12 @@ void CObject::SetMaterial(int iModel, uint8_t byteMaterialIndex, char* txdname, 
 					pGame->RequestModel(iModel);
 					pGame->LoadRequestedModels();
 					while (!pGame->IsModelLoaded(iModel)) {
-						usleep(1);
+						usleep(1000);
 						iWaitPreloaded++;
-						if (iWaitPreloaded > 250) {
+						if (iWaitPreloaded % 50 == 0) {
+							pGame->LoadRequestedModels();
+						}
+						if (iWaitPreloaded > 300) {
 							m_Material[byteMaterialIndex].pMaterialTexture = 0;
 							break;
 						}

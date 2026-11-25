@@ -33,7 +33,16 @@ CVehicle::CVehicle(int iType, float fX, float fY, float fZ, float fRotation, boo
 		if (!pGame->IsModelLoaded(iType)) {
 			pGame->RequestModel(iType);
 			pGame->LoadRequestedModels();
-			while (!pGame->IsModelLoaded(iType)) usleep(100);
+			int tries = 0;
+			while (!pGame->IsModelLoaded(iType)) {
+				usleep(1000);
+				if (++tries % 50 == 0) {
+					pGame->LoadRequestedModels();
+				}
+				if (tries >= 1500) {
+					return;
+				}
+			}
 		}
 
 		ScriptCommand(&create_car, iType, fX, fY, fZ, &dwRetID);
@@ -85,11 +94,18 @@ CVehicle::CVehicle(int iType, float fX, float fY, float fZ, float fRotation, boo
 		pGame->RequestModel(TRAIN_TRAM);
 		pGame->LoadRequestedModels();
 
-		while (!pGame->IsModelLoaded(TRAIN_PASSENGER_LOCO)) usleep(1000);
-		while (!pGame->IsModelLoaded(TRAIN_PASSENGER)) usleep(1000);
-		while (!pGame->IsModelLoaded(TRAIN_FREIGHT_LOCO)) usleep(1000);
-		while (!pGame->IsModelLoaded(TRAIN_FREIGHT)) usleep(1000);
-		while (!pGame->IsModelLoaded(TRAIN_TRAM)) usleep(1000);
+		const int trainModels[] = {
+			TRAIN_PASSENGER_LOCO, TRAIN_PASSENGER, TRAIN_FREIGHT_LOCO, TRAIN_FREIGHT, TRAIN_TRAM
+		};
+		for (int tModel : trainModels) {
+			int tries = 0;
+			while (!pGame->IsModelLoaded(tModel) && tries < 1000) {
+				usleep(1000);
+				if (++tries % 50 == 0) {
+					pGame->LoadRequestedModels();
+				}
+			}
+		}
 
 		ScriptCommand(&create_train, iType, fX, fY, fZ, dwDirection, &dwRetID);
 		m_pVehicle = GamePool_Vehicle_GetAt(dwRetID);
@@ -365,21 +381,20 @@ void CVehicle::AddComponent(int iComponentID)
 	uint32_t dwRet;
 	ScriptCommand(&add_car_component, m_gtaId, iComponentID, &dwRet);*/
 
-	int waitPreloaded;
+	int waitPreloaded = 0;
 
 	// CStreaming::HasVehicleUpgradeLoaded
-	bool HasVehicleUpgradeLoaded = Memory::callFunction<bool>("_ZN10CStreaming23HasVehicleUpgradeLoadedEi", iComponentID);
-
-	if (!HasVehicleUpgradeLoaded) {
+	if (!Memory::callFunction<bool>("_ZN10CStreaming23HasVehicleUpgradeLoadedEi", iComponentID)) {
 		// CStreaming::RequestVehicleUpgrade
 		Memory::callFunction<void>("_ZN10CStreaming21RequestVehicleUpgradeEii", iComponentID, 10);
 		pGame->LoadRequestedModels();
 
-		while (!HasVehicleUpgradeLoaded) {
-			usleep(1);
-			waitPreloaded++;
-			if (waitPreloaded > 200) {
-				//pUI->chat()->addDebugMessage("Warning: component %u wouldn't load in time.", iComponentID);
+		while (!Memory::callFunction<bool>("_ZN10CStreaming23HasVehicleUpgradeLoadedEi", iComponentID)) {
+			usleep(1000);
+			if (++waitPreloaded % 50 == 0) {
+				pGame->LoadRequestedModels();
+			}
+			if (waitPreloaded > 300) {
 				return;
 			}
 		}

@@ -37,11 +37,19 @@ public:
 	static bool voice() { return m_voice; }
 	static bool displayfps() { return m_displayfps; }
 	static bool radarrect() { return m_radarrect; }
+	static bool modifieddata() { return m_modifieddata; }
+	static bool headmove() { return m_headmove; }
 	static int fpslimit() { return m_fpslimit; }
 	static int chatstrings() { return m_chatstrings; }
 	static float fontsize() { return m_fontsize; }
 	static ImVec2 chatpos() { return m_chatpos; }
 	static ImVec2 chatsize() { return m_chatsize; }
+
+	static void setTimestamp(bool val) { m_timestamp = val; }
+	static void setHeadMove(bool val) { m_headmove = val; }
+	static void setFpsLimit(int val) { m_fpslimit = val; }
+	static void setChatStrings(int val) { m_chatstrings = val; }
+	static void setFontSize(float val) { m_fontsize = val; }
 
 private:
 	static bool m_initialized;
@@ -61,6 +69,8 @@ private:
 	static bool m_voice;
 	static bool m_displayfps;
 	static bool m_radarrect;
+	static bool m_modifieddata;
+	static bool m_headmove;
 	static int m_fpslimit;
 	static int m_chatstrings;
 	static float m_fontsize;

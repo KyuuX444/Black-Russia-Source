@@ -72,7 +72,6 @@ public class GameUI implements ButtonPanel.Listener, Voice.Listener, Scoreboard.
         wantedLevel = new WantedLevel(samp);
 
         if (samp.getSharedPreferences("samp_settings", Context.MODE_PRIVATE).getInt("game_version", 0) == 0) {
-            showLoadingScreen(true);
             showWantedLevel(true);
         }
     }
@@ -101,7 +100,9 @@ public class GameUI implements ButtonPanel.Listener, Voice.Listener, Scoreboard.
     }
 
     public void showLoadingScreen(boolean z) {
-        samp.runOnUiThread(() -> loadingScreen.show(z));
+        if (loadingScreen != null) {
+            samp.runOnUiThread(() -> loadingScreen.show(false));
+        }
     }
 
     public void showEditObject(boolean z) {

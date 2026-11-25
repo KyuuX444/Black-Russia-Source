@@ -76,34 +76,8 @@ DECL_HOOK(void, AND_TouchEvent, int type, int num, int posX, int posY)
 
 DECL_HOOK(void, DisplayScreen)
 {
-	/*
-	 * using the loadingscreen from java so we don't need this anymore
-	 */
-
-	/*if (RwCameraBeginUpdate(sa::Scene->m_pRwCamera)) {
-		// DefinedState2d
-		Memory::callFunction<void>("_Z14DefinedState2dv");
-
-		// CSprite2d::InitPerFrame
-		Memory::callFunction<void>("_ZN9CSprite2d12InitPerFrameEv");
-
-		RwRenderStateSet(rwRENDERSTATETEXTUREADDRESS, (void*) rwTEXTUREADDRESSCLAMP);
-
-		// emu_GammaSet
-		Memory::callFunction("_Z12emu_GammaSeth", false);
-
-		// CLoadingScreen::m_PercentLoaded
-		float fPercentLoaded = *g_saSym->GetSymbol<float*>("_ZN14CLoadingScreen15m_PercentLoadedE");
-
-		pUI->splashscreen()->setProgressBarValue(fPercentLoaded / 100.0f);
-		pUI->render();
-
-		if (sa::Scene && sa::Scene->m_pRwCamera)
-	{
-		RwCameraEndUpdate(sa::Scene->m_pRwCamera);
-	}
-		RwCameraShowRaster(sa::Scene->m_pRwCamera, nullptr, 0);
-	}*/
+	// Render GTA:SA's default loading screen without custom overlay UI
+	DisplayScreen();
 }
 
 static bool check_file_readable(const std::string& path)
@@ -343,12 +317,14 @@ static void init_file_bases_locked()
 	if (s_basesInitialized) {
 		return;
 	}
+	const bool modDataMode = Settings::modifieddata();
 	const char* candidateBases[] = {
 		Client::gameDir(),
 		"/storage/emulated/0/ryznSAMP/",
 		"/storage/emulated/0/Android/data/com.ryzn.samp/files/",
-		"/data/data/com.ryzn.samp/files/",
-		"/storage/emulated/0/Android/data/com.rockstargames.gtasa/files/"
+		modDataMode ? nullptr : "/data/data/com.ryzn.samp/files/",
+		"/storage/emulated/0/Android/data/com.rockstargames.gtasa/files/",
+		modDataMode ? "/data/data/com.ryzn.samp/files/" : nullptr
 	};
 	for (const char* b : candidateBases) {
 		if (!b || !b[0]) continue;
@@ -356,8 +332,9 @@ static void init_file_bases_locked()
 		if (norm.back() != '/') norm += '/';
 		push_unique_dir(s_stockBases, norm);
 	}
-	// Modpack directories have priority over all stock bases.
+	// Modpack directories have priority over all stock bases (skip internal shadow dir when modified_data is active).
 	for (const auto& stock : s_stockBases) {
+		if (modDataMode && stock == "/data/data/com.ryzn.samp/files/") continue;
 		discover_modpack_roots(stock, s_modBases);
 	}
 	for (const auto& modBase : s_modBases) {
@@ -703,10 +680,15 @@ DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 			if (!matched) continue;
 
 			std::string chosen;
+			bool modBeatsSamp = rule.modDataBeatsSamp ||
+				(Settings::modifieddata() &&
+				 strcmp(rule.matchRel, "data/script/mainv1.scm") != 0 &&
+				 strcmp(rule.matchRel, "data/script/scriptv1.img") != 0 &&
+				 strcmp(rule.matchRel, "data/gta.dat") != 0);
 			{
 				std::lock_guard<std::mutex> lock(s_fsCacheMutex);
 				init_file_bases_locked();
-				if (rule.modDataBeatsSamp) {
+				if (modBeatsSamp) {
 					// Modpacks under mods/ override everything first.
 					chosen = resolve_in_base_list(s_modBases, rule.sampRel);
 					if (chosen.empty()) chosen = resolve_in_base_list(s_modBases, rule.matchRel);
@@ -715,7 +697,7 @@ DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 						const char* gd = Client::gameDir();
 						std::string extSamp = (gd && gd[0]) ? resolve_case_insensitive_path(gd, rule.sampRel) : "";
 						std::string extData = (gd && gd[0]) ? resolve_case_insensitive_path(gd, rule.matchRel) : "";
-						bool preferDataOverSamp =
+						bool preferDataOverSamp = Settings::modifieddata() ||
 							!strcasecmp(rule.matchRel, "data/timecyc.dat") ||
 							!strcasecmp(rule.matchRel, "data/colorcycle.dat") ||
 							!strcasecmp(rule.matchRel, "data/popcycle.dat");
@@ -729,9 +711,21 @@ DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 				}
 			}
 			if (chosen.empty()) {
-				chosen = rule.modDataBeatsSamp
+				chosen = modBeatsSamp
 					? (!find_real_file(rule.matchRel).empty() ? find_real_file(rule.matchRel) : find_real_file(rule.sampRel))
 					: (!find_real_file(rule.sampRel).empty() ? find_real_file(rule.sampRel) : find_real_file(rule.matchRel));
+			}
+
+			// Protect against partial/stub SAMP/peds.ide overriding full vanilla data/peds.ide
+			if (!strcasecmp(rule.matchRel, "data/peds.ide") && !chosen.empty() && str_contains_case_insensitive(chosen.c_str(), "samp/peds.ide")) {
+				struct stat sampSt{};
+				std::string vanillaPeds = find_real_file("data/peds.ide");
+				if (!vanillaPeds.empty() && stat(chosen.c_str(), &sampSt) == 0 && sampSt.st_size < 4096) {
+					struct stat vanSt{};
+					if (stat(vanillaPeds.c_str(), &vanSt) == 0 && vanSt.st_size >= 4096) {
+						chosen = vanillaPeds;
+					}
+				}
 			}
 
 			if (!chosen.empty()) {
@@ -780,15 +774,15 @@ call_orig:
 
 DECL_HOOK(sa::CPedModelInfo *, CModelInfo_AddPedModel, int id)
 {
-	// spdlog::info("Adding ped model: {}", id);
+	if (id < 0 || id >= 20000) {
+		spdlog::error("CModelInfo_AddPedModel: out-of-range id {}", id);
+		return nullptr;
+	}
+
 	auto model = new sa::CPedModelInfo{};
 	model->vtable = g_saSym->GetVmtFunction<uintptr_t>("_ZTV13CPedModelInfo", 1, true); // CPedModelInfo::~CPedModelInfo
 
-	typedef sa::CStore<sa::CPedModelInfo, 278> PedModelStore;
-	auto ms_pedModelStore = g_saSym->Abs<PedModelStore *>(addr::ms_pedModelStore);
-	ms_pedModelStore->AddItem();
-
-	// CClumpModelInfo::Init
+	// CClumpModelInfo::Init (calls CBaseModelInfo::Init)
 	model->Init();
 
 	auto ms_modelInfoPtrs = g_saSym->Abs<sa::CBaseModelInfo **>(addr::CModelInfo_ms_modelInfoPtrs);
@@ -1206,14 +1200,63 @@ DECL_HOOK(void, Render2dStuff)
 
 	if (Settings::displayfps())
 	{
-		// fps
-		msCollected[curMS++ % 0x28] = Memory::callFunction<unsigned int>("_Z9OS_TimeMSv");
+		unsigned int nowMs = Memory::callFunction<unsigned int>("_Z9OS_TimeMSv");
+		msCollected[curMS++ % 0x28] = nowMs;
+
+		static unsigned int s_lastFpsUpdateMs = 0;
+		static unsigned int s_lastMemUpdateMs = 0;
+		static char s_szStrFps[64] = "FPS: 0.00";
+		static char s_szStrMem[64] = "MEM: 0 / 0 MB";
+		static const char* s_szStrArch = VER_x32 ? "ARCH: x32" : "ARCH: x64";
+
+		if (curMS >= 0x28 && (nowMs - s_lastFpsUpdateMs) >= 200) {
+			unsigned int oldest = msCollected[curMS % 0x28];
+			unsigned int newest = msCollected[(curMS - 1) % 0x28];
+			unsigned int delta = newest - oldest;
+			if (delta > 0) {
+				snprintf(s_szStrFps, sizeof(s_szStrFps), "FPS: %.2f", 39000.0f / static_cast<float>(delta));
+			}
+			s_lastFpsUpdateMs = nowMs;
+		}
+
+		// Throttle expensive heap-walk (mallinfo2) & system memory queries to 1Hz instead of every frame
+		if ((nowMs - s_lastMemUpdateMs) >= 1000 || s_lastMemUpdateMs == 0) {
+			struct mallinfo2 memInfo = mallinfo2();
+			long long totalAllocatedMB = static_cast<long long>(memInfo.uordblks) / (1024 * 1024);
+			static long long s_totalMemoryMB = 0;
+			if (s_totalMemoryMB == 0) {
+#if VER_x32
+				FILE *meminfo = fopen("/proc/meminfo", "r");
+				if (meminfo) {
+					char line[256];
+					while (fgets(line, sizeof(line), meminfo)) {
+						if (strncmp(line, "MemTotal:", 9) == 0) {
+							s_totalMemoryMB = atoll(&line[9]) / 1024;
+							break;
+						}
+					}
+					fclose(meminfo);
+				}
+#else
+				struct sysinfo info{};
+				if (sysinfo(&info) == 0) {
+					s_totalMemoryMB = static_cast<long long>(info.totalram) / (1024 * 1024);
+				}
+#endif
+			}
+			snprintf(s_szStrMem, sizeof(s_szStrMem), "MEM: %lld / %lld MB", totalAllocatedMB, s_totalMemoryMB);
+			s_lastMemUpdateMs = nowMs;
+		}
 
 		RGBA bgColor = {0, 0, 0, 0};
 		RGBA color = {255, 255, 255, 255};
+		const float baseScaleX = 1.12f * 0.54f;
+		const float baseScaleY = 1.12f;
+		const float drawX = (static_cast<float>(sa::RsGlobal->screenWidth) / 640.0f) * 4.0f;
+		const float scaleH = static_cast<float>(sa::RsGlobal->screenHeight) / 448.0f;
 
 		CFont::SetBackgroundColor(&bgColor);
-		CFont::SetScale(1.12f * 0.54, 1.12f);
+		CFont::SetScale(baseScaleX, baseScaleY);
 		CFont::SetOrientation(1);
 		CFont::SetJustify(0);
 		CFont::SetWrapX(640.0);
@@ -1222,68 +1265,9 @@ DECL_HOOK(void, Render2dStuff)
 		CFont::SetEdge(0);
 		CFont::SetColor(&color);
 
-		char szStr[64];
-		sprintf(szStr, "FPS: %.2f", (float)(39000.0 / (float)(int)(msCollected[(curMS - 1) % 0x28] - msCollected[curMS % 0x28])));
-		CFont::PrintString((float)((float)sa::RsGlobal->screenWidth / 640.0) * 4.0, (float)((float)sa::RsGlobal->screenHeight / 448.0) * 200.0, szStr);
-
-		// mem
-		CFont::SetBackgroundColor(&bgColor);
-		CFont::SetScale(1.12f * 0.54, 1.12f);
-		CFont::SetOrientation(1);
-		CFont::SetJustify(0);
-		CFont::SetWrapX(640.0);
-		CFont::SetProportional(0);
-		CFont::SetFontStyle(1);
-		CFont::SetEdge(0);
-		CFont::SetColor(&color);
-
-		struct mallinfo2 memInfo = mallinfo2();
-
-		long long totalAllocatedMB = memInfo.uordblks / (1024 * 1024);
-
-#if VER_x32
-		long long totalMemoryMB = 0;
-		FILE *meminfo = fopen("/proc/meminfo", "r");
-		if (meminfo)
-		{
-			char line[256];
-			while (fgets(line, sizeof(line), meminfo))
-			{
-				if (strncmp(line, "MemTotal:", 9) == 0)
-				{
-					totalMemoryMB = atoll(&line[9]) / 1024;
-					break;
-				}
-			}
-			fclose(meminfo);
-		}
-#else
-		struct sysinfo info{};
-		long long totalMemoryMB = 0;
-		if (sysinfo(&info) == 0)
-		{
-			totalMemoryMB = info.totalram / (1024 * 1024); // Get total system RAM
-		}
-#endif
-
-		char szStrMem[64];
-		snprintf(szStrMem, sizeof(szStrMem), "MEM: %lld / %lld MB", totalAllocatedMB, totalMemoryMB);
-		CFont::PrintString((float)((float)sa::RsGlobal->screenWidth / 640.0) * 4.0, (float)((float)sa::RsGlobal->screenHeight / 448.0) * 210.0, szStrMem);
-
-		// arch
-		CFont::SetBackgroundColor(&bgColor);
-		CFont::SetScale(1.12f * 0.54, 1.12f);
-		CFont::SetOrientation(1);
-		CFont::SetJustify(0);
-		CFont::SetWrapX(640.0);
-		CFont::SetProportional(0);
-		CFont::SetFontStyle(1);
-		CFont::SetEdge(0);
-		CFont::SetColor(&color);
-
-		char szStrArch[64];
-		snprintf(szStrArch, sizeof(szStrArch), "ARCH: %s", VER_x32 ? "x32" : "x64");
-		CFont::PrintString((float)((float)sa::RsGlobal->screenWidth / 640.0) * 4.0, (float)((float)sa::RsGlobal->screenHeight / 448.0) * 220.0, szStrArch);
+		CFont::PrintString(drawX, scaleH * 200.0f, s_szStrFps);
+		CFont::PrintString(drawX, scaleH * 210.0f, s_szStrMem);
+		CFont::PrintString(drawX, scaleH * 220.0f, const_cast<char*>(s_szStrArch));
 	}
 }
 
@@ -1335,7 +1319,8 @@ extern sa::CPlayerInfo *WORLD_PLAYERS;
 
 DECL_HOOK(sa::CPlayerInfo *, GetPlayerInfoForThisPlayerPed, sa::CPed *ped)
 {
-	for (int i = 0; i < MAX_PLAYERS; i++)
+	if (!WORLD_PLAYERS) return nullptr;
+	for (int i = 0; i < PLAYER_PED_SLOTS; i++)
 	{
 		if (WORLD_PLAYERS[i].m_pPed == ped)
 		{
@@ -1396,7 +1381,8 @@ DECL_HOOK(void, CWidget_SetEnabled, uintptr_t pWidget, bool bEnabled)
 
 DECL_HOOK(int, CWorld_FindPlayerSlotWithPedPointer, sa::CPed *pPlayersPed)
 {
-	for (int i = 0; i < MAX_PLAYERS; ++i)
+	if (!WORLD_PLAYERS) return -1;
+	for (int i = 0; i < PLAYER_PED_SLOTS; ++i)
 	{
 		if (WORLD_PLAYERS[i].m_pPed == pPlayersPed)
 		{

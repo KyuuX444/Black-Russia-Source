@@ -256,7 +256,7 @@ public class ServerManager {
                     listener.onComplete();
                 }
                 RyznGameDownloader.saveServerConfig(resolvedAddress, pass);
-                if (RyznGameDownloader.isGameInstalled()) {
+                if (RyznGameDownloader.isGameInstalled(activity)) {
                     activity.startActivity(new Intent(activity, GTASA.class));
                 } else {
                     activity.startActivity(new Intent(activity, LoaderActivity.class));
@@ -300,7 +300,7 @@ public class ServerManager {
         if (context == null || !RyznGameDownloader.hasStoragePermission(context)) {
             return ClientState.NEEDS_PERMISSION;
         }
-        if (RyznGameDownloader.isGameInstalled()) {
+        if (RyznGameDownloader.isGameInstalled(context)) {
             return ClientState.READY;
         }
         return ClientState.NEEDS_DOWNLOAD;

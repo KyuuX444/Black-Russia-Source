@@ -36,7 +36,9 @@ public class GTASA extends com.rockstargames.gtasa.GTASA {
 
     private File resolveGameDirectory() {
         File primaryDir = RyznGameDownloader.getGameDir();
-        if (new File(primaryDir, "texdb").exists()) {
+        boolean modMode = RyznGameDownloader.isModifiedDataEnabled(this);
+        if (new File(primaryDir, "texdb").exists()
+                || (modMode && (new File(primaryDir, "mods").exists() || new File(primaryDir, "data").exists() || new File(primaryDir, "SAMP").exists()))) {
             return primaryDir;
         }
         File extFiles = getExternalFilesDir(null);
@@ -49,7 +51,8 @@ public class GTASA extends com.rockstargames.gtasa.GTASA {
         for (String path : candidates) {
             if (path == null || path.isEmpty()) continue;
             File dir = new File(path);
-            if (new File(dir, "texdb").exists()) {
+            if (new File(dir, "texdb").exists()
+                    || (modMode && (new File(dir, "mods").exists() || new File(dir, "data").exists() || new File(dir, "SAMP").exists()))) {
                 return dir;
             }
         }

@@ -2,7 +2,9 @@
 #include "../../Game/Game.h"
 #include "../../Net/NetGame.h"
 #include "../../Java/Java.h"
+#include "../../Settings.h"
 #include <algorithm>
+#include <cctype>
 
 extern UI* pUI;
 extern Game* pGame;
@@ -64,7 +66,54 @@ void Chat::addMessage(const std::string& message, const ImColor& color)
 
 void Chat::addClientCommand(const std::string& cmd_name, const std::function<void(const std::string&)>& callback)
 {
-	m_commands[cmd_name] = callback;
+	std::string lower = cmd_name;
+	std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+	m_commands[lower] = callback;
+}
+
+void Chat::clear()
+{
+	ListBox::clear();
+	this->setScrollY(0.0f);
+}
+
+void Chat::setPageSize(int pagesize)
+{
+	if (pagesize < 5) pagesize = 5;
+	if (pagesize > 20) pagesize = 20;
+
+	Settings::setChatStrings(pagesize);
+	UISettings::m_chatDispMesssages = pagesize + 1;
+	UISettings::m_chatSize.y = UISettings::m_chatItemSize.y * UISettings::m_chatDispMesssages;
+	this->setFixedSize(UISettings::chatSize());
+	this->performLayout();
+	this->setScrollY(1.0f);
+}
+
+void Chat::updateFontSize(float fontsize)
+{
+	if (fontsize < 10.0f) fontsize = 10.0f;
+	if (fontsize > 60.0f) fontsize = 60.0f;
+
+	Settings::setFontSize(fontsize);
+	float scaledFont = fontsize * UISettings::scaleFactor().y;
+	UISettings::setFontSize(scaledFont);
+	UISettings::m_chatItemSize.y = scaledFont / 2.0f;
+	UISettings::m_chatSize.y = UISettings::m_chatItemSize.y * UISettings::m_chatDispMesssages;
+
+	this->setItemSize(UISettings::chatItemSize());
+	this->setFixedSize(UISettings::chatSize());
+
+	if (panel()) {
+		for (auto* child : panel()->children()) {
+			if (auto* item = dynamic_cast<MessageItem*>(child)) {
+				item->setFontSize(scaledFont / 2.0f);
+			}
+		}
+	}
+
+	this->performLayout();
+	this->setScrollY(1.0f);
 }
 
 void Chat::draw(ImGuiRenderer* renderer)
@@ -104,6 +153,8 @@ void Chat::keyboardEvent(const std::string& input)
 		else {
 			cmd_name = input.substr(1);
 		}
+
+		std::transform(cmd_name.begin(), cmd_name.end(), cmd_name.begin(), [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
 
 		auto cmd = m_commands.find(cmd_name);
 		if (cmd != m_commands.end()) {

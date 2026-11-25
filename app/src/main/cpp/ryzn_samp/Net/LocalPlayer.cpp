@@ -1125,7 +1125,7 @@ void CLocalPlayer::ApplySpecialAction(uint8_t byteSpecialAction)
 
 	m_pPlayerPed->SetSpecialAction(byteSpecialAction);
 
-	if (m_pPlayerPed->IsAdded()) {
+	if (Settings::headmove() && m_pPlayerPed->IsAdded()) {
 		if ((GetTickCount() - m_dwLastHeadUpdate) > 500) {
 			sa::CVector LookAt;
 			CAMERA_AIM* Aim = GameGetInternalAim();

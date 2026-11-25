@@ -681,7 +681,16 @@ uint32_t Game::CreatePickup(int iModel, int iType, float x, float y, float z, in
 	if (!IsModelLoaded(iModel)) {
 		RequestModel(iModel);
 		LoadRequestedModels();
-		while (!IsModelLoaded(iModel)) sleep(1);
+		int tries = 0;
+		while (!IsModelLoaded(iModel)) {
+			usleep(1000);
+			if (++tries % 50 == 0) {
+				LoadRequestedModels();
+			}
+			if (tries >= 1000) {
+				break;
+			}
+		}
 	}
 
 	uint32_t hnd;

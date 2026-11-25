@@ -186,6 +186,7 @@ public:
 	bool CompareOnFootSyncKeys(uint16_t wKeys, uint16_t lrAnalog, uint16_t udAnalog);
 	void ApplySpecialAction(uint8_t byteSpecialAction);
 	void SetSpawnInfo(PLAYER_SPAWN_INFO* pSpawnInfo);
+	void SetSpawnSkin(int iSkin) { m_SpawnInfo.iSkin = iSkin; }
 	void HandleClassSelectionOutcome(bool bOutcome);
 	uint8_t GetSpecialAction();
 	uint32_t GetPlayerColorAsARGB();

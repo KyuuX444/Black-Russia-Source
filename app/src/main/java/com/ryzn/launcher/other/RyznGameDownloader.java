@@ -87,8 +87,55 @@ public class RyznGameDownloader {
         return new File(getGameDir(), "SAMP/settings.json");
     }
 
+    public static boolean isModifiedDataEnabled(Context context) {
+        if (context != null) {
+            android.content.SharedPreferences sp =
+                    context.getSharedPreferences("samp_settings", Context.MODE_PRIVATE);
+            if (sp.contains("modified_data")) {
+                return sp.getBoolean("modified_data", false);
+            }
+        }
+        try {
+            File ini = getSettingsFile();
+            if (ini.exists()) {
+                Wini w = new Wini(ini);
+                String val = w.get("gui", "modifieddata");
+                if (val != null) {
+                    return "1".equals(val.trim());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
+    private static boolean hasExistingGameData(File dir) {
+        if (dir == null || !dir.isDirectory()) return false;
+        return new File(dir, "texdb").isDirectory()
+                || new File(dir, "mods").isDirectory()
+                || new File(dir, "data").isDirectory()
+                || new File(dir, "SAMP").isDirectory();
+    }
+
     public static boolean isGameInstalled() {
+        return isGameInstalled(null);
+    }
+
+    public static boolean isGameInstalled(Context context) {
         File dir = getGameDir();
+        if (isModifiedDataEnabled(context)) {
+            if (hasExistingGameData(dir)) {
+                return true;
+            }
+            if (context != null) {
+                File ext = context.getExternalFilesDir(null);
+                if (hasExistingGameData(ext)) {
+                    return true;
+                }
+            }
+            return hasExistingGameData(new File("/storage/emulated/0/Android/data/com.ryzn.samp/files"))
+                    || hasExistingGameData(new File("/storage/emulated/0/Android/data/com.rockstargames.gtasa/files"));
+        }
         return new File(dir, "texdb/gta3.img").exists() && getSettingsFile().exists();
     }
 
@@ -168,6 +215,7 @@ public class RyznGameDownloader {
         int voicelist = (sp == null || sp.getBoolean("voice_chat", true)) ? 1 : 0;
         int radarrect = (sp != null && sp.getBoolean("radar_rect", false)) ? 1 : 0;
         int timestamp = (sp != null && sp.getBoolean("timestamp", false)) ? 1 : 0;
+        int modifiedData = isModifiedDataEnabled(context) ? 1 : 0;
         int chatStrings = sp != null ? Math.max(5, Math.min(20, sp.getInt("chat_strings", 8))) : 8;
         float fontSize = sp != null ? sp.getFloat("font_size", 30.0f) : 30.0f;
 
@@ -202,6 +250,7 @@ public class RyznGameDownloader {
                     + "voicelist = " + voicelist + "\n"
                     + "radarrect = " + radarrect + "\n"
                     + "timestamp = " + timestamp + "\n"
+                    + "modifieddata = " + modifiedData + "\n"
                     + "fps = 60\n";
             try (FileOutputStream fos = new FileOutputStream(settingsFile)) {
                 fos.write(iniContent.getBytes(StandardCharsets.UTF_8));
@@ -234,6 +283,7 @@ public class RyznGameDownloader {
             boolean voiceChat = true;
             boolean displayFps = false;
             boolean radarRect = false;
+            boolean modifiedData = isModifiedDataEnabled(context);
             int chatStrings = 8;
             double fontSize = 30.0;
             int fpsLimit = 60;
@@ -280,6 +330,8 @@ public class RyznGameDownloader {
                     if (iniFps != null) displayFps = "1".equals(iniFps.trim());
                     String iniRadar = w.get("gui", "radarrect");
                     if (iniRadar != null) radarRect = "1".equals(iniRadar.trim());
+                    String iniModData = w.get("gui", "modifieddata");
+                    if (iniModData != null) modifiedData = "1".equals(iniModData.trim());
                     String iniChat = w.get("gui", "ChatMaxMessages");
                     if (iniChat != null) {
                         chatStrings = Math.max(5, Math.min(20, Integer.parseInt(iniChat.trim())));
@@ -314,6 +366,7 @@ public class RyznGameDownloader {
             settingsObj.put("voice_chat", voiceChat);
             settingsObj.put("display_fps", displayFps);
             settingsObj.put("radar_rect", radarRect);
+            settingsObj.put("modified_data", modifiedData);
             settingsObj.put("fps_limit", fpsLimit);
             settingsObj.put("chat_strings", chatStrings);
             settingsObj.put("font_size", fontSize);
@@ -543,6 +596,7 @@ public class RyznGameDownloader {
                     throw new IOException("Gagal membuat folder penyimpanan: " + gameDir.getAbsolutePath());
                 }
 
+                final boolean keepModifiedExisting = isModifiedDataEnabled(activity);
                 long downloadedBytes = 0L;
                 final int totalFiles = allItems.size();
                 long lastUiUpdate = 0L;
@@ -558,8 +612,11 @@ public class RyznGameDownloader {
                     }
 
                     final String shortName = targetFile.getName();
-                    if (targetFile.exists() && item.size > 0 && targetFile.length() == item.size) {
-                        downloadedBytes += item.size;
+                    boolean keepExisting = targetFile.exists()
+                            && ((item.size > 0 && targetFile.length() == item.size)
+                                || (keepModifiedExisting && targetFile.length() > 0));
+                    if (keepExisting) {
+                        downloadedBytes += (item.size > 0 ? item.size : targetFile.length());
                         long now = System.currentTimeMillis();
                         if (now - lastUiUpdate > 150 || i == totalFiles - 1) {
                             lastUiUpdate = now;

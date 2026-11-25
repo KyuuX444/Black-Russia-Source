@@ -1467,8 +1467,14 @@ void CPlayerPed::SetModelIndex(uint uiModel)
 		uiModel = 0;
 	}
 
-	// CClothes::RebuildPlayer
-	Memory::ret(g_saSym->GetSymbol<uintptr_t>("_ZN8CClothes13RebuildPlayerEP10CPlayerPedb"));
+	// CClothes::RebuildPlayer (guard once)
+	static bool s_clothesPatched = false;
+	if (!s_clothesPatched) {
+		if (auto pRebuild = g_saSym->GetSymbol<uintptr_t>("_ZN8CClothes13RebuildPlayerEP10CPlayerPedb")) {
+			Memory::ret(pRebuild);
+		}
+		s_clothesPatched = true;
+	}
 
 	DestroyFollowPedTask();
 
@@ -1514,8 +1520,16 @@ void CPlayerPed::GiveWeapon(int iWeaponId, int iAmmo)
 			if (!pGame->IsModelLoaded(iWeaponModelID)) {
 				pGame->RequestModel(iWeaponModelID);
 				pGame->LoadRequestedModels();
-				while (!pGame->IsModelLoaded(iWeaponModelID))
-					sleep(1);
+				int tries = 0;
+				while (!pGame->IsModelLoaded(iWeaponModelID)) {
+					usleep(1000);
+					if (++tries % 50 == 0) {
+						pGame->LoadRequestedModels();
+					}
+					if (tries >= 1000) {
+						return;
+					}
+				}
 			}
 
 			*pbyteCurrentPlayer = m_bytePlayerNumber;

@@ -1128,12 +1128,12 @@
     <dimen name="tooltip_vertical_padding">6.5dip</dimen>
     <dimen name="tooltip_y_offset_non_touch">0.0dip</dimen>
     <dimen name="tooltip_y_offset_touch">16.0dip</dimen>
-    <dimen name="ryzn_space_xs">4dp</dimen>
-    <dimen name="ryzn_space_sm">8dp</dimen>
-    <dimen name="ryzn_space_md">12dp</dimen>
-    <dimen name="ryzn_space_lg">16dp</dimen>
-    <dimen name="ryzn_card_radius">10dp</dimen>
-    <dimen name="ryzn_btn_radius">8dp</dimen>
-    <dimen name="ryzn_header_height">54dp</dimen>
-    <dimen name="ryzn_footer_height">36dp</dimen>
+    <dimen name="ryzn_space_xs">3dp</dimen>
+    <dimen name="ryzn_space_sm">6dp</dimen>
+    <dimen name="ryzn_space_md">10dp</dimen>
+    <dimen name="ryzn_space_lg">14dp</dimen>
+    <dimen name="ryzn_card_radius">8dp</dimen>
+    <dimen name="ryzn_btn_radius">6dp</dimen>
+    <dimen name="ryzn_header_height">44dp</dimen>
+    <dimen name="ryzn_footer_height">32dp</dimen>
 </resources>

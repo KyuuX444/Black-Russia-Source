@@ -115,19 +115,21 @@ void CEntity::SetModelIndex(uint uiModel)
 		return;
 	}
 
-	int iTryCount = 0;
 	if (!pGame->IsModelLoaded(uiModel) && !GetModelRWObject(uiModel)) {
 		pGame->RequestModel(uiModel);
 		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(uiModel)) {
-			sleep(1);
-
-			if (iTryCount > 200) {
-				pUI->chat()->addDebugMessage("Warning: Model %u wouldn't load in time!", uiModel);
+		int iTryCount = 0;
+		while (!pGame->IsModelLoaded(uiModel) && !GetModelRWObject(uiModel)) {
+			usleep(1000);
+			if (++iTryCount % 50 == 0) {
+				pGame->LoadRequestedModels();
+			}
+			if (iTryCount >= 1500) {
+				if (pUI && pUI->chat()) {
+					pUI->chat()->addDebugMessage("Warning: Model %u wouldn't load in time!", uiModel);
+				}
 				return;
 			}
-
-			iTryCount++;
 		}
 	}
 

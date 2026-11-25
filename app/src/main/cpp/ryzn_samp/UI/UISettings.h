@@ -4,8 +4,12 @@ class UISettings {
 public:
 	static void Initialize(const ImVec2& display_size);
 
+	/* scaling */
+	static ImVec2 scaleFactor() { return m_scaleFactor; }
+
 	/* font */
 	static float fontSize() { return m_fontSize; }
+	static void setFontSize(float fontSize) { m_fontSize = fontSize; }
 	static float outlineSize() { return m_outlineSize; }
 
 	/* ////////////////// sizes ////////////////// */

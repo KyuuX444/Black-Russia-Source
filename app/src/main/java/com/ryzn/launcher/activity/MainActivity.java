@@ -146,7 +146,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (state == ServerManager.ClientState.NEEDS_DOWNLOAD) {
                 startActivity(new Intent(this, LoaderActivity.class));
             } else {
-                Toast.makeText(this, "Client siap di /storage/emulated/0/" + RyznGameDownloader.GAME_DIR_NAME + "/", Toast.LENGTH_SHORT).show();
+                String msg = RyznGameDownloader.isModifiedDataEnabled(this)
+                        ? "Mode Modified Data aktif: membaca data game yang ada"
+                        : "Client siap di /storage/emulated/0/" + RyznGameDownloader.GAME_DIR_NAME + "/";
+                Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -202,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
         ServerManager.ClientState state = ServerManager.getClientState(this);
         if (state == ServerManager.ClientState.READY) {
             statusDot.setBackgroundResource(R.drawable.bg_status_dot_online);
-            statusText.setText("Client Siap");
+            statusText.setText(RyznGameDownloader.isModifiedDataEnabled(this) ? "Client Siap (Mod)" : "Client Siap");
         } else if (state == ServerManager.ClientState.NEEDS_PERMISSION) {
             statusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
             statusText.setText("Butuh Izin");

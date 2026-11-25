@@ -4,9 +4,14 @@
 #include "UI/UI.h"
 #include "Java/Java.h"
 #include "Game/Game.h"
+#include "Game/Patches.h"
 #include "Net/NetGame.h"
 #include "Game/AudioStream.h"
 
+#include <cstdlib>
+#include <cstring>
+#include <malloc.h>
+#include <sys/sysinfo.h>
 #include <thread>
 
 extern UI* pUI;
@@ -130,37 +135,167 @@ void cmdDW(const std::string& params)
 
 void cmdClearMyChat(const std::string& params)
 {
-	if (!pUI) {
+	if (!pUI || !pUI->chat()) {
 		return;
 	}
 
-	for (int i = 0; i < 25; i++) {
-		pUI->chat()->addInfoMessage(" ");
+	pUI->chat()->clear();
+}
+
+void cmdReconnect(const std::string& params)
+{
+	if (pNetGame) {
+		pNetGame->Reconnect();
 	}
+}
+
+void cmdPageSize(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	if (params.empty()) {
+		pUI->chat()->addInfoMessage("-> Usage: /pagesize [5-20] (current: %d)", Settings::chatstrings());
+		return;
+	}
+
+	char* endPtr = nullptr;
+	long val = std::strtol(params.c_str(), &endPtr, 10);
+	if (endPtr == params.c_str() || val < 5 || val > 20) {
+		pUI->chat()->addInfoMessage("-> Pagesize must be between 5 and 20");
+		return;
+	}
+
+	pUI->chat()->setPageSize(static_cast<int>(val));
+	pUI->chat()->addInfoMessage("-> Pagesize set to %ld", val);
+}
+
+void cmdFontSize(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	if (params.empty()) {
+		pUI->chat()->addInfoMessage("-> Usage: /fontsize [10-60 or -3..5] (current: %.1f)", Settings::fontsize());
+		return;
+	}
+
+	char* endPtr = nullptr;
+	float val = std::strtof(params.c_str(), &endPtr);
+	if (endPtr == params.c_str()) {
+		pUI->chat()->addInfoMessage("-> Invalid fontsize");
+		return;
+	}
+
+	if (val >= -3.0f && val <= 5.0f) {
+		val = 30.0f + val * 3.0f;
+	}
+
+	if (val < 10.0f || val > 60.0f) {
+		pUI->chat()->addInfoMessage("-> Fontsize must be between 10 and 60 (or -3..5)");
+		return;
+	}
+
+	pUI->chat()->updateFontSize(val);
+	pUI->chat()->addInfoMessage("-> Fontsize set to %.1f", val);
 }
 
 void cmdTimestamp(const std::string& params)
 {
-	if (pUI) {
-		pUI->chat()->addInfoMessage("-> Timestamp %s", Chat::timestamp() ? "OFF" : "ON");
-		Chat::setTimestamp(!Chat::timestamp());
+	if (pUI && pUI->chat()) {
+		bool next = !Chat::timestamp();
+		Chat::setTimestamp(next);
+		Settings::setTimestamp(next);
 		pUI->chat()->performLayout();
+		pUI->chat()->addInfoMessage("-> Timestamp %s", next ? "ON" : "OFF");
 	}
+}
+
+void cmdFpsLimit(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	if (params.empty()) {
+		pUI->chat()->addInfoMessage("-> Usage: /fpslimit [20-120] (current: %d)", Settings::fpslimit());
+		return;
+	}
+
+	char* endPtr = nullptr;
+	long fps = std::strtol(params.c_str(), &endPtr, 10);
+	if (endPtr == params.c_str() || fps < 20 || fps > 120) {
+		pUI->chat()->addInfoMessage("-> FPS limit must be between 20 and 120");
+		return;
+	}
+
+	Patches::setFpsLimit(static_cast<int>(fps));
+	pUI->chat()->addInfoMessage("-> Frame limiter set to %ld FPS", fps);
+}
+
+void cmdHeadMove(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	bool next = !Settings::headmove();
+	Settings::setHeadMove(next);
+	pUI->chat()->addInfoMessage("-> Headmove %s", next ? "ON" : "OFF");
+}
+
+void cmdInterior(const std::string& params)
+{
+	if (!pUI || !pUI->chat() || !pGame) {
+		return;
+	}
+
+	pUI->chat()->addInfoMessage("-> Current interior: %d", static_cast<int>(pGame->GetActiveInterior()));
+}
+
+void cmdMem(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	struct mallinfo2 memInfo = mallinfo2();
+	long long allocMB = static_cast<long long>(memInfo.uordblks) / (1024 * 1024);
+	long long totalMB = 0;
+
+#if VER_x32
+	FILE* meminfo = fopen("/proc/meminfo", "r");
+	if (meminfo) {
+		char line[256];
+		while (fgets(line, sizeof(line), meminfo)) {
+			if (strncmp(line, "MemTotal:", 9) == 0) {
+				totalMB = atoll(&line[9]) / 1024;
+				break;
+			}
+		}
+		fclose(meminfo);
+	}
+#else
+	struct sysinfo info{};
+	if (sysinfo(&info) == 0) {
+		totalMB = static_cast<long long>(info.totalram) / (1024 * 1024);
+	}
+#endif
+
+	pUI->chat()->addInfoMessage("-> Memory: %lld MB used / %lld MB RAM", allocMB, totalMB);
 }
 
 void cmdCmds(const std::string& params)
 {
-	if (pUI) {
-		pUI->chat()->addInfoMessage(" ");
-		pUI->chat()->addInfoMessage("Client ClientCmds:");
-		pUI->chat()->addInfoMessage("/quit (/q) -> Exit Game");
-		pUI->chat()->addInfoMessage("/rcon -> Login to rcon console (Usage: /rcon login [password])");
-		pUI->chat()->addInfoMessage("/save -> Save onfoot/incar position (as savedpositions.txt in SAMP data folder)");
-		pUI->chat()->addInfoMessage("/dl -> Toggle Debug Labels");
-		pUI->chat()->addInfoMessage("/dw -> Toggle Death Window");
-		pUI->chat()->addInfoMessage("/clearmychat -> Clear Your Chat");
-		pUI->chat()->addInfoMessage("/timestamp -> Toggle Timestamp");
-		pUI->chat()->addInfoMessage(" ");
+	if (pUI && pUI->chat()) {
+		pUI->chat()->addInfoMessage("--- Ryzn SA-MP Client Commands ---");
+		pUI->chat()->addInfoMessage("/rec (/reconnect) - Reconnect to server | /q (/quit) - Exit game");
+		pUI->chat()->addInfoMessage("/c (/clear) - Clear chat | /pagesize [5-20] | /fontsize [10-60|-3..5]");
+		pUI->chat()->addInfoMessage("/timestamp - Chat timestamps | /fpslimit [20-120] | /headmove - Ped head look");
+		pUI->chat()->addInfoMessage("/dl - Vehicle debug | /dw - Killfeed | /save (/rs) - Save coords");
+		pUI->chat()->addInfoMessage("/interior - Interior ID | /mem - Memory stats | /rcon [cmd]");
 	}
 }
 
@@ -179,18 +314,35 @@ void ClientCmds::initialize()
 {
 	spdlog::info("Initializing client commands..");
 
+	auto* chat = pUI->chat();
+	chat->addClientCommand("q", cmdQuit);
+	chat->addClientCommand("quit", cmdQuit);
+	chat->addClientCommand("c", cmdClearMyChat);
+	chat->addClientCommand("cc", cmdClearMyChat);
+	chat->addClientCommand("clear", cmdClearMyChat);
+	chat->addClientCommand("clearmychat", cmdClearMyChat);
+	chat->addClientCommand("pagesize", cmdPageSize);
+	chat->addClientCommand("fontsize", cmdFontSize);
+	chat->addClientCommand("fs", cmdFontSize);
+	chat->addClientCommand("timestamp", cmdTimestamp);
+	chat->addClientCommand("fpslimit", cmdFpsLimit);
+	chat->addClientCommand("headmove", cmdHeadMove);
+	chat->addClientCommand("interior", cmdInterior);
+	chat->addClientCommand("mem", cmdMem);
+	chat->addClientCommand("save", cmdSave);
+	chat->addClientCommand("rs", cmdSave);
+	chat->addClientCommand("help", cmdCmds);
+	chat->addClientCommand("cmds", cmdCmds);
+	chat->addClientCommand("clientcmds", cmdCmds);
+
 	if (Client::offlineMode()) {
-		pUI->chat()->addClientCommand("j", cmdJetpack);
+		chat->addClientCommand("j", cmdJetpack);
 	}
 	else {
-		pUI->chat()->addClientCommand("q", cmdQuit);
-		pUI->chat()->addClientCommand("quit", cmdQuit);
-		pUI->chat()->addClientCommand("rcon", cmdRcon);
-		pUI->chat()->addClientCommand("save", cmdSave);
-		pUI->chat()->addClientCommand("dl", cmdDL);
-		pUI->chat()->addClientCommand("dw", cmdDW);
-		pUI->chat()->addClientCommand("clearmychat", cmdClearMyChat);
-		pUI->chat()->addClientCommand("timestamp", cmdTimestamp);
-		pUI->chat()->addClientCommand("clientcmds", cmdCmds);
+		chat->addClientCommand("rec", cmdReconnect);
+		chat->addClientCommand("reconnect", cmdReconnect);
+		chat->addClientCommand("rcon", cmdRcon);
+		chat->addClientCommand("dl", cmdDL);
+		chat->addClientCommand("dw", cmdDW);
 	}
 }

@@ -236,7 +236,16 @@ RwTexture* SnapShotHelper::CreateObjectSnapShot(int iModel, uint32_t dwColor, sa
 		bNeedRemoveModel = true;
 		pGame->RequestModel(iModel);
 		pGame->LoadRequestedModels();
-		while (!pGame->IsModelLoaded(iModel)) usleep(1);
+		int tries = 0;
+		while (!pGame->IsModelLoaded(iModel)) {
+			usleep(1000);
+			if (++tries % 50 == 0) {
+				pGame->LoadRequestedModels();
+			}
+			if (tries >= 500) {
+				return nullptr;
+			}
+		}
 	}
 
 	auto pRwObject = reinterpret_cast<RwObject*>(ModelInfoCreateInstance(iModel));

@@ -5,10 +5,10 @@
     android:background="@drawable/ryzn_sheet_surface"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="20dp"
-    android:paddingTop="20dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="24dp">
+    android:paddingStart="16dp"
+    android:paddingTop="14dp"
+    android:paddingEnd="18dp"
+    android:paddingBottom="16dp">
 
     <TextView
         android:id="@+id/prompt_title"
@@ -18,88 +18,88 @@
         android:gravity="center"
         android:text="Identitas Pemain"
         android:textColor="@color/manga_ink"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/prompt_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="14dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="10dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center"
         android:maxLines="2"
         android:text="Masukkan Nick_Name (tanpa spasi, maks 24 huruf)"
         android:textColor="@color/ryzn_text_secondary"
-        android:textSize="11.5sp" />
+        android:textSize="10.5sp" />
 
     <EditText
         android:id="@+id/prompt_nickname_input"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="38dp"
         android:background="@drawable/ryzn_field_surface"
         android:fontFamily="@font/montserrat_medium"
         android:hint="Nick_Name..."
         android:imeOptions="actionDone"
         android:inputType="textNoSuggestions"
         android:maxLength="24"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:singleLine="true"
         android:textColor="@color/manga_ink"
         android:textColorHint="@color/ryzn_text_muted"
-        android:textSize="13sp" />
+        android:textSize="11.5sp" />
 
     <EditText
         android:id="@+id/prompt_password_input"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ryzn_field_surface"
         android:fontFamily="@font/montserrat_medium"
         android:hint="Kata sandi server..."
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         android:singleLine="true"
         android:textColor="@color/manga_ink"
         android:textColorHint="@color/ryzn_text_muted"
-        android:textSize="13sp"
+        android:textSize="11.5sp"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prompt_cancel_btn"
             android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_marginEnd="10dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_action_dark"
             android:fontFamily="@font/montserrat_bold"
-            android:paddingBottom="2dp"
+            android:paddingBottom="1dp"
             android:text="Batal"
             android:textAllCaps="false"
             android:textColor="@color/manga_ink"
-            android:textSize="13sp" />
+            android:textSize="11.5sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prompt_confirm_btn"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="38dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_play_purple"
             android:fontFamily="@font/montserrat_bold"
-            android:paddingBottom="3dp"
+            android:paddingBottom="2dp"
             android:text="Simpan"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
-            android:textSize="13sp" />
+            android:textSize="11.5sp" />
     </LinearLayout>
 </LinearLayout>

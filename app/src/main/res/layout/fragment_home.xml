@@ -3,21 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingStart="10dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="8dp">
+    android:paddingStart="8dp"
+    android:paddingTop="6dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="6dp">
 
-    <!-- 1. Hero Manga Banner Panel -->
+    <!-- 1. Compact Hero Manga Banner Panel -->
     <FrameLayout
         android:id="@+id/hero_banner_card"
         android:layout_width="0dp"
-        android:layout_height="118dp"
+        android:layout_height="84dp"
         android:background="@drawable/bg_card_surface"
-        android:paddingStart="2dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="5dp"
-        android:paddingBottom="5dp"
+        android:paddingStart="1.5dp"
+        android:paddingTop="1.5dp"
+        android:paddingEnd="3.5dp"
+        android:paddingBottom="3.5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -37,16 +37,16 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#58FAF8F3" />
+                android:background="#48F6F8FC" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="10dp">
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="4dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -60,58 +60,58 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:text="RYZN"
                         android:textColor="@color/manga_ink"
-                        android:textSize="26sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:layout_marginBottom="3dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginBottom="2dp"
                         android:background="@color/manga_ink"
                         android:fontFamily="@font/montserrat_bold"
-                        android:paddingStart="7dp"
-                        android:paddingTop="2dp"
-                        android:paddingEnd="7dp"
-                        android:paddingBottom="2dp"
+                        android:paddingStart="6dp"
+                        android:paddingTop="1dp"
+                        android:paddingEnd="6dp"
+                        android:paddingBottom="1dp"
                         android:text="SA-MP"
                         android:textColor="#FFFFFF"
-                        android:textSize="11.5sp" />
+                        android:textSize="9.5sp" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:background="#DCFFFFFF"
+                    android:background="#EAFFFFFF"
                     android:fontFamily="@font/montserrat_bold"
-                    android:paddingStart="6dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="2dp"
+                    android:paddingStart="5dp"
+                    android:paddingTop="1dp"
+                    android:paddingEnd="5dp"
+                    android:paddingBottom="1dp"
                     android:text="@string/banner_tagline"
                     android:textColor="@color/manga_crimson"
-                    android:textSize="10.5sp" />
+                    android:textSize="9sp" />
             </LinearLayout>
 
             <!-- Tappable Nickname Badge bottom-right of Banner -->
             <LinearLayout
                 android:id="@+id/banner_nick_chip"
                 android:layout_width="wrap_content"
-                android:layout_height="26dp"
+                android:layout_height="22dp"
                 android:layout_gravity="bottom|end"
-                android:layout_margin="8dp"
+                android:layout_margin="6dp"
                 android:background="@color/manga_ink"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="9dp"
-                android:paddingEnd="9dp">
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
 
                 <ImageView
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_marginEnd="5dp"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:layout_marginEnd="4dp"
                     android:contentDescription="@null"
                     android:src="@drawable/ic_nick"
                     app:tint="#FFFFFF" />
@@ -122,11 +122,11 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/montserrat_bold"
-                    android:maxWidth="135dp"
+                    android:maxWidth="130dp"
                     android:maxLines="1"
                     android:text="Set Nick_Name"
                     android:textColor="#FFFFFF"
-                    android:textSize="10.5sp" />
+                    android:textSize="9.5sp" />
             </LinearLayout>
         </FrameLayout>
     </FrameLayout>
@@ -136,24 +136,24 @@
         android:id="@+id/server_list_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
         android:background="@drawable/bg_card_surface"
         android:orientation="vertical"
-        android:paddingStart="2dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="5dp"
-        android:paddingBottom="5dp"
+        android:paddingStart="1.5dp"
+        android:paddingTop="1.5dp"
+        android:paddingEnd="3.5dp"
+        android:paddingBottom="3.5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_split_barrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_min="148dp"
+        app:layout_constraintHeight_min="120dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hero_banner_card">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:paddingEnd="6dp">
+            android:layout_height="28dp"
+            android:paddingEnd="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -162,17 +162,17 @@
                 android:background="@drawable/bg_section_header_tab"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center_vertical"
-                android:paddingStart="12dp"
-                android:paddingEnd="14dp"
-                android:paddingBottom="2dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="1dp"
                 android:text="@string/section_server_list"
                 android:textColor="#FFFFFF"
-                android:textSize="12.5sp" />
+                android:textSize="10.5sp" />
 
             <LinearLayout
                 android:id="@+id/btn_refresh_servers"
                 android:layout_width="wrap_content"
-                android:layout_height="26dp"
+                android:layout_height="22dp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/bg_btn_action_dark"
@@ -180,15 +180,15 @@
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="2dp">
+                android:paddingStart="7dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="1dp">
 
                 <ImageView
                     android:id="@+id/icon_refresh"
-                    android:layout_width="13dp"
-                    android:layout_height="13dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_width="11dp"
+                    android:layout_height="11dp"
+                    android:layout_marginEnd="3dp"
                     android:contentDescription="@string/action_refresh"
                     android:src="@drawable/ic_refresh"
                     app:tint="@color/manga_ink" />
@@ -199,51 +199,51 @@
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/action_refresh"
                     android:textColor="@color/manga_ink"
-                    android:textSize="10.5sp" />
+                    android:textSize="9.5sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/btn_add_server_inline"
                 android:layout_width="wrap_content"
-                android:layout_height="26dp"
+                android:layout_height="22dp"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="6dp"
+                android:layout_marginEnd="5dp"
                 android:layout_toStartOf="@id/btn_refresh_servers"
                 android:background="@drawable/bg_btn_action_dark"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
-                android:paddingStart="9dp"
-                android:paddingEnd="11dp"
-                android:paddingBottom="2dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="9dp"
+                android:paddingBottom="1dp"
                 android:text="@string/action_add_ip"
                 android:textColor="@color/manga_crimson"
-                android:textSize="10.5sp" />
+                android:textSize="9.5sp" />
         </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1.5dp"
+            android:layout_height="1.2dp"
             android:background="@color/manga_ink" />
 
         <!-- Compact Inline Server Filter -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="34dp"
-            android:layout_marginStart="6dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="6dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
             android:background="@drawable/ryzn_field_surface"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="9dp">
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginEnd="7dp"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:layout_marginEnd="6dp"
                 android:contentDescription="@null"
                 android:src="@drawable/search_24px"
                 app:tint="@color/ryzn_text_secondary" />
@@ -262,7 +262,7 @@
                 android:singleLine="true"
                 android:textColor="@color/manga_ink"
                 android:textColorHint="@color/ryzn_text_muted"
-                android:textSize="11.5sp" />
+                android:textSize="10.5sp" />
         </LinearLayout>
 
         <FrameLayout
@@ -275,10 +275,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingStart="6dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="6dp" />
+                android:paddingStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="5dp" />
 
             <TextView
                 android:id="@+id/home_servers_empty"
@@ -286,10 +286,10 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/montserrat_medium"
                 android:gravity="center"
-                android:padding="16dp"
+                android:padding="12dp"
                 android:text="Belum ada server. Ketuk + IP untuk menambahkan server SA-MP."
                 android:textColor="@color/ryzn_text_muted"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:visibility="gone" />
         </FrameLayout>
     </LinearLayout>
@@ -301,44 +301,44 @@
         app:barrierDirection="top"
         app:constraint_referenced_ids="info_card,btn_play_main" />
 
-    <!-- 3. Server Information Card (Bottom Left) -->
+    <!-- 3. Compact Server Information Card (Bottom Left) -->
     <LinearLayout
         android:id="@+id/info_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="6dp"
         android:background="@drawable/bg_card_surface"
         android:orientation="vertical"
-        android:paddingStart="2dp"
-        android:paddingTop="2dp"
-        android:paddingEnd="5dp"
-        android:paddingBottom="5dp"
+        android:paddingStart="1.5dp"
+        android:paddingTop="1.5dp"
+        android:paddingEnd="3.5dp"
+        android:paddingBottom="3.5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_play_main"
-        app:layout_constraintHorizontal_weight="0.56"
+        app:layout_constraintHorizontal_weight="0.58"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="22dp"
             android:background="@drawable/bg_section_header_tab"
             android:fontFamily="@font/montserrat_bold"
             android:gravity="center_vertical"
-            android:paddingStart="10dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="2dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="1dp"
             android:text="@string/section_server_info"
             android:textColor="#FFFFFF"
-            android:textSize="11.5sp" />
+            android:textSize="10sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="9dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="9dp"
-            android:paddingBottom="7dp">
+            android:paddingStart="8dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="5dp">
 
             <TextView
                 android:id="@+id/info_server_name"
@@ -349,21 +349,21 @@
                 android:maxLines="1"
                 android:text="Pilih server"
                 android:textColor="@color/manga_ink"
-                android:textSize="11.5sp" />
+                android:textSize="10.5sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="46dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/label_mode"
                     android:textColor="@color/ryzn_text_secondary"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
 
                 <TextView
                     android:id="@+id/info_mode"
@@ -375,7 +375,7 @@
                     android:maxLines="1"
                     android:text=": -"
                     android:textColor="@color/manga_ink"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -385,12 +385,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="46dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/label_map"
                     android:textColor="@color/ryzn_text_secondary"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
 
                 <TextView
                     android:id="@+id/info_map"
@@ -402,7 +402,7 @@
                     android:maxLines="1"
                     android:text=": San Andreas"
                     android:textColor="@color/manga_ink"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -412,12 +412,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="46dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/label_players"
                     android:textColor="@color/ryzn_text_secondary"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
 
                 <TextView
                     android:id="@+id/info_players"
@@ -429,7 +429,7 @@
                     android:maxLines="1"
                     android:text=": 0 / 0"
                     android:textColor="@color/manga_ink"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -439,12 +439,12 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_width="50dp"
+                    android:layout_width="46dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/label_ping"
                     android:textColor="@color/ryzn_text_secondary"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
 
                 <TextView
                     android:id="@+id/info_ping"
@@ -456,16 +456,16 @@
                     android:maxLines="1"
                     android:text=": -- ms"
                     android:textColor="@color/manga_ink"
-                    android:textSize="10sp" />
+                    android:textSize="9sp" />
             </LinearLayout>
 
-            <!-- Preview skyline panel -->
+            <!-- Compact preview skyline panel -->
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginTop="6dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="4dp"
                 android:background="@drawable/ryzn_field_surface"
-                android:padding="1.5dp">
+                android:padding="1dp">
 
                 <ImageView
                     android:id="@+id/info_preview_image"
@@ -479,7 +479,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- 4. Bold Shonen Manga PLAY CTA Panel (Bottom Right) -->
+    <!-- 4. Compact PLAY CTA Panel (Bottom Right) -->
     <LinearLayout
         android:id="@+id/btn_play_main"
         android:layout_width="0dp"
@@ -489,18 +489,18 @@
         android:focusable="true"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingStart="12dp"
-        android:paddingEnd="14dp"
-        android:paddingBottom="4dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/info_card"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.44"
+        app:layout_constraintHorizontal_weight="0.42"
         app:layout_constraintStart_toEndOf="@+id/info_card"
         app:layout_constraintTop_toTopOf="@+id/info_card">
 
         <ImageView
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:contentDescription="@string/action_play"
             android:src="@drawable/ic_play"
             app:tint="#FFFFFF" />
@@ -508,21 +508,21 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:fontFamily="@font/montserrat_bold"
             android:letterSpacing="0.08"
             android:text="@string/action_play"
             android:textColor="#FFFFFF"
-            android:textSize="22sp" />
+            android:textSize="17sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="1dp"
             android:fontFamily="@font/montserrat_bold"
             android:text="MASUK GAME"
-            android:textColor="#FFE8EA"
-            android:textSize="9.5sp" />
+            android:textColor="#FFE4EB"
+            android:textSize="8.5sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

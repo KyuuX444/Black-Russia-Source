@@ -1,23 +1,38 @@
 #include "Game.h"
 #include "../Client.h"
+#include "../Settings.h"
 #include "VehicleColoursTable.h"
 
 sa::CPlayerInfo* WORLD_PLAYERS = nullptr;
+
+void Patches::setFpsLimit(int fps)
+{
+	if (fps < 20) fps = 20;
+	if (fps > 120) fps = 120;
+	Settings::setFpsLimit(fps);
+
+#if VER_x32
+	uint8_t u8fps = static_cast<uint8_t>(fps);
+	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x5E49E0), (uintptr_t) &u8fps, 1);
+	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x5E492E), (uintptr_t) &u8fps, 1);
+#else
+	uint32_t movW9 = 0x52800009u | ((static_cast<uint32_t>(fps) & 0xFFFFu) << 5);
+	uint32_t movW8 = 0x52800008u | ((static_cast<uint32_t>(fps) & 0xFFFFu) << 5);
+	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A38C), (uintptr_t) &movW9, 4);
+	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A43C), (uintptr_t) &movW8, 4);
+	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A458), (uintptr_t) &movW9, 4);
+#endif
+	if (sa::RsGlobal) {
+		*reinterpret_cast<uint32_t*>(reinterpret_cast<uintptr_t>(sa::RsGlobal) + 0x10) = static_cast<uint32_t>(fps);
+	}
+	spdlog::info("FPS limit set to {}", fps);
+}
 
 void Patches::preApply()
 {
 	spdlog::info("Applying FPS patches...");
 
-	// fps limit
-#if VER_x32
-	uint8_t fps = 0x78; // 120
-	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x5E49E0), (uintptr_t) &fps, 1);
-	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x5E492E), (uintptr_t) &fps, 1);
-#else
-	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A38C), (uintptr_t) "\x09\x0F\x80\x52", 4);
-	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A43C), (uintptr_t) "\x08\x0F\x80\x52", 4);
-	Memory::writeMemory(g_saSym->Abs<uintptr_t>(0x70A458), (uintptr_t) "\x09\x0F\x80\x52", 4);
-#endif
+	setFpsLimit(120);
 
 	// show fps
 	//*(bool*) (g_saSym->GetSymbol<uintptr_t>("FrontEndMenuManager") + (VER_x32 ? 0xB5 : 0xC1)) = true;
@@ -33,14 +48,17 @@ void Patches::allocPlayers()
 {
 	spdlog::info("Allocating world players...");
 
-	// relocate CWorld::Players[]
-	WORLD_PLAYERS = (sa::CPlayerInfo*) malloc(404 * PLAYER_PED_SLOTS);
-	memset(WORLD_PLAYERS, 0, 404 * PLAYER_PED_SLOTS);
+	// relocate CWorld::Players[] with exact ABI struct size (404 on x32, 472 on x64)
+	size_t playerInfoSize = sizeof(sa::CPlayerInfo);
+	size_t totalBytes = playerInfoSize * PLAYER_PED_SLOTS;
+	WORLD_PLAYERS = (sa::CPlayerInfo*) malloc(totalBytes);
+	memset(WORLD_PLAYERS, 0, totalBytes);
 
 	Memory::protectAddr(g_saSym->Abs(addr::_ZN6CWorld7PlayersE_ptr));
 	*g_saSym->Abs<sa::CPlayerInfo**>(addr::_ZN6CWorld7PlayersE_ptr) = WORLD_PLAYERS;
 
-	spdlog::info("CWorld::Players new address: 0x{:X}, old address: 0x{:X}, size: {}", (uintptr_t) WORLD_PLAYERS, (uintptr_t) g_saSym->GetSymbol("_ZN6CWorld7PlayersE"), 404 * PLAYER_PED_SLOTS);
+	spdlog::info("CWorld::Players new address: 0x{:X}, old address: 0x{:X}, size: {} ({} bytes/slot)",
+			(uintptr_t) WORLD_PLAYERS, (uintptr_t) g_saSym->GetSymbol("_ZN6CWorld7PlayersE"), totalBytes, playerInfoSize);
 
 }
 void Patches::initBetterPoolsSize()
@@ -276,6 +294,14 @@ void Patches::apply()
 	/*Memory::ret(g_saSym->GetSymbol<uintptr_t>("_ZN21CAEVehicleAudioEntity32PlayerAboutToExitVehicleAsDriverEv"));
 	Memory::ret(g_saSym->GetSymbol<uintptr_t>("_ZN21CAEVehicleAudioEntity18JustWreckedVehicleEv"));
 	Memory::ret(g_saSym->GetSymbol<uintptr_t>("_ZN21CAEVehicleAudioEntity21TurnOnRadioForVehicleEv"));*/
+
+	// Prevent CJ clothes rebuild from overwriting server-assigned ped skins
+	if (auto pRebuild = g_saSym->GetSymbol<uintptr_t>("_ZN8CClothes13RebuildPlayerEP10CPlayerPedb")) {
+		Memory::ret(pRebuild);
+	}
+	if (auto pRebuildIfNeeded = g_saSym->GetSymbol<uintptr_t>("_ZN8CClothes21RebuildPlayerIfNeededEP10CPlayerPed")) {
+		Memory::ret(pRebuildIfNeeded);
+	}
 
 	// Disable in-game radio
 	Memory::ret(g_saSym->GetSymbol<uintptr_t>("_ZN20CAERadioTrackManager7ServiceEi"));
