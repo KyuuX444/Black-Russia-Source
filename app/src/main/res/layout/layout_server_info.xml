@@ -5,7 +5,7 @@
     android:background="@drawable/ryzn_sheet_surface"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="22dp">
+    android:padding="20dp">
 
     <TextView
         android:id="@+id/server_name"
@@ -16,27 +16,27 @@
         android:gravity="center"
         android:maxLines="2"
         android:text="Memuat..."
-        android:textColor="#FFFFFF"
+        android:textColor="@color/ryzn_text_primary"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/server_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="@font/montserrat_medium"
         android:gravity="center"
         android:maxLines="1"
         android:text="127.0.0.1:7777"
-        android:textColor="#7CA4FF"
+        android:textColor="@color/ryzn_purple_light"
         android:textSize="12sp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginBottom="14dp"
-        android:background="#12FFFFFF" />
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/ryzn_surface_stroke" />
 
     <TextView
         android:id="@+id/server_players"
@@ -46,7 +46,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="Pemain: 0 / 0"
-        android:textColor="#CFD6E3"
+        android:textColor="@color/ryzn_text_primary"
         android:textSize="12sp" />
 
     <TextView
@@ -57,8 +57,8 @@
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center"
         android:maxLines="1"
-        android:text="Gamemode: Mobile / PC"
-        android:textColor="#9AA4B7"
+        android:text="Mode: SA-MP"
+        android:textColor="@color/ryzn_text_secondary"
         android:textSize="12sp" />
 
     <TextView
@@ -66,87 +66,87 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="14dp"
         android:fontFamily="@font/montserrat_regular"
         android:gravity="center"
         android:maxLines="1"
-        android:text="Bahasa: Indonesia"
-        android:textColor="#9AA4B7"
+        android:text="Map: San Andreas"
+        android:textColor="@color/ryzn_text_secondary"
         android:textSize="12sp" />
 
     <EditText
         android:id="@+id/nickname_input_text"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="44dp"
         android:background="@drawable/ryzn_field_surface"
         android:fontFamily="@font/montserrat_regular"
         android:hint="Nick_Name..."
         android:imeOptions="actionDone"
         android:inputType="textNoSuggestions"
         android:maxLength="24"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#788296"
+        android:textColor="@color/ryzn_text_primary"
+        android:textColorHint="@color/ryzn_text_muted"
         android:textSize="13sp" />
 
     <EditText
         android:id="@+id/password_input_text"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="44dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/ryzn_field_surface"
         android:fontFamily="@font/montserrat_regular"
         android:hint="Kata sandi server..."
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#788296"
+        android:textColor="@color/ryzn_text_primary"
+        android:textColorHint="@color/ryzn_text_muted"
         android:textSize="13sp"
         android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/delete_button"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="42dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
-            android:background="@drawable/ryzn_secondary_pill"
+            android:background="@drawable/bg_btn_action_dark"
             android:drawableStart="@drawable/ic_delete"
             android:drawablePadding="6dp"
             android:fontFamily="@font/montserrat_bold"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
             android:text="Hapus"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/ryzn_text_primary"
             android:textSize="13sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/connect_button"
             android:layout_width="0dp"
-            android:layout_height="44dp"
+            android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="@drawable/ryzn_primary_pill"
+            android:background="@drawable/bg_btn_play_purple"
             android:drawableStart="@drawable/ic_play"
             android:drawablePadding="6dp"
             android:fontFamily="@font/montserrat_bold"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
             android:text="Hubungkan"
             android:textAllCaps="false"
-            android:textColor="#0D1017"
+            android:textColor="#FFFFFF"
             android:textSize="13sp" />
     </LinearLayout>
 

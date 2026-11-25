@@ -2276,23 +2276,28 @@ void CTaskSimpleUseGun__RemoveStanceAnims_hook(void* thiz, void* ped, float a3)
 float (*CRadar__LimitRadarPoint)(float* a1);
 float CRadar__LimitRadarPoint_hook(float* a1)
 {
+	if (!a1)
+	{
+		return 0.0f;
+	}
+
 	if (*(uint8_t*)(g_libGTASA + 0x0063E0B4))
 	{
 		return sqrtf((float)(a1[1] * a1[1]) + (float)(*a1 * *a1));
 	}
 
-	if (!CRadarRect::IsEnabled())
+	if (CRadarRect::IsEnabled())
 	{
-		return CRadar__LimitRadarPoint(a1);
-	}
-	float value = CRadarRect::CRadar__LimitRadarPoint_hook(a1);
-
-	if (pChatWindow)
-	{
-		//pChatWindow->AddDebugMessage("VALUE %f", value);
+		return CRadarRect::CRadar__LimitRadarPoint_hook(a1);
 	}
 
-	return value;
+	float dist = sqrtf((float)(a1[1] * a1[1]) + (float)(a1[0] * a1[0]));
+	if (dist > 1.0f)
+	{
+		a1[0] /= dist;
+		a1[1] /= dist;
+	}
+	return dist;
 }
 
 void (*CSprite2d__DrawBarChart)(float x, float y, unsigned short width, unsigned char height, float progress, signed char progressAdd,
@@ -2626,15 +2631,6 @@ void InstallHooks()
 	
 	SetUpHook(g_libGTASA + 0x00398334, (uintptr_t)CGame__Shutdown_hook, (uintptr_t*)& CGame__Shutdown);
 
-	WriteMemory(g_libGTASA + 0x003DA86C,
-		(uintptr_t)"\x80\xB4"\
-		"\x00\xAF"\
-		"\x1B\x4B"\
-		"\x7B\x44"\
-		"\x1B\x68", 10);
-
-	NOP(g_libGTASA + 0x003DA876, 3);
-
 	// headlights color, wheel size, wheel align
 	SetUpHook(g_libGTASA + 0x005466EC, (uintptr_t)CShadows__StoreCarLightShadow_hook, (uintptr_t*)& CShadows__StoreCarLightShadow);
 	SetUpHook(g_libGTASA + 0x00518EC4, (uintptr_t)CVehicle__DoHeadLightBeam_hook, (uintptr_t*)& CVehicle__DoHeadLightBeam);
@@ -2646,7 +2642,7 @@ void InstallHooks()
 
 	SetUpHook(g_libGTASA + 0x0046CEF4, (uintptr_t)CTaskSimpleUseGun__RemoveStanceAnims_hook, (uintptr_t*)& CTaskSimpleUseGun__RemoveStanceAnims);
 
-	SetUpHook(g_libGTASA + 0x003DA86C, (uintptr_t)CRadar__LimitRadarPoint_hook, (uintptr_t*)& CRadar__LimitRadarPoint); // TO FIX
+	SetUpHook(g_libGTASA + 0x003DA86C, (uintptr_t)CRadar__LimitRadarPoint_hook, (uintptr_t*)& CRadar__LimitRadarPoint);
 	SetUpHook(g_libGTASA + 0x005529FC, (uintptr_t)CSprite2d__DrawBarChart_hook, (uintptr_t*)& CSprite2d__DrawBarChart);
 	SetUpHook(g_libGTASA + 0x005353B4, (uintptr_t)CFont__PrintString_hook, (uintptr_t*)& CFont__PrintString);
 	SetUpHook(g_libGTASA + 0x0055265C, (uintptr_t)CSprite2d__Draw_hook, (uintptr_t*)& CSprite2d__Draw);

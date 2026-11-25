@@ -28,6 +28,8 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
     private final int[] mTabSizes = {0, 0, 0, 0};
     private final boolean mTablist;
     private boolean mbSkip = false;
+    private SampGuiSkin mSkin;
+    private int mSkinVersion = 0;
 
     public interface OnClickListener {
         void onClick(int i, String str);
@@ -61,6 +63,12 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
         this.mRowsList = arrayList;
         this.mContext = activity;
         this.mTablist = tablist;
+    }
+
+    public void setSkin(SampGuiSkin skin) {
+        this.mSkin = skin;
+        this.mSkinVersion++;
+        notifyDataSetChanged();
     }
 
     public void setOnDoubleClickListener(OnDoubleClickListener onDoubleClickListener) {
@@ -153,6 +161,17 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
             int length = Math.min(4, split.length);
             for (int i3 = 0; i3 < length; i3++) {
                 viewHolder.mFields[i3].setText(Utils.getColoredString(split[i3]));
+            }
+        }
+        if (this.mSkin != null) {
+            Object tag = viewHolder.mRowBg.getTag();
+            if (!(tag instanceof Integer) || ((Integer) tag) != mSkinVersion) {
+                android.graphics.drawable.Drawable selBg = mSkin.createSelectionBarDrawable(mContext);
+                if (selBg != null) {
+                    viewHolder.mRowBg.setImageDrawable(null);
+                    viewHolder.mRowBg.setBackground(selBg);
+                }
+                viewHolder.mRowBg.setTag(mSkinVersion);
             }
         }
         if (this.mCurrentSelectedPosition == pos) {

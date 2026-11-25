@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="400dp"
+    android:height="200dp"
+    android:viewportWidth="400"
+    android:viewportHeight="200">
+    <!-- Horizon atmospheric dusk sun disc -->
+    <path
+        android:fillColor="#22DDD6FE"
+        android:pathData="M210,122 m-64,0 a64,64 0 1,0 128,0 a64,64 0 1,0 -128,0" />
+    <path
+        android:fillColor="#2CE9D5FF"
+        android:pathData="M210,122 m-38,0 a38,38 0 1,0 76,0 a38,38 0 1,0 -76,0" />
+    <!-- Far Los Santos downtown towers silhouette -->
+    <path
+        android:fillColor="#3D1C6B"
+        android:pathData="M0,200V128H28V105H52V132H84V92H108V122H134V74H158V52H172V74H184V118H206V60H234V32H248V18H256V32H270V62H288V108H316V84H344V114H372V96H400V200H0Z" />
+    <!-- Closer midtown cityscape layer -->
+    <path
+        android:fillColor="#1E1B24"
+        android:pathData="M0,200V146H38V134H68V152H112V128H144V150H178V118H198V152H242V132H276V148H318V124H352V146H400V200H0Z" />
+    <!-- Palm trees silhouettes (left & right) -->
+    <path
+        android:fillColor="#111115"
+        android:pathData="M48,162L54,74L60,162Z" />
+    <path
+        android:fillColor="#111115"
+        android:pathData="M54,74C42,64 26,66 18,74C28,72 41,72 52,78C38,80 28,88 22,98C33,89 45,84 54,82C46,92 43,104 44,114C48,100 54,90 56,82C65,92 72,102 74,112C76,98 70,86 60,80C72,78 84,82 92,88C84,74 70,68 54,74Z" />
+    <path
+        android:fillColor="#111115"
+        android:pathData="M332,166L337,62L343,166Z" />
+    <path
+        android:fillColor="#111115"
+        android:pathData="M337,62C322,52 304,54 294,64C307,61 322,62 334,67C318,70 307,79 301,91C314,81 327,76 337,74C329,85 326,98 327,108C332,94 337,83 340,74C350,84 358,96 361,106C362,91 355,78 344,72C358,70 371,74 381,81C371,65 355,58 337,62Z" />
+    <!-- Boulevard asphalt & subtle perspective road lines -->
+    <path
+        android:fillColor="#141418"
+        android:pathData="M0,160L400,152V200H0Z" />
+    <path
+        android:fillColor="#4D803DF2"
+        android:pathData="M0,160L400,152V155L0,163Z" />
+    <path
+        android:fillColor="#30FFFFFF"
+        android:pathData="M110,188L145,180L154,180L122,188Z M192,179L225,172L233,172L202,179Z M270,171L300,165L307,165L279,171Z" />
+</vector>

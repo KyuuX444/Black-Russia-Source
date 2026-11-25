@@ -89,7 +89,7 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/montserrat_bold"
         android:text="0%"
-        android:textColor="#7CA4FF"
+        android:textColor="@color/ryzn_purple_light"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@id/progress_bar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,10 +109,10 @@
         app:rcBackgroundPadding="0dp"
         app:rcMax="100.0"
         app:rcProgress="0.0"
-        app:rcProgressColor="#7CA4FF"
+        app:rcProgressColor="@color/ryzn_purple_primary"
         app:rcRadius="6dp"
         app:rcReverse="false"
         app:rcSecondaryProgress="0.0"
-        app:rcSecondaryProgressColor="#9ECAFF" />
+        app:rcSecondaryProgressColor="@color/ryzn_purple_light" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

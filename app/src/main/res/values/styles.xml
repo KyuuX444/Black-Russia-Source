@@ -65,17 +65,17 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 </style>
 
-    <style name="AppTheme.NoActionBar">
-    <item name="android:windowBackground">@color/ryzn_bg</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:statusBarColor">@color/ryzn_bg</item>
-    <item name="android:navigationBarColor">@color/ryzn_nav_bar</item>
-    <item name="colorAccent">@color/ryzn_accent</item>
-    <item name="colorPrimary">@color/ryzn_accent</item>
-    <item name="colorPrimaryDark">@color/ryzn_bg</item>
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-    <item name="android:windowTitleSize">0dp</item>
+    <style name="AppTheme.NoActionBar" parent="@style/Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@color/ryzn_bg_black</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@color/ryzn_bg_black</item>
+        <item name="android:navigationBarColor">@color/ryzn_nav_bar</item>
+        <item name="colorAccent">@color/ryzn_purple_primary</item>
+        <item name="colorPrimary">@color/ryzn_purple_primary</item>
+        <item name="colorPrimaryDark">@color/ryzn_bg_black</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTitleSize">0dp</item>
     </style>
 
     <style name="AppTheme.RyznDialog" parent="Theme.MaterialComponents.Dialog.Alert">

@@ -14,56 +14,24 @@ void CRadarRect::LoadTextures()
 {
 	//m_pRectTexture = (RwTexture*)LoadTextureFromDB("txd", "radardisc_r");
 }
-extern CChatWindow* pChatWindow;
+
 float CRadarRect::CRadar__LimitRadarPoint_hook(float* pos)
 {
-
-/*	float r, angle;
+	if (!pos) return 0.0f;
 
 	if (*(uint8_t*)(g_libGTASA + 0x0063E0B4))
 	{
-		r = sqrtf(pos[0] * pos[0] + pos[1] * pos[1]);
-		return r;
+		return sqrtf(pos[0] * pos[0] + pos[1] * pos[1]);
 	}
-	r = sqrtf(pos[0] * pos[0] + pos[1] * pos[1]);
-	if (r > 1.0)
+
+	float dist = sqrtf(pos[0] * pos[0] + pos[1] * pos[1]);
+	float maxAxis = fmaxf(fabsf(pos[0]), fabsf(pos[1]));
+	if (maxAxis > 1.0f)
 	{
-		if (pos[0] > -1.0f && pos[0] < 1.0f && pos[1] > -1.0f && pos[1] < 1.0f)
-			r = 0.99f;
-		else
-		{
-			angle = atan2f(pos[1], pos[0]) * 57.295779513f + 180.0f;
-			if (angle <= 45.0f || angle > 315.0f)
-			{
-				pos[0] = 1.0f;
-				pos[1] = sinf(angle / 57.295779513f) * 1.4142135623f;
-				//if (pChatWindow) pChatWindow->AddDebugMessage("process 1");
-			}
-			else if (angle > 45 && angle <= 135)
-			{
-				pos[0] = cosf(angle / 57.295779513f) * 1.4142135623f;
-				pos[1] = 1.0f;
-				//if (pChatWindow) pChatWindow->AddDebugMessage("process 2");
-			}
-			else if (angle > 135 && angle <= 225)
-			{
-				pos[0] = -1.0f;
-				pos[1] = sinf(angle / 57.295779513f) * 1.4142135623f;
-				//if (pChatWindow) pChatWindow->AddDebugMessage("process 3");
-			}
-			else
-			{
-				pos[0] = cosf(angle / 57.295779513f) * 1.4142135623f;
-				pos[1] = -1.0f;
-				//if (pChatWindow) pChatWindow->AddDebugMessage("process 1");
-			}
-
-			pos[0] *= (-1.0f);
-			pos[1] *= (-1.0f);
-		}
+		pos[0] /= maxAxis;
+		pos[1] /= maxAxis;
 	}
-
-	return r;*/
+	return dist;
 }
 
 bool CRadarRect::IsEnabled()

@@ -1,42 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ryzn_launcher_bg">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingStart="20dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="12dp">
+        android:paddingStart="14dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_section_header_tab"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Pengaturan"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp" />
+            android:paddingStart="12dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="5dp"
+            android:text="@string/nav_settings"
+            android:textColor="@color/ryzn_text_primary"
+            android:textSize="14sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/montserrat_regular"
-            android:text="Sesuaikan tampilan, performa, dan obrolan Ryzn SA-MP"
-            android:textColor="#8A94A6"
-            android:textSize="12sp" />
+            android:text="Sesuaikan Nick_Name, tampilan, dan obrolan Ryzn SA-MP"
+            android:textColor="@color/ryzn_text_secondary"
+            android:textSize="11.5sp" />
     </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="84dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:clipToPadding="false"
         android:fillViewport="true">
 
@@ -44,26 +49,95 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="20dp"
+            android:paddingStart="14dp"
             android:paddingTop="4dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="28dp">
+            android:paddingEnd="14dp"
+            android:paddingBottom="24dp">
+
+            <!-- Section: Profil Pemain -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="6dp"
+                android:fontFamily="@font/montserrat_bold"
+                android:letterSpacing="0.08"
+                android:text="PROFIL PEMAIN"
+                android:textColor="@color/ryzn_purple_light"
+                android:textSize="10.5sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_surface"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/ryzn_icon_tint_circle"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_nick"
+                    tools:ignore="ContentDescription" />
+
+                <EditText
+                    android:id="@+id/settings_nick_input"
+                    android:layout_width="0dp"
+                    android:layout_height="38dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/ryzn_field_surface"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:hint="Nick_Name..."
+                    android:imeOptions="actionDone"
+                    android:inputType="textNoSuggestions"
+                    android:maxLength="24"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:singleLine="true"
+                    android:textColor="@color/ryzn_text_primary"
+                    android:textColorHint="@color/ryzn_text_muted"
+                    android:textSize="12.5sp" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/settings_nick_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/bg_btn_play_purple"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:minWidth="74dp"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:text="Simpan"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11.5sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/ryzn_surface_stroke" />
 
             <!-- Section: Tampilan & Layar -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:layout_marginBottom="6dp"
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="TAMPILAN &amp; LAYAR"
-                android:textColor="#7CA4FF"
-                android:textSize="11sp" />
+                android:textColor="@color/ryzn_purple_light"
+                android:textSize="10.5sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/displayfpsIcon"
@@ -80,7 +154,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/displayfpsIcon"
                     android:orientation="vertical">
 
@@ -89,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Tampilkan FPS"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -97,7 +171,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Teks FPS putih minimalis di pojok"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -116,7 +190,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/fullscreenmodeIcon"
@@ -133,7 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/fullscreenmodeIcon"
                     android:orientation="vertical">
 
@@ -142,7 +216,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Mode Layar Penuh"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -150,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Isi penuh layar hingga area notch"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -169,7 +243,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/radarrectIcon"
@@ -186,7 +260,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/radarrectIcon"
                     android:orientation="vertical">
 
@@ -195,7 +269,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Radar Kotak"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -203,7 +277,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Ubah bentuk minimap menjadi kotak"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -224,8 +298,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="16dp"
-                android:background="#10FFFFFF" />
+                android:layout_marginBottom="12dp"
+                android:background="@color/ryzn_surface_stroke" />
 
             <!-- Section: Suara & Chat -->
             <TextView
@@ -235,12 +309,12 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="SUARA &amp; OBROLAN"
-                android:textColor="#7CA4FF"
-                android:textSize="11sp" />
+                android:textColor="@color/ryzn_purple_light"
+                android:textSize="10.5sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/voicechatIcon"
@@ -257,7 +331,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/voicechatIcon"
                     android:orientation="vertical">
 
@@ -266,7 +340,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Voice Chat"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -274,7 +348,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Tombol mikrofon saat berada di game"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -293,7 +367,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/chattimestampIcon"
@@ -310,7 +384,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/chattimestampIcon"
                     android:orientation="vertical">
 
@@ -319,7 +393,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Timestamp Obrolan"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -327,7 +401,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Tampilkan jam di awal pesan chat"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -346,7 +420,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="54dp">
 
                 <ImageView
                     android:id="@+id/fontsizeIcon"
@@ -363,11 +437,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/fontsizeIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Ukuran Font"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/ryzn_text_primary"
                     android:textSize="13sp" />
 
                 <EditText
@@ -383,14 +457,14 @@
                     android:inputType="numberDecimal"
                     android:maxLength="5"
                     android:singleLine="true"
-                    android:textColor="#FFFFFF"
-                    android:textColorHint="#788296"
+                    android:textColor="@color/ryzn_text_primary"
+                    android:textColorHint="@color/ryzn_text_muted"
                     android:textSize="12sp" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp">
+                android:layout_height="54dp">
 
                 <ImageView
                     android:id="@+id/chatstringsIcon"
@@ -407,11 +481,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/chatstringsIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Baris Obrolan"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/ryzn_text_primary"
                     android:textSize="13sp" />
 
                 <LinearLayout
@@ -434,7 +508,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="-"
-                        android:textColor="#9BB8FF"
+                        android:textColor="@color/ryzn_purple_light"
                         android:textSize="15sp" />
 
                     <TextView
@@ -444,7 +518,7 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:gravity="center"
                         android:text="8"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="12sp" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -456,7 +530,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="+"
-                        android:textColor="#9BB8FF"
+                        android:textColor="@color/ryzn_purple_light"
                         android:textSize="15sp" />
                 </LinearLayout>
             </RelativeLayout>
@@ -465,8 +539,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="16dp"
-                android:background="#10FFFFFF" />
+                android:layout_marginBottom="12dp"
+                android:background="@color/ryzn_surface_stroke" />
 
             <!-- Section: Sistem & Data -->
             <TextView
@@ -476,12 +550,12 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="SISTEM &amp; DATA"
-                android:textColor="#7CA4FF"
-                android:textSize="11sp" />
+                android:textColor="@color/ryzn_purple_light"
+                android:textSize="10.5sp" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/gameDataIcon"
@@ -498,7 +572,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/gameDataIcon"
                     android:orientation="vertical">
 
@@ -507,7 +581,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Data Game"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/ryzn_text_primary"
                         android:textSize="13sp" />
 
                     <TextView
@@ -515,7 +589,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_regular"
                         android:text="Simpanan /ryznSAMP/"
-                        android:textColor="#7E889B"
+                        android:textColor="@color/ryzn_text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -525,19 +599,19 @@
                     android:layout_height="34dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/ryzn_primary_pill"
+                    android:background="@drawable/bg_btn_play_purple"
                     android:fontFamily="@font/montserrat_bold"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
                     android:text="Unduh / Perbaiki"
                     android:textAllCaps="false"
-                    android:textColor="#0D1017"
-                    android:textSize="12sp" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="11.5sp" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="58dp">
+                android:layout_height="56dp">
 
                 <ImageView
                     android:id="@+id/resetIcon"
@@ -555,11 +629,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="14dp"
+                    android:layout_marginStart="12dp"
                     android:layout_toEndOf="@id/resetIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Reset Pengaturan"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/ryzn_text_primary"
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -568,14 +642,14 @@
                     android:layout_height="34dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/ryzn_secondary_pill"
+                    android:background="@drawable/bg_btn_action_dark"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Reset"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:textColor="@color/ryzn_text_primary"
+                    android:textSize="11.5sp" />
             </RelativeLayout>
 
         </LinearLayout>
     </ScrollView>
-</FrameLayout>
+</LinearLayout>

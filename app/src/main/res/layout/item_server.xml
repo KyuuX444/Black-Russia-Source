@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_server_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
+    android:background="@drawable/bg_server_item_normal"
+    android:clickable="true"
+    android:focusable="true"
+    android:paddingStart="10dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="8dp">
+
+    <FrameLayout
+        android:id="@+id/item_icon_frame"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/ryzn_icon_tint_circle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/item_server_icon"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_server_node" />
+
+        <ImageView
+            android:id="@+id/item_lock_icon"
+            android:layout_width="11dp"
+            android:layout_height="11dp"
+            android:layout_gravity="bottom|end"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_locked"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/item_right_col"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/item_players"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="0 / 0"
+            android:textColor="@color/ryzn_text_primary"
+            android:textSize="11.5sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:id="@+id/item_status_dot"
+                android:layout_width="6dp"
+                android:layout_height="6dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_status_dot_offline" />
+
+            <TextView
+                android:id="@+id/item_ping"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="-- ms"
+                android:textColor="@color/ryzn_text_secondary"
+                android:textSize="10sp" />
+
+            <ImageView
+                android:id="@+id/item_signal_icon"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_signal_off" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/item_server_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
+        android:text="Memuat server..."
+        android:textColor="@color/ryzn_text_primary"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toStartOf="@id/item_right_col"
+        app:layout_constraintStart_toEndOf="@id/item_icon_frame"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_server_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_regular"
+        android:maxLines="1"
+        android:text="127.0.0.1:7777 • SA-MP"
+        android:textColor="@color/ryzn_text_secondary"
+        android:textSize="10.5sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/item_server_name"
+        app:layout_constraintStart_toStartOf="@id/item_server_name"
+        app:layout_constraintTop_toBottomOf="@id/item_server_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

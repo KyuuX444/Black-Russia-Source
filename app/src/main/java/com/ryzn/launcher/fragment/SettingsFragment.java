@@ -22,14 +22,21 @@ import androidx.fragment.app.Fragment;
 
 import com.ryzn.game.R;
 import com.ryzn.launcher.activity.LoaderActivity;
+import com.ryzn.launcher.activity.MainActivity;
 import com.ryzn.launcher.other.RyznGameDownloader;
+import com.ryzn.launcher.other.ServerManager;
 
 import org.ini4j.Wini;
 
 import java.io.File;
 
-public class SettingsPageFragment extends Fragment {
+/**
+ * Native client settings screen synced directly with SharedPreferences and /ryznSAMP/SAMP/settings.ini.
+ */
+public class SettingsFragment extends Fragment {
 
+    private EditText nickInput;
+    private Button nickSaveBtn;
     private EditText fontSizeInput;
     private Switch displayFpsSwitch;
     private Switch fullscreenSwitch;
@@ -47,9 +54,11 @@ public class SettingsPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings_page, container, false);
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
         prefs = requireActivity().getSharedPreferences("samp_settings", Context.MODE_PRIVATE);
 
+        nickInput = view.findViewById(R.id.settings_nick_input);
+        nickSaveBtn = view.findViewById(R.id.settings_nick_save);
         fontSizeInput = view.findViewById(R.id.fontsize);
         displayFpsSwitch = view.findViewById(R.id.displayfps_switch);
         fullscreenSwitch = view.findViewById(R.id.fullscreen_switch);
@@ -91,6 +100,7 @@ public class SettingsPageFragment extends Fragment {
 
     private void loadFromIni() {
         bindingValues = true;
+        String nick = ServerManager.readSavedNickname(requireContext());
         boolean fps = prefs.getBoolean("display_fps", false);
         boolean full = prefs.getBoolean("fullscreen", false);
         boolean radar = prefs.getBoolean("radar_rect", false);
@@ -123,6 +133,7 @@ public class SettingsPageFragment extends Fragment {
         } catch (Exception ignored) {
         }
 
+        nickInput.setText(nick);
         displayFpsSwitch.setChecked(fps);
         fullscreenSwitch.setChecked(full);
         radarRectSwitch.setChecked(radar);
@@ -134,6 +145,20 @@ public class SettingsPageFragment extends Fragment {
     }
 
     private void setupListeners() {
+        nickSaveBtn.setOnClickListener(v -> {
+            String nick = nickInput.getText().toString().trim();
+            if (nick.isEmpty()) {
+                Toast.makeText(getActivity(), "Nick_Name tidak boleh kosong.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (nick.length() > 24 || nick.contains(" ")) {
+                Toast.makeText(getActivity(), "Nick_Name maksimal 24 karakter tanpa spasi.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            ServerManager.saveNickname(requireContext(), nick);
+            Toast.makeText(getActivity(), "Nick_Name disimpan: " + nick, Toast.LENGTH_SHORT).show();
+        });
+
         fontSizeInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -186,7 +211,11 @@ public class SettingsPageFragment extends Fragment {
         reinstallBtn.setOnClickListener(v -> {
             if (getActivity() != null) {
                 if (!RyznGameDownloader.hasStoragePermission(getActivity())) {
-                    RyznGameDownloader.requestAllFilesPermissionIfNeeded(getActivity());
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).requestStorageOrAllFilesPermission();
+                    } else {
+                        RyznGameDownloader.requestAllFilesPermissionIfNeeded(getActivity());
+                    }
                     return;
                 }
                 startActivity(new Intent(getActivity(), LoaderActivity.class));
@@ -214,6 +243,9 @@ public class SettingsPageFragment extends Fragment {
                     updateIni("gui", "ChatMaxMessages", "8");
                     updateIni("gui", "FontSize", "30.0");
                     loadFromIni();
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).refreshFooterClientState();
+                    }
                     Toast.makeText(getActivity(), "Pengaturan telah dikembalikan ke default.", Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton("Batal", null)
@@ -248,11 +280,12 @@ public class SettingsPageFragment extends Fragment {
         }
     }
 
-    private void showOptionInfo(String title, String message) {
+    private void showOptionInfo(String title, String body) {
+        if (getActivity() == null) return;
         new AlertDialog.Builder(requireActivity())
                 .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton("Oke", (dialog, which) -> dialog.dismiss())
+                .setMessage(body)
+                .setPositiveButton("Oke", null)
                 .show();
     }
 }

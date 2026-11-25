@@ -2,6 +2,8 @@ package com.ryzn.game.gui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -11,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -49,6 +52,10 @@ public class BrDialogWindow {
     private final View mDialogButtonNegative;
     private final TextView mDialogButtonPositiveText;
     private final TextView mDialogButtonNegativeText;
+    private final PcScrollbarView mDialogTextScrollbar;
+    private final PcScrollbarView mDialogListScrollbar;
+    private final SampGuiSkin mSkin = new SampGuiSkin();
+    private boolean mSkinApplied = false;
 
     private DialogAdapter mListAdapter;
     private final ArrayList<String> mRowsList = new ArrayList<>();
@@ -85,6 +92,8 @@ public class BrDialogWindow {
         this.mDialogButtonNegative = activity.findViewById(R.id.button_negative);
         this.mDialogButtonPositiveText = activity.findViewById(R.id.button_positive_text);
         this.mDialogButtonNegativeText = activity.findViewById(R.id.button_negative_text);
+        this.mDialogTextScrollbar = activity.findViewById(R.id.dialog_text_scrollbar);
+        this.mDialogListScrollbar = activity.findViewById(R.id.dialog_list_scrollbar);
 
         mDialogInput.setOnClickListener(view -> {
             mDialogInput.requestFocus();
@@ -114,7 +123,51 @@ public class BrDialogWindow {
         });
 
         Utils.scaleViewAndChildren(activity, mMainLayout);
+        if (mDialogTextScrollbar != null && mDialogTextLayout instanceof ScrollView) {
+            mDialogTextScrollbar.attachToScrollView((ScrollView) mDialogTextLayout);
+        }
+        if (mDialogListScrollbar != null) {
+            mDialogListScrollbar.attachToRecyclerView(mDialogListRecycler);
+        }
+        applyPcSkin();
         close();
+    }
+
+    private void applyPcSkin() {
+        boolean changed = mSkin.reloadIfNeeded(activity);
+        if (!changed && mSkinApplied) {
+            return;
+        }
+        mSkinApplied = true;
+        if (mDialogTextScrollbar != null) {
+            mDialogTextScrollbar.setSkin(mSkin);
+        }
+        if (mDialogListScrollbar != null) {
+            mDialogListScrollbar.setSkin(mSkin);
+        }
+        Drawable btnPosBg = mSkin.createButtonDrawable(activity);
+        if (btnPosBg != null) {
+            mDialogButtonPositive.setBackground(btnPosBg);
+        }
+        Drawable btnNegBg = mSkin.createButtonDrawable(activity);
+        if (btnNegBg != null) {
+            mDialogButtonNegative.setBackground(btnNegBg);
+        }
+        ColorStateList btnTextColors = mSkin.createButtonTextColors();
+        mDialogButtonPositiveText.setTextColor(btnTextColors);
+        mDialogButtonNegativeText.setTextColor(btnTextColors);
+
+        Drawable editBg = mSkin.createEditBoxDrawable(activity);
+        if (editBg != null) {
+            mDialogInputLayout.setBackground(editBg);
+        }
+        Drawable listBg = mSkin.createListBoxDrawable(activity);
+        if (listBg != null) {
+            mDialogList.setBackground(listBg);
+        }
+        if (mListAdapter != null) {
+            mListAdapter.setSkin(mSkin);
+        }
     }
 
     public void show(int dialogId, int dialogStyle, String title, String message, String button1, String button2) {
@@ -136,6 +189,7 @@ public class BrDialogWindow {
             mMainLayout.setLayoutParams(rootLp);
         }
 
+        applyPcSkin();
         loadDialog();
         Utils.ShowLayout(mMainLayout, false);
     }
@@ -172,6 +226,9 @@ public class BrDialogWindow {
                 ((FrameLayout.LayoutParams) rootLp).gravity = 49;
                 mMainLayout.setLayoutParams(rootLp);
             }
+        }
+        if (mDialogTextScrollbar != null) {
+            mDialogTextLayout.post(mDialogTextScrollbar::syncFromTarget);
         }
     }
 
@@ -313,7 +370,16 @@ public class BrDialogWindow {
                     mDialogTabField[i].setLayoutParams(lpCol);
                 }
             }
+            if (mDialogListScrollbar != null) {
+                mDialogListScrollbar.syncFromTarget();
+            }
         });
+        if (mDialogTextScrollbar != null) {
+            mDialogTextLayout.post(mDialogTextScrollbar::syncFromTarget);
+        }
+        if (mDialogListScrollbar != null) {
+            mDialogListRecycler.post(mDialogListScrollbar::syncFromTarget);
+        }
     }
 
     private void loadButtons() {
@@ -334,13 +400,16 @@ public class BrDialogWindow {
             mDialogTextLayout.setVisibility(View.VISIBLE);
             mDialogInputLayout.setVisibility(View.GONE);
             mDialogListLayout.setVisibility(View.GONE);
+            if (mDialogListScrollbar != null) mDialogListScrollbar.setVisibility(View.GONE);
         } else if (style == DIALOG_STYLE_INPUT) {
             mDialogTextLayout.setVisibility(View.VISIBLE);
             mDialogInputLayout.setVisibility(View.VISIBLE);
             mDialogInput.setInputType(524353);
             mDialogListLayout.setVisibility(View.GONE);
+            if (mDialogListScrollbar != null) mDialogListScrollbar.setVisibility(View.GONE);
         } else if (style == DIALOG_STYLE_LIST) {
             mDialogTextLayout.setVisibility(View.GONE);
+            if (mDialogTextScrollbar != null) mDialogTextScrollbar.setVisibility(View.GONE);
             mDialogInputLayout.setVisibility(View.GONE);
             mDialogListLayout.setVisibility(View.VISIBLE);
             mDialogTabListRow.setVisibility(View.GONE);
@@ -349,13 +418,16 @@ public class BrDialogWindow {
             mDialogInputLayout.setVisibility(View.VISIBLE);
             mDialogInput.setInputType(524417);
             mDialogListLayout.setVisibility(View.GONE);
+            if (mDialogListScrollbar != null) mDialogListScrollbar.setVisibility(View.GONE);
         } else if (style == DIALOG_STYLE_TABLIST) {
             mDialogTextLayout.setVisibility(View.GONE);
+            if (mDialogTextScrollbar != null) mDialogTextScrollbar.setVisibility(View.GONE);
             mDialogInputLayout.setVisibility(View.GONE);
             mDialogListLayout.setVisibility(View.VISIBLE);
             mDialogTabListRow.setVisibility(View.GONE);
         } else if (style == DIALOG_STYLE_TABLIST_HEADERS) {
             mDialogTextLayout.setVisibility(View.GONE);
+            if (mDialogTextScrollbar != null) mDialogTextScrollbar.setVisibility(View.GONE);
             mDialogInputLayout.setVisibility(View.GONE);
             mDialogListLayout.setVisibility(View.VISIBLE);
             mDialogTabListRow.setVisibility(View.VISIBLE);
@@ -366,6 +438,7 @@ public class BrDialogWindow {
         mDialogListRecycler.setLayoutManager(new LinearLayoutManager(activity, RecyclerView.VERTICAL, false));
         mListAdapter = new DialogAdapter(mRowsList, activity,
                 mDialogStyle == DIALOG_STYLE_TABLIST || mDialogStyle == DIALOG_STYLE_TABLIST_HEADERS);
+        mListAdapter.setSkin(mSkin);
         mDialogListRecycler.setAdapter(mListAdapter);
         mListAdapter.setOnClickListener((pos, str) -> {
             if (pos != -1) {
