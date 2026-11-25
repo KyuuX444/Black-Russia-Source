@@ -167,9 +167,11 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
             Object tag = viewHolder.mRowBg.getTag();
             if (!(tag instanceof Integer) || ((Integer) tag) != mSkinVersion) {
                 android.graphics.drawable.Drawable selBg = mSkin.createSelectionBarDrawable(mContext);
+                viewHolder.mRowBg.setImageDrawable(null);
                 if (selBg != null) {
-                    viewHolder.mRowBg.setImageDrawable(null);
                     viewHolder.mRowBg.setBackground(selBg);
+                } else {
+                    viewHolder.mRowBg.setBackgroundColor(0x40808080);
                 }
                 viewHolder.mRowBg.setTag(mSkinVersion);
             }

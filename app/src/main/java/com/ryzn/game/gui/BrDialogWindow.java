@@ -148,10 +148,14 @@ public class BrDialogWindow {
         Drawable btnPosBg = mSkin.createButtonDrawable(activity);
         if (btnPosBg != null) {
             mDialogButtonPositive.setBackground(btnPosBg);
+        } else {
+            mDialogButtonPositive.setBackgroundResource(R.drawable.samp_border);
         }
         Drawable btnNegBg = mSkin.createButtonDrawable(activity);
         if (btnNegBg != null) {
             mDialogButtonNegative.setBackground(btnNegBg);
+        } else {
+            mDialogButtonNegative.setBackgroundResource(R.drawable.samp_border);
         }
         ColorStateList btnTextColors = mSkin.createButtonTextColors();
         mDialogButtonPositiveText.setTextColor(btnTextColors);
@@ -160,11 +164,11 @@ public class BrDialogWindow {
         Drawable editBg = mSkin.createEditBoxDrawable(activity);
         if (editBg != null) {
             mDialogInputLayout.setBackground(editBg);
+        } else {
+            mDialogInputLayout.setBackgroundResource(R.drawable.samp_border);
         }
         Drawable listBg = mSkin.createListBoxDrawable(activity);
-        if (listBg != null) {
-            mDialogList.setBackground(listBg);
-        }
+        mDialogList.setBackground(listBg);
         if (mListAdapter != null) {
             mListAdapter.setSkin(mSkin);
         }

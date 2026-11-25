@@ -20,18 +20,16 @@ import com.ryzn.game.gui.util.Utils;
 import com.ryzn.launcher.other.RyznGameDownloader;
 
 import java.io.File;
-import java.io.InputStream;
 
 /**
- * Loads PC SA-MP sampgui.png from /storage/emulated/0/ryznSAMP/SAMP/sampgui.png
- * (falling back to bundled assets/SAMP/sampgui.png) and slices standard 512x512 DXUT sprites.
+ * Reads PC SA-MP sampgui.png directly from downloaded game data
+ * (/storage/emulated/0/ryznSAMP/SAMP/sampgui.png) and slices standard 512x512 DXUT sprites.
  */
 public class SampGuiSkin {
 
     private Bitmap atlas;
     private long loadedMtime = -1L;
     private long loadedSize = -1L;
-    private boolean loadedFromExternal = false;
 
     public Bitmap buttonNormalBmp;
     public Bitmap buttonHoverBmp;
@@ -47,14 +45,10 @@ public class SampGuiSkin {
 
     public synchronized boolean reloadIfNeeded(Activity activity) {
         File extFile = RyznGameDownloader.getSampGuiFile();
-        if (!extFile.exists() || extFile.length() == 0) {
-            RyznGameDownloader.ensureDefaultSampGui(activity, RyznGameDownloader.getGameDir());
-        }
-
         if (extFile.exists() && extFile.isFile() && extFile.length() > 0 && extFile.canRead()) {
             long mtime = extFile.lastModified();
             long size = extFile.length();
-            if (loadedFromExternal && atlas != null && mtime == loadedMtime && size == loadedSize) {
+            if (atlas != null && mtime == loadedMtime && size == loadedSize) {
                 return false;
             }
             Bitmap bmp = BitmapFactory.decodeFile(extFile.getAbsolutePath());
@@ -62,26 +56,30 @@ public class SampGuiSkin {
                 applyAtlas(bmp);
                 loadedMtime = mtime;
                 loadedSize = size;
-                loadedFromExternal = true;
                 return true;
             }
         }
 
-        if (!loadedFromExternal && atlas != null) {
+        if (atlas == null) {
             return false;
         }
-        try (InputStream is = activity.getAssets().open("SAMP/sampgui.png")) {
-            Bitmap bmp = BitmapFactory.decodeStream(is);
-            if (bmp != null) {
-                applyAtlas(bmp);
-                loadedFromExternal = false;
-                loadedMtime = -1L;
-                loadedSize = -1L;
-                return true;
-            }
-        } catch (Exception ignored) {
-        }
-        return false;
+        clearAtlas();
+        return true;
+    }
+
+    private void clearAtlas() {
+        atlas = null;
+        loadedMtime = -1L;
+        loadedSize = -1L;
+        buttonNormalBmp = null;
+        buttonHoverBmp = null;
+        editBoxBmp = null;
+        listBoxBmp = null;
+        selectionBarBmp = null;
+        scrollUpBmp = null;
+        scrollTrackBmp = null;
+        scrollDownBmp = null;
+        scrollThumbBmp = null;
     }
 
     private void applyAtlas(Bitmap bmp) {

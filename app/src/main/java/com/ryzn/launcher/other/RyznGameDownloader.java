@@ -155,7 +155,6 @@ public class RyznGameDownloader {
         if (settingsFile.getParentFile() != null && !settingsFile.getParentFile().exists()) {
             settingsFile.getParentFile().mkdirs();
         }
-        ensureDefaultSampGui(context, gameDir);
         String cleanNick = (nickname == null || nickname.trim().isEmpty()) ? "Player" : nickname.trim();
         android.content.SharedPreferences sp = context != null
                 ? context.getSharedPreferences("samp_settings", Context.MODE_PRIVATE)
@@ -216,27 +215,6 @@ public class RyznGameDownloader {
 
     public static File getSampGuiFile() {
         return new File(getGameDir(), "SAMP/sampgui.png");
-    }
-
-    public static void ensureDefaultSampGui(Context context, File gameDir) {
-        if (context == null || gameDir == null) return;
-        File dst = new File(gameDir, "SAMP/sampgui.png");
-        if (dst.exists() && dst.length() > 0) {
-            return;
-        }
-        if (dst.getParentFile() != null && !dst.getParentFile().exists()) {
-            dst.getParentFile().mkdirs();
-        }
-        try (InputStream in = context.getAssets().open("SAMP/sampgui.png");
-             OutputStream out = new FileOutputStream(dst)) {
-            byte[] buf = new byte[8192];
-            int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            out.flush();
-        } catch (IOException ignored) {
-        }
     }
 
     public static String[] parseServerAddress(String rawInput) {
