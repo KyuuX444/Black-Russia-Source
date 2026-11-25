@@ -53,13 +53,13 @@ import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.byparad1st.game.R;
-import com.byparad1st.game.core.DialogClientSettings;
-import com.byparad1st.game.gui.BrDialogWindow;
-import com.byparad1st.game.gui.BrNotification;
-import com.byparad1st.game.gui.ChooseServer;
-import com.byparad1st.game.gui.tab.Tab;
-import com.byparad1st.game.gui.HudManager;
+import com.ryzn.game.R;
+import com.ryzn.game.core.DialogClientSettings;
+import com.ryzn.game.gui.BrDialogWindow;
+import com.ryzn.game.gui.BrNotification;
+import com.ryzn.game.gui.ChooseServer;
+import com.ryzn.game.gui.tab.Tab;
+import com.ryzn.game.gui.HudManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -1505,6 +1505,18 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         return mInputManager != null && mInputManager.IsShowing();
     }
 
+    public boolean isTabShowing() {
+        return mTab != null && mTab.isShowing();
+    }
+
+    public void closeTabWindow() {
+        runOnUiThread(() -> {
+            if (mTab != null && mTab.isShowing()) {
+                mTab.close(this, mTab.getInputLayout());
+            }
+        });
+    }
+
     public void showInputLayout()
     {
         runOnUiThread(new Runnable() {
@@ -1619,7 +1631,7 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
         runOnUiThread(() -> mBrNotification.newInstance().show(jSONObject));
     }
 
-    // Legacy Black Russia custom server GUIs disabled for pure SA-MP / Alyn experience
+    // Legacy custom server GUIs disabled for pure SA-MP experience
     public void ShowAuto() { }
     public void UpdateAuto(String name, int price, int count, float maxspeed, float acceleration, int gear) { }
     public void HideAuto() { }
@@ -1631,7 +1643,16 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
     public void showFuelStation(int type, int price1, int price2, int price3, int price4, int price5, int maxCount) { }
     public void ShowSpawn() { }
     public void HideSpawn() { }
-    public void showTabWindow() { runOnUiThread(() -> { if (mTab != null) mTab.show(true); }); }
+    public void showTabWindow() {
+        runOnUiThread(() -> {
+            if (mTab == null) return;
+            if (mTab.isShowing()) {
+                mTab.close(this, mTab.getInputLayout());
+            } else {
+                mTab.show(true);
+            }
+        });
+    }
     public void setTabStat(int id, String name, int score, int ping) { runOnUiThread(() -> { if (mTab != null) mTab.setStat(id, name, score, ping); }); }
     public void showInventory(int hp, int hunger, int skin_id, int key, int sumka) { }
     public void ShowJbl() { }

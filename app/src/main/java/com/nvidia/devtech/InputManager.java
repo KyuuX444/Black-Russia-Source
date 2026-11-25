@@ -7,29 +7,28 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.byparad1st.game.R;
+import com.ryzn.game.R;
 
 import java.util.ArrayList;
 
 public class InputManager {
 
-    public interface InputListener
-    {
-        public void OnInputEnd(String str);
+    public interface InputListener {
+        void OnInputEnd(String str);
     }
 
     private LinearLayout mInputLayout = null;
     private EditText mInputEt = null;
 
-    private Button mButtonSlash = null;
-    private Button mButtonHistoryNext = null;
-    private Button mButtonHistoryPrev = null;
+    private View mButtonSlash = null;
+    private View mButtonHistoryNext = null;
+    private View mButtonHistoryPrev = null;
+    private View mButtonOk = null;
 
     private Activity mContext = null;
     private boolean mIsShowing = false;
@@ -40,17 +39,13 @@ public class InputManager {
     private ArrayList<String> mInputHistory = null;
     private int mCurrentHistoryMessage = 0;
 
-    private HeightProvider mHeightProvider = null;
-
     private Runnable mAnimTask = null;
 
-    public boolean IsShowing()
-    {
+    public boolean IsShowing() {
         return mIsShowing;
     }
 
-    public InputManager(Activity act)
-    {
+    public InputManager(Activity act) {
         mContext = act;
 
         mInputLayout = mContext.findViewById(R.id.main_input);
@@ -58,67 +53,53 @@ public class InputManager {
         mButtonSlash = mContext.findViewById(R.id.main_but_input_slash);
         mButtonHistoryPrev = mContext.findViewById(R.id.main_but_input_prev);
         mButtonHistoryNext = mContext.findViewById(R.id.main_but_input_next);
+        mButtonOk = mContext.findViewById(R.id.main_but_input_ok);
 
-        mInputHistory = new ArrayList<String>();
+        mInputHistory = new ArrayList<>();
 
-        mButtonSlash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mInputEt.getText().insert(mInputEt.getSelectionStart(), "/");
-            }
+        mButtonSlash.setOnClickListener(view -> {
+            int pos = Math.max(0, mInputEt.getSelectionStart());
+            mInputEt.getText().insert(pos, "/");
         });
 
-        mButtonHistoryPrev.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mButtonHistoryPrev.setOnClickListener(view -> {
+            mCurrentHistoryMessage--;
+            if (mCurrentHistoryMessage < 0) {
+                mCurrentHistoryMessage = 0;
+            }
+            if (mCurrentHistoryMessage <= 0) {
+                mInputEt.setText("");
+                return;
+            }
+            mInputEt.setText(mInputHistory.get(mCurrentHistoryMessage - 1));
+            mInputEt.setSelection(mInputEt.getText().length());
+        });
+
+        mButtonHistoryNext.setOnClickListener(view -> {
+            mCurrentHistoryMessage++;
+            if ((mCurrentHistoryMessage - 1) >= mInputHistory.size()) {
                 mCurrentHistoryMessage--;
-                if(mCurrentHistoryMessage < 0)
-                {
-                    mCurrentHistoryMessage = 0;
-                }
-                if(mCurrentHistoryMessage <= 0)
-                {
-                    mInputEt.setText("");
-                    return;
-                }
-
-                mInputEt.setText(mInputHistory.get(mCurrentHistoryMessage - 1));
-                mInputEt.setSelection(mInputEt.getText().length());
             }
+            if (mCurrentHistoryMessage <= 0) {
+                return;
+            }
+            mInputEt.setText(mInputHistory.get(mCurrentHistoryMessage - 1));
+            mInputEt.setSelection(mInputEt.getText().length());
         });
 
-        mButtonHistoryNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mCurrentHistoryMessage++;
-                if((mCurrentHistoryMessage - 1) >= mInputHistory.size())
-                {
-                    mCurrentHistoryMessage--;
-                }
-                if(mCurrentHistoryMessage <= 0)
-                {
-                    return;
-                }
-
-                mInputEt.setText(mInputHistory.get(mCurrentHistoryMessage - 1));
-                mInputEt.setSelection(mInputEt.getText().length());
-            }
-        });
+        if (mButtonOk != null) {
+            mButtonOk.setOnClickListener(view -> submitCurrentInput());
+        }
 
         mInputEt.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent)
-            {
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_DONE
                         || i == EditorInfo.IME_ACTION_SEND
                         || i == EditorInfo.IME_ACTION_NEXT
                         || (keyEvent != null && keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                                && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER))
-                {
-                    Editable editableText = mInputEt.getText();
-                    String str = editableText != null ? editableText.toString() : "";
-                    mInputEt.setText("");
-                    OnInputEnd(str);
+                                && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    submitCurrentInput();
                     return true;
                 }
                 return false;
@@ -128,84 +109,74 @@ public class InputManager {
         HideInputLayout();
     }
 
-    public void onHeightChanged(int height)
-    {
+    private void submitCurrentInput() {
+        Editable editableText = mInputEt.getText();
+        String str = editableText != null ? editableText.toString() : "";
+        mInputEt.setText("");
+        OnInputEnd(str);
+    }
+
+    public void onHeightChanged(int height) {
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) mInputLayout.getLayoutParams();
-        params.setMargins(0, 0 , 0, height);
+        params.setMargins(0, 0, 0, height);
         mInputLayout.setLayoutParams(params);
     }
 
-    public void ShowInputLayout()
-    {
+    public void ShowInputLayout() {
         mIsShowing = true;
-
         mInputLayout.setVisibility(View.INVISIBLE);
 
         mInputEt.requestFocus();
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(mInputEt, InputMethodManager.SHOW_IMPLICIT);
+        if (imm != null) {
+            imm.showSoftInput(mInputEt, InputMethodManager.SHOW_IMPLICIT);
+        }
 
-        if(mAnimTask != null)
-        {
+        if (mAnimTask != null) {
             mInputLayout.removeCallbacks(mAnimTask);
             mAnimTask = null;
         }
 
-        mAnimTask = new Runnable() {
-            @Override
-            public void run() {
-                mInputLayout.setVisibility(View.VISIBLE);
-                mInputEt.requestFocus();
-            }
+        mAnimTask = () -> {
+            mInputLayout.setVisibility(View.VISIBLE);
+            mInputEt.requestFocus();
         };
-
         mInputLayout.postDelayed(mAnimTask, 60);
 
         mCurrentHistoryMessage = 0;
-
         mSavedInput = null;
-        if(mInputEt != null)
-        {
+        if (mInputEt != null) {
             mInputEt.setText("");
         }
     }
 
-    public void HideInputLayout()
-    {
-
+    public void HideInputLayout() {
         mCurrentHistoryMessage = 0;
-
-        if(mInputEt.getEditableText() != null)
-        {
+        if (mInputEt.getEditableText() != null) {
             mSavedInput = mInputEt.getEditableText().toString();
         }
-
-        if(mAnimTask != null)
-        {
+        if (mAnimTask != null) {
             mInputLayout.removeCallbacks(mAnimTask);
             mAnimTask = null;
         }
-
-        if(mContext.getCurrentFocus() != null)
-        {
-            InputMethodManager inputMethodManager = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(mContext.getCurrentFocus().getWindowToken(), 0);
+        if (mContext.getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(mContext.getCurrentFocus().getWindowToken(), 0);
+            }
         }
         mInputLayout.setVisibility(View.GONE);
-
         mIsShowing = false;
     }
 
-    private void OnInputEnd(String str)
-    {
-        if(mInputHistory.size() >= mMaxHistory)
-        {
-            mInputHistory.remove(mInputHistory.size() - 1);
+    private void OnInputEnd(String str) {
+        if (!str.trim().isEmpty()) {
+            if (mInputHistory.size() >= mMaxHistory) {
+                mInputHistory.remove(mInputHistory.size() - 1);
+            }
+            mInputHistory.add(0, str);
         }
-        mInputHistory.add(0, str);
-
-        InputListener listener = (InputListener)mContext;
-
+        InputListener listener = (InputListener) mContext;
         listener.OnInputEnd(str);
     }
 }

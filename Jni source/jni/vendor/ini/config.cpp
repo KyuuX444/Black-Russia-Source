@@ -124,6 +124,8 @@ bool ini_table_read_from_file(ini_table_s* table, const char* file)
             buf = (char*)realloc(buf, buffer_size);
         }
         switch(c) {
+            case '\r':
+                break;
             case ' ':
                 switch(state) {
                     case Value: if (value[0] != '\0') spaces++; break;

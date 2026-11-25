@@ -176,7 +176,7 @@ void CGUI::Render()
 	}
 
 	if (pChatWindow) pChatWindow->Render();
-	// Black Russia speedometer overlay disabled for clean Alyn-style UI
+	// Custom speedometer overlay disabled for standard SA-MP UI
 	if (pScoreBoard) pScoreBoard->Draw();
 	if (pKeyBoard) pKeyBoard->Render();
 	if (pDialogWindow) pDialogWindow->Render();
@@ -357,7 +357,7 @@ void CGUI::RenderGUI()
 
 void CGUI::RenderServer()
 {
-	// Removed Black Russia debug status circle overlay at (35, 35) over radar
+	// Custom debug overlay removed
 }
 
 

@@ -1076,8 +1076,8 @@ JNIEXPORT void JNICALL Java_com_nvidia_devtech_NvEventQueueActivity_sendRPC(JNIE
 			}
 			case 1: // TAB
 			{
-				if (pScoreBoard)
-					pScoreBoard->Toggle();
+				if (g_pJavaWrapper)
+					g_pJavaWrapper->ShowTabWindow();
 				break;
 			}
 			case 2: // ALT
@@ -1443,6 +1443,28 @@ void CJavaWrapper::ShowTabWindow()
 		Log("No env");
 		return;
 	}
+
+	if (pNetGame && pNetGame->GetPlayerPool())
+	{
+		pNetGame->UpdatePlayerScoresAndPings();
+		CPlayerPool* pPlayerPool = pNetGame->GetPlayerPool();
+		SetTabStat(-1, (char*)"", 0, 0);
+		SetTabStat(
+			(int)pPlayerPool->GetLocalPlayerID(),
+			(char*)pPlayerPool->GetLocalPlayerName(),
+			pPlayerPool->GetLocalPlayerScore(),
+			(int)pPlayerPool->GetLocalPlayerPing());
+		for (PLAYERID x = 0; x < MAX_PLAYERS; x++)
+		{
+			if (!pPlayerPool->GetSlotState(x)) continue;
+			SetTabStat(
+				(int)x,
+				(char*)pPlayerPool->GetPlayerName(x),
+				pPlayerPool->GetRemotePlayerScore(x),
+				(int)pPlayerPool->GetRemotePlayerPing(x));
+		}
+	}
+
 	env->CallVoidMethod(this->activity, this->s_showTabWindow);
 }
 
@@ -1469,15 +1491,23 @@ void CJavaWrapper::SetTabStat(int id, char* name, int score, int ping) {
 		return;
 	}
 
+	const char* safeName = name ? name : "";
+	size_t nameLen = strlen(safeName);
 	jclass strClass = env->FindClass("java/lang/String");
-    jmethodID ctorID = env->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
-    jstring encoding = env->NewStringUTF("UTF-8");
+	jmethodID ctorID = env->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");
+	jstring encoding = env->NewStringUTF("UTF-8");
 
-    jbyteArray bytes = env->NewByteArray(strlen(name));
-    env->SetByteArrayRegion(bytes, 0, strlen(name), (jbyte*)name);
-    jstring jname = (jstring) env->NewObject(strClass, ctorID, bytes, encoding);
+	jbyteArray bytes = env->NewByteArray((jsize)nameLen);
+	if (nameLen > 0)
+		env->SetByteArrayRegion(bytes, 0, (jsize)nameLen, (jbyte*)safeName);
+	jstring jname = (jstring) env->NewObject(strClass, ctorID, bytes, encoding);
 
 	env->CallVoidMethod(this->activity, this->s_setTabStat, id, jname, score, ping);
+
+	env->DeleteLocalRef(jname);
+	env->DeleteLocalRef(bytes);
+	env->DeleteLocalRef(encoding);
+	env->DeleteLocalRef(strClass);
 }
 
 void CJavaWrapper::ShowSpawn()

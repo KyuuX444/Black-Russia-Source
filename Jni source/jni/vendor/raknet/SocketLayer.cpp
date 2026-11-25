@@ -298,19 +298,31 @@ SOCKET SocketLayer::CreateBoundSocket( unsigned short port, bool blockingSocket,
 #if !defined(_COMPATIBILITY_1) && !defined(_COMPATIBILITY_2)
 const char* SocketLayer::DomainNameToIP( const char *domainName )
 {
-	struct hostent * phe = gethostbyname( domainName );
+	if ( !domainName || !domainName[0] )
+		return 0;
 
-	if ( phe == 0 || phe->h_addr_list[ 0 ] == 0 )
+	struct addrinfo hints, *res = nullptr;
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_DGRAM;
+
+	if ( getaddrinfo(domainName, nullptr, &hints, &res) != 0 || !res )
 	{
-		//cerr << "Yow! Bad host lookup." << endl;
+		if (res) freeaddrinfo(res);
 		return 0;
 	}
 
-	struct in_addr addr;
+	static char szBufs[4][64];
+	static unsigned int s_bufIdx = 0;
+	static pthread_mutex_t s_dnsMutex = PTHREAD_MUTEX_INITIALIZER;
+	pthread_mutex_lock(&s_dnsMutex);
+	char *outBuf = szBufs[(s_bufIdx++) & 3];
+	pthread_mutex_unlock(&s_dnsMutex);
 
-	memcpy( &addr, phe->h_addr_list[ 0 ], sizeof( struct in_addr ) );
-
-	return inet_ntoa( addr );
+	struct sockaddr_in *ipv4 = (struct sockaddr_in*)res->ai_addr;
+	const char *ipStr = inet_ntop(AF_INET, &(ipv4->sin_addr), outBuf, 64);
+	freeaddrinfo(res);
+	return ipStr ? outBuf : 0;
 }
 #endif
 

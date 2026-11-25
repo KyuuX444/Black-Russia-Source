@@ -98,11 +98,22 @@ extern "C"
 }
 
 void InitBASSFuncs();
+static bool g_bNetworkInited = false;
 void InitSAMP(JNIEnv* pEnv, jobject thiz)
 {
 	PROTECT_CODE_INITSAMP;
 
 	Log("Initializing InitSAMP..");
+
+	// Allow reconnecting to a new server cleanly if GTASA activity relaunches in the same process
+	if (pNetGame)
+	{
+		pNetGame->ShutDownForGameRestart();
+		delete pNetGame;
+		pNetGame = nullptr;
+	}
+	g_bNetworkInited = false;
+	CHUD::m_bCreatedCar = false;
 
 	InitBASSFuncs();
 	BASS_Init(-1, 44100, BASS_DEVICE_3D, 0, NULL); //          
@@ -122,6 +133,11 @@ void InitSAMP(JNIEnv* pEnv, jobject thiz)
 
 	Log("Storage: %s", g_pszStorage);
 
+	if (pSettings)
+	{
+		delete pSettings;
+		pSettings = nullptr;
+	}
 	pSettings = new CSettings();
 
 	CWeaponsOutFit::SetEnabled(pSettings->GetReadOnly().iOutfitGuns);
@@ -210,7 +226,6 @@ void InitInGame()
 {
 
 	static bool bGameInited = false;
-	static bool bNetworkInited = false;
 	if (!bGameInited)
 	{
 		if (!unique_library_handler(encLib.decrypt()))
@@ -222,17 +237,23 @@ void InitInGame()
 		pGame->SetMaxStats();
 
 		g_pJavaWrapper->UpdateSplash(101);
+		pGame->DisplayHUD(false);
+		pGame->DisplayWidgets(false);
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
-	CCamera *pCamera = pGame->GetCamera();
-	pCamera->SetPosition(1093.0f, -2036.0f, 90.0f, 0.0f, 0.0f, 0.0f);
-	pCamera->LookAtPoint(384.0f, -1557.0f, 20.0f, 2);
-	pGame->SetWorldWeather(10);
+		if (pPlayer)
+		{
+			pPlayer->TogglePlayerControllable(false);
+		}
+		CCamera *pCamera = pGame->GetCamera();
+		pCamera->SetPosition(1093.0f, -2036.0f, 90.0f, 0.0f, 0.0f, 0.0f);
+		pCamera->LookAtPoint(384.0f, -1557.0f, 20.0f, 2);
+		pGame->SetWorldWeather(10);
 		bGameInited = true;
 
 		return;
 	}
 
-	if (!bNetworkInited)
+	if (!g_bNetworkInited)
 	{
 		if (!pNetGame && pSettings)
 		{
@@ -248,16 +269,18 @@ void InitInGame()
 				pSettings->GetReadOnly().szNickName,
 				pSettings->GetReadOnly().szPassword);
 			pSettings->GetWrite().last_server = 0;
+			pGame->DisplayHUD(false);
+			pGame->DisplayWidgets(false);
 			if (g_pJavaWrapper)
 			{
 				g_pJavaWrapper->HideGPS();
-				g_pJavaWrapper->ShowRadar();
+				g_pJavaWrapper->HideRadar();
 				g_pJavaWrapper->HideZona();
 				g_pJavaWrapper->HideX2();
 				g_pJavaWrapper->ShowHud();
 			}
 		}
-		bNetworkInited = true;
+		g_bNetworkInited = true;
 		return;
 	}
 }

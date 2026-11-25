@@ -108,7 +108,7 @@ void InitBASSFuncs()
 	handle = dlopen("libbass.so", 3);
 	if (!handle)
 	{
-		handle = dlopen("/data/data/com.parad1stgames.game/lib/libbass.so", 3);
+		handle = dlopen("/data/data/com.ryzn.samp/lib/libbass.so", 3);
 	}
 	if (!handle)
 	{

@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/alyn_dialog_card"
+    android:background="@drawable/ryzn_sheet_surface"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="22dp">
 
     <TextView
         android:id="@+id/add_server_title"
@@ -18,43 +18,47 @@
         android:textColor="#FFFFFF"
         android:textSize="17sp" />
 
-    <View
-        android:layout_width="160dp"
-        android:layout_height="2dp"
-        android:layout_marginTop="10dp"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/alyn_primary" />
+        android:fontFamily="@font/montserrat_regular"
+        android:gravity="center"
+        android:text="Masukkan alamat IP atau domain beserta port"
+        android:textColor="#8A94A6"
+        android:textSize="12sp" />
 
     <EditText
         android:id="@+id/address_input_text"
         android:layout_width="match_parent"
         android:layout_height="46dp"
-        android:background="@drawable/alyn_search_bg"
+        android:background="@drawable/ryzn_field_surface"
         android:fontFamily="@font/montserrat_regular"
-        android:hint="HOST:PORT..."
+        android:hint="contoh: 127.0.0.1:7777"
         android:imeOptions="actionDone"
         android:inputType="textUri|textNoSuggestions"
-        android:paddingStart="14dp"
-        android:paddingEnd="14dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         android:singleLine="true"
         android:textColor="#FFFFFF"
-        android:textColorHint="#9E9E9E"
-        android:textSize="14sp" />
+        android:textColorHint="#788296"
+        android:textSize="13sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_server"
-        android:layout_width="wrap_content"
-        android:layout_height="42dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/alyn_blue_btn"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/ryzn_primary_pill"
         android:drawableStart="@drawable/ic_add"
         android:drawablePadding="8dp"
         android:fontFamily="@font/montserrat_bold"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:text="Tambah Server"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:text="Simpan ke Favorit"
         android:textAllCaps="false"
-        android:textColor="@color/alyn_bg"
+        android:textColor="#0D1017"
         android:textSize="13sp" />
 
 </LinearLayout>

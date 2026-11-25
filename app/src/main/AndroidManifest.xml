@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.byparad1st.game">
+    package="com.ryzn.game">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -53,11 +53,11 @@
         </provider>
 
         <activity
-            android:name="com.byparad1st.game.core.GTASA"
+            android:name="com.ryzn.game.core.GTASA"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"></activity>
         <activity
-            android:name="com.byparad1st.launcher.activity.SplashActivity"
+            android:name="com.ryzn.launcher.activity.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
@@ -67,13 +67,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.byparad1st.launcher.activity.MainActivity"
+            android:name="com.ryzn.launcher.activity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="com.byparad1st.launcher.activity.LoaderActivity"
+            android:name="com.ryzn.launcher.activity.LoaderActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 

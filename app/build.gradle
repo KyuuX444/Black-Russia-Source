@@ -9,8 +9,8 @@ android {
         targetSdkVersion 28
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        applicationId 'com.parad1stgames.game'
-        versionName "parad1st-games-0.1"
+        applicationId 'com.ryzn.samp'
+        versionName "1.0-ryzn"
         versionCode 10
         vectorDrawables.useSupportLibrary = true
 
@@ -23,7 +23,7 @@ android {
     signingConfigs {
         release {
             def envPath = System.getenv("KEYSTORE_PATH")
-            storeFile envPath ? file(envPath) : file("${rootDir}/keystore/black-russia-release.jks")
+            storeFile envPath ? file(envPath) : file("${rootDir}/keystore/ryzn-samp-release.jks")
             storePassword System.getenv("STORE_PASSWORD") ?: "blackrussia123"
             keyAlias System.getenv("KEY_ALIAS") ?: "blackrussia"
             keyPassword System.getenv("KEY_PASSWORD") ?: "blackrussia123"

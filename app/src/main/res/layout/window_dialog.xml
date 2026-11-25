@@ -1,225 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dw_root"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@drawable/alyn_samp_border"
-    android:orientation="vertical"
-    android:paddingTop="14dp"
-    android:paddingBottom="14dp"
-    android:visibility="visible">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
 
-    <TextView
-        android:id="@+id/dw_caption"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:fontFamily="sans-serif-medium"
-        android:singleLine="true"
-        android:text="Judul Dialog"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold" />
+        android:layout_gravity="center"
+        android:background="#CC000000"
+        android:clickable="true"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/dw_scroll_info"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="18dp"
-        android:layout_weight="0.5"
-        android:overScrollMode="never"
-        android:scrollbarThumbHorizontal="@android:color/transparent"
-        android:scrollbarThumbVertical="@android:color/transparent"
-        android:scrollbarTrackHorizontal="@android:color/transparent"
-        android:scrollbarTrackVertical="@android:color/transparent"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/dw_info"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dialog_body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:lineSpacingExtra="3sp"
-            android:text="Info"
-            android:textColor="#A9C4E4"
-            android:textSize="12sp" />
-    </androidx.core.widget.NestedScrollView>
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_max="800.0px"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/dw_scroll_root"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="12dp"
-        android:layout_weight="0.5"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        android:visibility="visible">
-
-        <LinearLayout
-            android:id="@+id/dw_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="18dp"
-            android:orientation="horizontal">
+            <View
+                android:id="@+id/dialog_caption_bg"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:background="#000000"
+                app:layout_constraintBottom_toBottomOf="@id/dialog_caption"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/dialog_caption"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:fontFamily="sans-serif-medium"
-                android:text="Kolom 1"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:layout_margin="5px"
+                android:gravity="start"
+                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Title"
+                android:textColor="#ffffffff"
+                android:textSize="36.0px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="match_parent"
+            <ScrollView
+                android:id="@+id/dialog_text_layout"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:fontFamily="sans-serif-medium"
-                android:text="Kolom 2"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp"
-                android:textStyle="bold" />
+                android:layout_margin="24.0px"
+                android:scrollbars="none"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_buttons"
+                app:layout_constraintHeight_max="632.0px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_caption"
+                app:layout_constraintVertical_bias="0.0">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.25"
-                android:fontFamily="sans-serif-medium"
-                android:text="Kolom 3"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="18dp"
-                android:layout_weight="0.25"
-                android:fontFamily="sans-serif-medium"
-                android:text="Kolom 4"
-                android:textColor="#FFFFFF"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <View
-            android:id="@+id/dw_divider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginRight="18dp"
-            android:layout_marginBottom="10dp"
-            android:background="#669ECAFF"
-            android:visibility="visible" />
-
-        <ScrollView
-            android:id="@+id/dw_scrollview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fadeScrollbars="false"
-            android:scrollbarAlwaysDrawVerticalTrack="true"
-            android:scrollbarStyle="outsideInset"
-            android:scrollbarThumbVertical="@drawable/br_dialog_scroll_thumb"
-            android:scrollbarTrackVertical="@drawable/br_dialog_scroll_track">
-
-            <LinearLayout
-                android:id="@+id/dw_scroll_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:scrollbarStyle="insideOverlay">
-
-                <TextView
-                    android:id="@+id/dw_list_button"
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/alyn_list_inactive"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="start|center_vertical"
-                    android:paddingLeft="12dp"
-                    android:paddingTop="7dp"
-                    android:paddingRight="12dp"
-                    android:paddingBottom="7dp"
-                    android:text="Item"
-                    android:textAllCaps="false"
-                    android:textColor="#A9C4E4"
-                    android:textSize="12sp" />
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
+                    android:orientation="vertical">
 
-    <com.nvidia.devtech.CustomEditText
-        android:id="@+id/dw_edittext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginRight="18dp"
-        android:background="@drawable/alyn_input_bg"
-        android:ems="10"
-        android:fontFamily="sans-serif"
-        android:gravity="start"
-        android:hint="Ketuk untuk mengetik"
-        android:imeOptions="actionSend|flagNoFullscreen|flagNoExtractUi"
-        android:inputType="text"
-        android:longClickable="true"
-        android:paddingLeft="12dp"
-        android:paddingTop="8dp"
-        android:paddingRight="12dp"
-        android:paddingBottom="8dp"
-        android:singleLine="true"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#8A8A8A"
-        android:textSize="13sp"
-        android:visibility="visible" />
+                    <TextView
+                        android:id="@+id/dialog_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Text"
+                        android:textColor="#a9c4e4"
+                        android:textSize="28.0px" />
 
-    <LinearLayout
-        android:id="@+id/dw_root_buttons"
-        android:layout_width="wrap_content"
-        android:layout_height="34dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginRight="18dp"
-        android:gravity="center"
-        android:orientation="horizontal">
+                </LinearLayout>
 
-        <Button
-            android:id="@+id/dw_button_ok"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/alyn_btn_primary"
-            android:fontFamily="sans-serif-medium"
-            android:minWidth="96dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:text="OK"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+            </ScrollView>
 
-        <Button
-            android:id="@+id/dw_button_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:layout_weight="1"
-            android:background="@drawable/alyn_btn_secondary"
-            android:fontFamily="sans-serif-medium"
-            android:minWidth="96dp"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:text="Batal"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
-    </LinearLayout>
-</LinearLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dialog_input_layout"
+                android:layout_width="0.0dip"
+                android:layout_height="wrap_content"
+                android:layout_margin="24.0px"
+                android:background="@drawable/samp_border"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_buttons"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_text_layout">
+
+                <EditText
+                    android:id="@+id/dialog_input"
+                    android:layout_width="0.0dip"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:imeOptions="actionDone|flagNoExtractUi"
+                    android:inputType="textShortMessage"
+                    android:lines="1"
+                    android:maxLines="1"
+                    android:paddingStart="24.0px"
+                    android:paddingTop="20.0px"
+                    android:paddingEnd="24.0px"
+                    android:paddingBottom="20.0px"
+                    android:singleLine="true"
+                    android:textColor="#ffffffff"
+                    android:textColorHint="#7affffff"
+                    android:textSize="32.0px"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dialog_list_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24.0px"
+                android:layout_marginBottom="24.0px"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/dialog_buttons"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_max="632.0px"
+                app:layout_constraintHeight_min="632.0px"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_caption">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dialog_tablist_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="32.0px"
+                    android:paddingEnd="64.0px"
+                    android:paddingBottom="12.0px"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/dialog_field1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingEnd="20.0px"
+                        android:singleLine="true"
+                        android:text="Field1"
+                        android:textColor="#a9c4e4"
+                        android:textSize="32.0px"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/dialog_field2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingEnd="20.0px"
+                        android:singleLine="true"
+                        android:text="Field2"
+                        android:textColor="#a9c4e4"
+                        android:textSize="32.0px"
+                        app:layout_constraintStart_toEndOf="@+id/dialog_field1"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/dialog_field3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingEnd="20.0px"
+                        android:singleLine="true"
+                        android:text="Field3"
+                        android:textColor="#a9c4e4"
+                        android:textSize="32.0px"
+                        app:layout_constraintStart_toEndOf="@+id/dialog_field2"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/dialog_field4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_medium"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:paddingEnd="20.0px"
+                        android:singleLine="true"
+                        android:text="Field4"
+                        android:textColor="#a9c4e4"
+                        android:textSize="32.0px"
+                        app:layout_constraintStart_toEndOf="@+id/dialog_field3"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dialog_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.0dip"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dialog_tablist_row">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dialog_list_recycler"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_margin="16.0px"
+                        android:fadeScrollbars="false"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:scrollbars="vertical"
+                        android:verticalScrollbarPosition="right"
+                        android:visibility="visible"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/dialog_buttons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="24.0px"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialog_caption"
+                app:layout_constraintVertical_bias="1.0">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_positive"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/samp_border"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/button_positive_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48.0px"
+                        android:layout_marginTop="16.0px"
+                        android:layout_marginEnd="48.0px"
+                        android:layout_marginBottom="16.0px"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Button1"
+                        android:textColor="#ffffffff"
+                        android:textSize="32.0px"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/button_negative"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16.0px"
+                    android:background="@drawable/samp_border"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/button_positive"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/button_negative_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="48.0px"
+                        android:layout_marginTop="16.0px"
+                        android:layout_marginEnd="48.0px"
+                        android:layout_marginBottom="16.0px"
+                        android:lines="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="Button2"
+                        android:textColor="#ffffffff"
+                        android:textSize="32.0px"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

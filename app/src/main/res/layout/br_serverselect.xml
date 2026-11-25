@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="0%"
-            android:textColor="@color/alyn_primary"
+            android:textColor="@color/ryzn_accent"
             app:layout_constraintBottom_toTopOf="@+id/progress_bar"
             app:layout_constraintEnd_toEndOf="@+id/progress_bar" />
 
@@ -91,7 +91,7 @@
             app:rcBackgroundPadding="0dp"
             app:rcMax="100.0"
             app:rcProgress="0.0"
-            app:rcProgressColor="@color/alyn_primary"
+            app:rcProgressColor="@color/ryzn_accent"
             app:rcRadius="@dimen/_3sdp"
             app:rcReverse="false"
             app:rcSecondaryProgress="0.0"

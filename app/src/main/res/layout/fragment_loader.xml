@@ -4,19 +4,8 @@
     android:id="@+id/background_loader"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/alyn_bg"
+    android:background="@drawable/ryzn_launcher_bg"
     android:padding="24dp">
-
-    <TextView
-        android:id="@+id/loader_badge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_bold"
-        android:text="Ryzn SA-MP"
-        android:textColor="#757575"
-        android:textSize="11sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/loader_icon"
@@ -28,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.45"
+        app:layout_constraintVertical_bias="0.44"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <TextView
@@ -51,8 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:fontFamily="@font/montserrat_regular"
-        android:text="Mobile"
-        android:textColor="#AFAFAF"
+        android:text="Pengunduh Data Game"
+        android:textColor="#8A94A6"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@id/loader_warning"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +76,7 @@
         android:gravity="center"
         android:maxLines="2"
         android:text="Mempersiapkan file game..."
-        android:textColor="#AFAFAF"
+        android:textColor="#8A94A6"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@id/loading_percent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -100,7 +89,7 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/montserrat_bold"
         android:text="0%"
-        android:textColor="@color/alyn_primary"
+        android:textColor="#7CA4FF"
         android:textSize="13sp"
         app:layout_constraintBottom_toTopOf="@id/progress_bar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,11 +105,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:rcBackgroundColor="#26FFFFFF"
+        app:rcBackgroundColor="#20FFFFFF"
         app:rcBackgroundPadding="0dp"
         app:rcMax="100.0"
         app:rcProgress="0.0"
-        app:rcProgressColor="@color/alyn_primary"
+        app:rcProgressColor="#7CA4FF"
         app:rcRadius="6dp"
         app:rcReverse="false"
         app:rcSecondaryProgress="0.0"

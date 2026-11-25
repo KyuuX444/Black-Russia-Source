@@ -1,4 +1,4 @@
-name: Build ryzn SA-MP APK
+name: Build Ryzn SA-MP APK
 
 on:
   push:

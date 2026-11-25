@@ -6,298 +6,295 @@
     android:layout_height="match_parent"
     android:visibility="gone">
 
-    <!-- Keep top-left native GTA radar (0%..19%) and top-right native GTA HUD (74%..100%) unobstructed -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_chat_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.19" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_chat_end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.74" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_bp_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.39" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_voice_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.46" />
-
-    <!-- Alyn-style translucent chat box -->
+    <!-- Chat panel (SA-MP Mobile layout: anchored right of GTA:SA radar) -->
     <LinearLayout
-        android:id="@+id/alyn_chat_box"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_92sdp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="4dp"
-        android:background="@drawable/alyn_chat_border"
+        android:id="@+id/ryzn_chat_box"
+        android:layout_width="@dimen/_400sdp"
+        android:layout_height="@dimen/_100sdp"
+        android:layout_marginStart="@dimen/_100sdp"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/chat_border"
         android:clickable="true"
         android:focusable="false"
         android:orientation="vertical"
-        android:paddingStart="6dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="6dp"
-        android:paddingBottom="4dp"
-        app:layout_constraintEnd_toStartOf="@id/guideline_chat_end"
-        app:layout_constraintStart_toEndOf="@id/guideline_chat_start"
+        android:padding="@dimen/_2sdp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chat"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:fadeScrollbars="true"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
             android:overScrollMode="never"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <!-- Alyn-style collapsible quick keys bar (>>, ESC, TAB, ALT, SPC, F, H, 2, Y, N, C, G) -->
-    <LinearLayout
-        android:id="@+id/alyn_button_panel"
-        android:layout_width="0dp"
+    <!-- Collapsible ButtonPanel at 0.35 vertical height -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_bp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <LinearLayout
+        android:id="@+id/buttons_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/_1sdp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline_bp_top">
+        app:layout_constraintTop_toTopOf="@id/guideline_bp">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/bp_extend"
-            android:layout_width="34dp"
-            android:layout_height="24dp"
-            android:background="@drawable/alyn_button_bg"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
             android:fontFamily="sans-serif-medium"
             android:includeFontPadding="false"
+            android:maxLines="1"
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:padding="0dp"
             android:text="&gt;&gt;"
             android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp" />
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold" />
 
-        <HorizontalScrollView
-            android:id="@+id/bp_scroll"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            android:overScrollMode="never"
-            android:scrollbars="none"
-            android:visibility="gone">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_esc"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="ESC"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_tab"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="TAB"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_esc"
-                    android:layout_width="34dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="ESC"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_alt"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="ALT"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_tab"
-                    android:layout_width="34dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="TAB"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_spc"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="SPC"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_alt"
-                    android:layout_width="34dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="ALT"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_f"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="F"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_spc"
-                    android:layout_width="34dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="SPC"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_h"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="H"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_f"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="F"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_2"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="2"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_h"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="H"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_y"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="Y"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_2"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="2"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_n"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="N"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_y"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="Y"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_c"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="C"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
 
-                <Button
-                    android:id="@+id/bp_n"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="N"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
-
-                <Button
-                    android:id="@+id/bp_c"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="3dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="C"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
-
-                <Button
-                    android:id="@+id/bp_g"
-                    android:layout_width="28dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/alyn_button_bg"
-                    android:fontFamily="sans-serif-medium"
-                    android:includeFontPadding="false"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="G"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="10sp" />
-            </LinearLayout>
-        </HorizontalScrollView>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/bp_g"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_margin="@dimen/_1sdp"
+            android:background="@drawable/ryzn_bp_btn"
+            android:fontFamily="sans-serif-medium"
+            android:includeFontPadding="false"
+            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="G"
+            android:textAllCaps="false"
+            android:textColor="#003258"
+            android:textSize="7sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Subtle Alyn-style mic button -->
+    <!-- Voice button at 0.5 vertical height -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
     <ImageButton
-        android:id="@+id/alyn_voice_btn"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="@dimen/_84sdp"
-        android:background="@drawable/alyn_voice_bg"
-        android:contentDescription="Voice"
-        android:padding="7dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/alyn_ic_voice"
+        android:id="@+id/ryzn_voice_btn"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:layout_marginEnd="@dimen/_100sdp"
+        android:background="@drawable/voice_bg"
+        android:contentDescription="Voice Chat"
+        android:src="@drawable/ic_voice"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline_voice_top" />
+        app:layout_constraintTop_toTopOf="@id/guideline_voice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

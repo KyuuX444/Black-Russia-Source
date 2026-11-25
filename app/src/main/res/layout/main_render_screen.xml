@@ -16,76 +16,109 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
+        <!-- SA-MP Keyboard input bar -->
         <LinearLayout
             android:id="@+id/main_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="#DD121212"
+            android:layout_margin="@dimen/_2sdp"
+            android:background="@drawable/samp_border"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingLeft="12dp"
-            android:paddingTop="6dp"
-            android:paddingRight="12dp"
-            android:paddingBottom="6dp">
+            android:paddingLeft="@dimen/_5sdp"
+            android:paddingRight="@dimen/_5sdp"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/main_but_input_slash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_slash"
+                android:contentDescription="/"
+                android:minWidth="@dimen/_10sdp"
+                android:minHeight="@dimen/_10sdp" />
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="#ffffff" />
+
+            <ImageButton
+                android:id="@+id/main_but_input_prev"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_arrow_up"
+                android:contentDescription="Prev"
+                android:minWidth="@dimen/_10sdp"
+                android:minHeight="@dimen/_10sdp" />
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="#ffffff" />
+
+            <ImageButton
+                android:id="@+id/main_but_input_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:background="@drawable/ic_arrow_down"
+                android:contentDescription="Next"
+                android:minWidth="@dimen/_10sdp"
+                android:minHeight="@dimen/_10sdp" />
+
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="#ffffff" />
 
             <com.nvidia.devtech.CustomEditText
                 android:id="@+id/main_et_input"
                 android:layout_width="0dp"
-                android:layout_height="38dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:background="@drawable/alyn_input_bg"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_weight="0.7"
+                android:background="@android:color/transparent"
+                android:ems="10"
                 android:hint="Ketik pesan atau /perintah..."
-                android:imeOptions="actionSend|flagNoExtractUi|flagNoFullscreen"
+                android:imeOptions="actionDone|flagNoExtractUi|flagNoFullscreen"
                 android:inputType="text"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:paddingTop="@dimen/_4sdp"
+                android:paddingBottom="@dimen/_4sdp"
                 android:singleLine="true"
                 android:textColor="#FFFFFF"
                 android:textColorHint="#8A8A8A"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/main_but_input_prev"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/alyn_btn_secondary"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="&#x22C1;"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+            <View
+                android:layout_width="@dimen/_1sdp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:background="#ffffff" />
 
-            <Button
-                android:id="@+id/main_but_input_next"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/alyn_btn_secondary"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="&#x22C0;"
-                android:textColor="#FFFFFF"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-
-            <Button
-                android:id="@+id/main_but_input_slash"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="@drawable/alyn_btn_secondary"
-                android:gravity="center"
-                android:minWidth="0dp"
-                android:minHeight="0dp"
-                android:text="/"
-                android:textColor="#FFFFFF"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+            <ImageButton
+                android:id="@+id/main_but_input_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginEnd="@dimen/_2sdp"
+                android:background="@drawable/ic_send"
+                android:contentDescription="Kirim"
+                android:minWidth="@dimen/_10sdp"
+                android:minHeight="@dimen/_10sdp" />
         </LinearLayout>
 
         <View

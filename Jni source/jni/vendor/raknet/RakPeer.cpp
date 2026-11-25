@@ -31,6 +31,7 @@
 #define closesocket close
 #include <unistd.h>
 #include <pthread.h>
+#include <arpa/inet.h>
 #endif
 #include <ctype.h> // toupper
 #include <string.h>
@@ -605,8 +606,8 @@ bool RakPeer::Connect( const char* host, unsigned short remotePort, char* passwo
 //		memcpy(outgoingPassword, passwordData, passwordDataLength);
 //	outgoingPasswordLength=(unsigned char) passwordDataLength;
 
-	// If the host starts with something other than 0, 1, or 2 it's (probably) a domain name.
-	if ( host[ 0 ] < '0' || host[ 0 ] > '2' )
+	// Resolve non-IPv4 hostnames via DomainNameToIP (inet_addr avoids misclassifying IPs starting with 3..9).
+	if ( inet_addr( host ) == INADDR_NONE )
 	{
 #if !defined(_COMPATIBILITY_1)
 		host = ( char* ) SocketLayer::Instance()->DomainNameToIP( host );

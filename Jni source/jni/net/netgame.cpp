@@ -49,8 +49,7 @@ unsigned char GetPacketID(Packet *p)
 
 CNetGame::CNetGame(const char* szHostOrIp, int iPort, const char* szPlayerName, const char* szPass)
 {
-	//strcpy(m_szHostName, "LUX RUSSIA");
-	strncpy(m_szHostOrIp, szHostOrIp, sizeof(m_szHostOrIp));
+	snprintf(m_szHostOrIp, sizeof(m_szHostOrIp), "%s", szHostOrIp ? szHostOrIp : "");
 	m_iPort = iPort;
 
 	m_pPlayerPool = new CPlayerPool();
@@ -71,8 +70,9 @@ CNetGame::CNetGame(const char* szHostOrIp, int iPort, const char* szPlayerName, 
 	RegisterScriptRPCs(m_pRakClient);
 	m_pRakClient->SetPassword(szPass);
 
-	m_dwLastConnectAttempt = GetTickCount();
-	m_iGameState = 	GAMESTATE_WAIT_CONNECT;
+	m_dwLastConnectAttempt = 0;
+	m_iGameState = GAMESTATE_WAIT_CONNECT;
+	CHUD::m_bCreatedCar = false;
 
 	m_iSpawnsAvailable = 0;
 	m_bHoldTime = true;
@@ -219,40 +219,45 @@ void CNetGame::Process()
 	{
 		CPlayerPed *pPlayer = pGame->FindPlayerPed();
 		CCamera *pCamera = pGame->GetCamera();
-                CPlayerPool *pPlayerPool = pNetGame->GetPlayerPool();
 
 		if(!CHUD::m_bCreatedCar && pPlayer && pCamera)
-		{                                  
-                        pCamera->Restore();
-  	                pCamera->SetBehindPlayer();
-			
-                        if(pPlayer->IsInVehicle())
-				pPlayer->RemoveFromVehicleAndPutAt(431.8335, 250.1207, 11.9394);
+		{
+			pCamera->SetPosition(1093.0f, -2036.0f, 90.0f, 0.0f, 0.0f, 0.0f);
+			pCamera->LookAtPoint(384.0f, -1557.0f, 20.0f, 2);
+
+			if(pPlayer->IsInVehicle())
+				pPlayer->RemoveFromVehicleAndPutAt(1133.0504f, -2038.4034f, 69.099998f);
 			else
-				pPlayer->TeleportTo(431.8335, 250.1207, 11.9394);
-                                                                       
-                        pPlayer->TogglePlayerControllable(true);
-                        pPlayer->SetModelIndex(122);
+				pPlayer->TeleportTo(1133.0504f, -2038.4034f, 69.099998f);
 
-			pGame->SetWorldWeather(m_byteWeather);
-			pGame->DisplayWidgets(true);
-			pGame->ToggleRadar(false);
-
-                        pGame->NewVehicle(402, 433.8335, 250.1207, 11.9394, 0, false); 
-                 }
-                 CHUD::m_bCreatedCar = true;
+			pPlayer->TogglePlayerControllable(false);
+			pGame->SetWorldWeather(10);
+			pGame->DisplayHUD(false);
+			pGame->DisplayWidgets(false);
+			CHUD::m_bCreatedCar = true;
+		}
 	}
 
 	if(GetGameState() == GAMESTATE_WAIT_CONNECT &&
-		(GetTickCount() - m_dwLastConnectAttempt) > 3000)
+		(m_dwLastConnectAttempt == 0 || (GetTickCount() - m_dwLastConnectAttempt) > 3000))
 	{
-		if(pChatWindow) pChatWindow->AddDebugMessageNonFormatted(CLocalisation::GetMessage(E_MSG::CONNECTING));
-		// Hide Black Russia helper popup for clean Alyn-style UI
-		g_pJavaWrapper->hideHelper();
-		
-		m_pRakClient->Connect(m_szHostOrIp, m_iPort, 0, 0, 5);
+		if(pChatWindow) {
+			pChatWindow->AddDebugMessage("Menghubungkan ke %s:%d...", m_szHostOrIp, m_iPort);
+		}
+		// Hide custom helper popup for clean SA-MP UI
+		if(g_pJavaWrapper) g_pJavaWrapper->hideHelper();
+
 		m_dwLastConnectAttempt = GetTickCount();
-		SetGameState(GAMESTATE_CONNECTING);
+		if(m_pRakClient && m_pRakClient->Connect(m_szHostOrIp, m_iPort, 0, 0, 2))
+		{
+			SetGameState(GAMESTATE_CONNECTING);
+		}
+		else
+		{
+			if(pChatWindow) {
+				pChatWindow->AddDebugMessage("{ff5555}Gagal menghubungi server %s:%d. Mencoba lagi...", m_szHostOrIp, m_iPort);
+			}
+		}
 	}
 	static bool once = false;
 	if (pVoice && !once)
@@ -305,17 +310,18 @@ void CNetGame::UpdateNetwork()
 			break;
 
 			case ID_FAILED_INITIALIZE_ENCRIPTION:
-			//pChatWindow->AddDebugMessage("Failed to initialize encryption.");
+			if(pChatWindow) pChatWindow->AddDebugMessage("Gagal menginisialisasi enkripsi.");
+			SetGameState(GAMESTATE_WAIT_CONNECT);
 			break;
 
 			case ID_CONNECTION_BANNED:
-                                                      //g_pJavaWrapper->ShowNotification(4, "Произошла неизвестная сетевая ошибка, переподключение", 7, "", ">>");
+			if(pChatWindow) pChatWindow->AddDebugMessageNonFormatted(CLocalisation::GetMessage(E_MSG::BANNED));
 			SetGameState(GAMESTATE_WAIT_CONNECT);
 			break;
 
 			case ID_INVALID_PASSWORD:
-			//pChatWindow->AddDebugMessage("Неверный пароль для подключения к серверу!");
-			m_pRakClient->Disconnect(0);
+			if(pChatWindow) pChatWindow->AddDebugMessage("Password server salah!");
+			if(m_pRakClient) m_pRakClient->Disconnect(0);
 			break;
 
 			case ID_PLAYER_SYNC:
@@ -1484,6 +1490,7 @@ void CNetGame::Packet_ConnectionLost(Packet* pkt)
 		pChatWindow->AddDebugMessageNonFormatted(CLocalisation::GetMessage(E_MSG::CONNECTION_LOST));
 	if(pVoice) pVoice->Disconnect();
 	ShutDownForGameRestart();
+	CHUD::m_bCreatedCar = false;
 
 	for(PLAYERID playerId = 0; playerId < MAX_PLAYERS; playerId++)
 	{
