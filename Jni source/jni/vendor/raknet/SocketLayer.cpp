@@ -38,6 +38,7 @@ typedef int socklen_t;
 #include <string.h> // memcpy
 #include <unistd.h>
 #include <fcntl.h>
+#include <pthread.h>
 #endif
 
 #include "ExtendedOverlappedPool.h"

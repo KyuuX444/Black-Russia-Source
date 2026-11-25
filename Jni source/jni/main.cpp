@@ -34,6 +34,7 @@ const char* g_pszStorage = nullptr;
 #include "clientlogic/ChatMessenger.h"
 #include "clientlogic/CSkyBox.h"
 #include "clientlogic/CRQ_Commands.h"
+#include "clientlogic/CHUD.h"
 
 const cryptor::string_encryptor encLib = cryptor::create("libsampvoice.so", 16);
 void CrashLog(const char* fmt, ...);
