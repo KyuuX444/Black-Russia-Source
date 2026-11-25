@@ -4,19 +4,19 @@
     android:id="@+id/item_server_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/bg_server_item_normal"
     android:clickable="true"
     android:focusable="true"
-    android:paddingStart="8dp"
-    android:paddingTop="5dp"
-    android:paddingEnd="9dp"
-    android:paddingBottom="6dp">
+    android:paddingStart="10dp"
+    android:paddingTop="7dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="8dp">
 
     <FrameLayout
         android:id="@+id/item_icon_frame"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:background="@drawable/ryzn_icon_tint_circle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +24,8 @@
 
         <ImageView
             android:id="@+id/item_server_icon"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/ic_server_node"
@@ -63,7 +63,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="1.5dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -79,10 +79,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
-                android:fontFamily="@font/montserrat_bold"
+                android:fontFamily="@font/roboto_medium"
                 android:text="-- ms"
                 android:textColor="@color/ryzn_text_secondary"
-                android:textSize="9sp" />
+                android:textSize="9.5sp" />
 
             <ImageView
                 android:id="@+id/item_signal_icon"
@@ -97,14 +97,14 @@
         android:id="@+id/item_server_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="7dp"
         android:ellipsize="end"
         android:fontFamily="@font/montserrat_bold"
         android:maxLines="1"
         android:text="Memuat server..."
         android:textColor="@color/manga_ink"
-        android:textSize="11.5sp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@id/item_right_col"
         app:layout_constraintStart_toEndOf="@id/item_icon_frame"
         app:layout_constraintTop_toTopOf="parent" />
@@ -113,13 +113,13 @@
         android:id="@+id/item_server_subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="1.5dp"
         android:ellipsize="end"
-        android:fontFamily="@font/montserrat_regular"
+        android:fontFamily="@font/roboto_regular"
         android:maxLines="1"
         android:text="127.0.0.1:7777 • SA-MP"
         android:textColor="@color/ryzn_text_secondary"
-        android:textSize="9.5sp"
+        android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="@id/item_server_name"
         app:layout_constraintStart_toStartOf="@id/item_server_name"
         app:layout_constraintTop_toBottomOf="@id/item_server_name" />

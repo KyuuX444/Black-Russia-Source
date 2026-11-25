@@ -156,6 +156,11 @@ void UI::touchEvent(const ImVec2& pos, TouchType type)
 		return;
 	}
 
+	if (m_chat && m_chat->visible() && m_chat->handlesTouch(pos)) {
+		m_chat->touchEvent(pos, type);
+		return;
+	}
+
 	ImGuiIO& io = ImGui::GetIO();
 	switch (type) {
 		case TouchType::push: io.MousePos = ImVec2(pos.x, pos.y);

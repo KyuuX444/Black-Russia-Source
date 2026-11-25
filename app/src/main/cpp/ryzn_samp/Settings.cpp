@@ -23,6 +23,7 @@ bool Settings::m_displayfps = false;
 bool Settings::m_radarrect = false;
 bool Settings::m_modifieddata = false;
 bool Settings::m_headmove = true;
+bool Settings::m_pcchatbox = true;
 int Settings::m_fpslimit = 60;
 int Settings::m_chatstrings = 5;
 float Settings::m_fontsize = 26.0f;
@@ -118,6 +119,7 @@ void Settings::initialize()
 		if (s.HasMember("display_fps") && s["display_fps"].IsBool()) m_displayfps = s["display_fps"].GetBool();
 		if (s.HasMember("radar_rect") && s["radar_rect"].IsBool()) m_radarrect = s["radar_rect"].GetBool();
 		if (s.HasMember("modified_data") && s["modified_data"].IsBool()) m_modifieddata = s["modified_data"].GetBool();
+		if (s.HasMember("pc_chatbox") && s["pc_chatbox"].IsBool()) m_pcchatbox = s["pc_chatbox"].GetBool();
 		if (s.HasMember("fps_limit") && s["fps_limit"].IsInt()) m_fpslimit = s["fps_limit"].GetInt();
 		if (s.HasMember("chat_strings") && s["chat_strings"].IsInt()) m_chatstrings = s["chat_strings"].GetInt();
 		if (s.HasMember("font_size") && s["font_size"].IsNumber()) m_fontsize = s["font_size"].GetFloat();
@@ -141,6 +143,7 @@ void Settings::initialize()
 	spdlog::info("display_fps {}", m_displayfps);
 	spdlog::info("radar_rect {}", m_radarrect);
 	spdlog::info("modified_data {}", m_modifieddata);
+	spdlog::info("pc_chatbox {}", m_pcchatbox);
 	spdlog::info("fps_limit {}", m_fpslimit);
 	spdlog::info("chat_strings {}", m_chatstrings);
 	spdlog::info("font_size {}", m_fontsize);

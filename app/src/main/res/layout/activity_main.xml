@@ -6,28 +6,28 @@
     android:background="@drawable/bg_ryzn_root"
     android:orientation="vertical">
 
-    <!-- Compact Manga Header -->
+    <!-- Bright White Manga Header with Subtle Halftone & Speedlines -->
     <LinearLayout
         android:id="@+id/header_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ryzn_header_height"
-        android:background="@color/manga_panel"
+        android:background="@drawable/bg_manga_header"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp">
 
         <ImageView
             android:id="@+id/header_logo"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_ryzn_logo" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="9dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -43,46 +43,46 @@
                     android:fontFamily="@font/montserrat_bold"
                     android:text="@string/app_name"
                     android:textColor="@color/ryzn_text_primary"
-                    android:textSize="13.5sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/header_version"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="6dp"
                     android:background="@drawable/ryzn_badge_online"
                     android:fontFamily="@font/montserrat_bold"
-                    android:paddingStart="5dp"
+                    android:paddingStart="6dp"
                     android:paddingTop="1dp"
-                    android:paddingEnd="5dp"
+                    android:paddingEnd="6dp"
                     android:paddingBottom="1dp"
                     android:text="v2.0"
-                    android:textColor="@color/manga_crimson"
+                    android:textColor="@color/ryzn_accent"
                     android:textSize="8.5sp" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:text="SA-MP Mobile Client"
                 android:textColor="@color/ryzn_text_secondary"
-                android:textSize="9sp" />
+                android:textSize="9.5sp" />
         </LinearLayout>
 
-        <!-- Client status pill inside header -->
+        <!-- Client readiness status pill inside header -->
         <LinearLayout
             android:id="@+id/footer_client_status"
             android:layout_width="wrap_content"
-            android:layout_height="24dp"
+            android:layout_height="26dp"
             android:background="@drawable/bg_btn_action_dark"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingStart="8dp"
+            android:paddingStart="9dp"
             android:paddingTop="1dp"
-            android:paddingEnd="9dp"
+            android:paddingEnd="10dp"
             android:paddingBottom="2dp">
 
             <View
@@ -96,10 +96,10 @@
                 android:id="@+id/footer_status_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_bold"
+                android:fontFamily="@font/roboto_medium"
                 android:text="Client Siap"
                 android:textColor="@color/ryzn_text_primary"
-                android:textSize="9.5sp" />
+                android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -120,24 +120,24 @@
         android:layout_height="1.5dp"
         android:background="@color/manga_ink" />
 
-    <!-- 2-Button Compact Manga Bottom Navigation Bar -->
+    <!-- Simplified 2-Tab Core Navigation (Beranda & Pengaturan) -->
     <LinearLayout
         android:id="@+id/bottom_nav_bar"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="50dp"
         android:background="@color/manga_panel"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingTop="5dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="5dp">
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp">
 
         <LinearLayout
             android:id="@+id/bottom_nav_home"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@drawable/bg_nav_item_selected"
             android:clickable="true"
@@ -148,8 +148,8 @@
 
             <ImageView
                 android:id="@+id/bottom_nav_home_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginEnd="6dp"
                 android:contentDescription="@string/nav_home"
                 android:src="@drawable/ic_nav_home"
@@ -162,14 +162,14 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/nav_home"
                 android:textColor="#FFFFFF"
-                android:textSize="11sp" />
+                android:textSize="11.5sp" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/bottom_nav_settings"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:background="@drawable/bg_nav_item_normal"
             android:clickable="true"
@@ -179,8 +179,8 @@
 
             <ImageView
                 android:id="@+id/bottom_nav_settings_icon"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginEnd="6dp"
                 android:contentDescription="@string/nav_settings"
                 android:src="@drawable/ic_nav_settings"
@@ -193,7 +193,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:text="@string/nav_settings"
                 android:textColor="@color/manga_ink"
-                android:textSize="11sp" />
+                android:textSize="11.5sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

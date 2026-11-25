@@ -69,7 +69,6 @@
     <string name="time_remaining">Sisa waktu: %1$s</string>
     <string name="time_remaining_notification">Sisa %1$s</string>
     <string name="hello_world">Halo dunia!</string>
-    <string name="menu_settings">Pengaturan</string>
     <string name="dialog_join_from_launcher_msg">Anda harus masuk ke game menggunakan launcher</string>
     <string name="dialog_join_from_launcher_ok">Terima</string>
     <string name="autoshop_max_speed">Kecepatan Maks.</string>

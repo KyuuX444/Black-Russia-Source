@@ -215,6 +215,7 @@ public class RyznGameDownloader {
         int voicelist = (sp == null || sp.getBoolean("voice_chat", true)) ? 1 : 0;
         int radarrect = (sp != null && sp.getBoolean("radar_rect", false)) ? 1 : 0;
         int timestamp = (sp != null && sp.getBoolean("timestamp", false)) ? 1 : 0;
+        int pcChatbox = (sp == null || sp.getBoolean("pc_chatbox", true)) ? 1 : 0;
         int modifiedData = isModifiedDataEnabled(context) ? 1 : 0;
         int chatStrings = sp != null ? Math.max(5, Math.min(20, sp.getInt("chat_strings", 8))) : 8;
         float fontSize = sp != null ? sp.getFloat("font_size", 30.0f) : 30.0f;
@@ -250,6 +251,7 @@ public class RyznGameDownloader {
                     + "voicelist = " + voicelist + "\n"
                     + "radarrect = " + radarrect + "\n"
                     + "timestamp = " + timestamp + "\n"
+                    + "pcchatbox = " + pcChatbox + "\n"
                     + "modifieddata = " + modifiedData + "\n"
                     + "fps = 60\n";
             try (FileOutputStream fos = new FileOutputStream(settingsFile)) {
@@ -279,6 +281,7 @@ public class RyznGameDownloader {
             String password = "";
             String nickName = "Player";
             boolean timestamp = false;
+            boolean pcChatbox = true;
             boolean fullscreen = false;
             boolean voiceChat = true;
             boolean displayFps = false;
@@ -296,6 +299,7 @@ public class RyznGameDownloader {
                     nickName = spNick.trim();
                 }
                 timestamp = sp.getBoolean("timestamp", false);
+                pcChatbox = sp.getBoolean("pc_chatbox", true);
                 fullscreen = sp.getBoolean("fullscreen", false);
                 voiceChat = sp.getBoolean("voice_chat", true);
                 displayFps = sp.getBoolean("display_fps", false);
@@ -322,6 +326,8 @@ public class RyznGameDownloader {
 
                     String iniTs = w.get("gui", "timestamp");
                     if (iniTs != null) timestamp = "1".equals(iniTs.trim());
+                    String iniPcCb = w.get("gui", "pcchatbox");
+                    if (iniPcCb != null) pcChatbox = !"0".equals(iniPcCb.trim());
                     String iniCut = w.get("gui", "cutout");
                     if (iniCut != null) fullscreen = "1".equals(iniCut.trim());
                     String iniVoice = w.get("gui", "voicelist");
@@ -361,6 +367,7 @@ public class RyznGameDownloader {
             settingsObj.put("new_interface", false);
             settingsObj.put("system_keyboard", false);
             settingsObj.put("timestamp", timestamp);
+            settingsObj.put("pc_chatbox", pcChatbox);
             settingsObj.put("fullscreen", fullscreen);
             settingsObj.put("fast_connect", false);
             settingsObj.put("voice_chat", voiceChat);

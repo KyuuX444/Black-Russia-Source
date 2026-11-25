@@ -39,6 +39,7 @@ public:
 	static bool radarrect() { return m_radarrect; }
 	static bool modifieddata() { return m_modifieddata; }
 	static bool headmove() { return m_headmove; }
+	static bool pcchatbox() { return m_pcchatbox; }
 	static int fpslimit() { return m_fpslimit; }
 	static int chatstrings() { return m_chatstrings; }
 	static float fontsize() { return m_fontsize; }
@@ -47,6 +48,7 @@ public:
 
 	static void setTimestamp(bool val) { m_timestamp = val; }
 	static void setHeadMove(bool val) { m_headmove = val; }
+	static void setPcChatbox(bool val) { m_pcchatbox = val; }
 	static void setFpsLimit(int val) { m_fpslimit = val; }
 	static void setChatStrings(int val) { m_chatstrings = val; }
 	static void setFontSize(float val) { m_fontsize = val; }
@@ -71,6 +73,7 @@ private:
 	static bool m_radarrect;
 	static bool m_modifieddata;
 	static bool m_headmove;
+	static bool m_pcchatbox;
 	static int m_fpslimit;
 	static int m_chatstrings;
 	static float m_fontsize;

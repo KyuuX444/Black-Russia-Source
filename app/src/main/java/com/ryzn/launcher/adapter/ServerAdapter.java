@@ -12,12 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ryzn.game.R;
 import com.ryzn.launcher.model.ServerInfo;
+import com.ryzn.launcher.other.MangaUiHelper;
 
 import java.util.List;
 
 /**
  * RecyclerView adapter displaying SA-MP servers with live player counts, ping, status dot,
- * IP:Port, and selection highlight in Neutral Dark Gray / Purple theme.
+ * IP:Port, and selection highlight in Bright White Modern Manga theme.
  */
 public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder> {
 
@@ -102,7 +103,9 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_server, parent, false);
-        return new ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
+        MangaUiHelper.attachPressFeedback(holder.root);
+        return holder;
     }
 
     @Override

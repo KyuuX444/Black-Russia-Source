@@ -14,20 +14,78 @@ public:
 	void clear();
 	void setPageSize(int pagesize);
 	void updateFontSize(float fontsize);
+	void scrollToBottom();
+	void scrollByLines(int deltaLines);
+	bool handlesTouch(const ImVec2& pos) const;
 
 	void addClientCommand(const std::string& cmd_name, const std::function<void(const std::string&)>& callback);
 
 	static void setTimestamp(bool timestamp) { m_timestamp = timestamp; }
 	static bool timestamp() { return m_timestamp; }
 
+	virtual void performLayout() override;
 	virtual void draw(ImGuiRenderer* renderer) override;
+	virtual void touchEvent(const ImVec2& pos, TouchType type) override;
 
 	virtual void activateEvent(bool active) override;
 	virtual void touchPopEvent() override;
 	virtual void keyboardEvent(const std::string& input) override;
 
 private:
+	struct PcRect {
+		ImVec2 min;
+		ImVec2 max;
+
+		bool contains(const ImVec2& p, float pad = 0.0f) const
+		{
+			return p.x >= (min.x - pad) && p.x <= (max.x + pad)
+					&& p.y >= (min.y - pad) && p.y <= (max.y + pad);
+		}
+	};
+
+	struct PcLayout {
+		bool showScrollbar;
+		bool showJumpBottom;
+		bool showInputBar;
+		bool inputFocused;
+		float sbWidth;
+		PcRect sbUpBtn;
+		PcRect sbDownBtn;
+		PcRect sbTrack;
+		PcRect sbThumb;
+		PcRect jumpBtn;
+		PcRect inputBox;
+		PcRect slashBtn;
+		PcRect histPrevBtn;
+		PcRect histNextBtn;
+		PcRect sendBtn;
+		PcRect fullBarRect;
+	};
+
+	enum class TouchTarget {
+		NONE,
+		BODY,
+		SB_UP,
+		SB_DOWN,
+		SB_THUMB,
+		JUMP_BOTTOM,
+		INPUT_SLASH,
+		INPUT_HIST_PREV,
+		INPUT_HIST_NEXT,
+		INPUT_SEND
+	};
+
 	void addMessage(const std::string& messsage, const ImColor& color = ImColor(1.0f, 1.0f, 1.0f));
+	float maxScrollOffset() const;
+	float scrollFraction() const;
+	void setScrollFraction(float fraction);
+	bool isAtBottom() const;
+	void clampScroll();
+	bool isInputOpenForChat() const;
+	PcLayout computePcLayout() const;
+	void drawScrollBar(ImGuiRenderer* renderer, const PcLayout& layout) const;
+	void drawJumpToBottomButton(ImGuiRenderer* renderer, const PcLayout& layout) const;
+	void drawInputActionBar(ImGuiRenderer* renderer, const PcLayout& layout) const;
 
 	class MessageItem : public ListBoxItem {
 	public:
@@ -82,4 +140,9 @@ private:
 private:
 	std::map<std::string, std::function<void(const std::string&)>> m_commands;
 	static bool m_timestamp;
+
+	TouchTarget m_touchTarget;
+	ImVec2 m_pushPos;
+	ImVec2 m_lastDragPos;
+	bool m_wasDragged;
 };

@@ -246,6 +246,18 @@ void cmdHeadMove(const std::string& params)
 	pUI->chat()->addInfoMessage("-> Headmove %s", next ? "ON" : "OFF");
 }
 
+void cmdPcChatbox(const std::string& params)
+{
+	if (!pUI || !pUI->chat()) {
+		return;
+	}
+
+	bool next = !Settings::pcchatbox();
+	Settings::setPcChatbox(next);
+	pUI->chat()->performLayout();
+	pUI->chat()->addInfoMessage("-> PC Chatbox %s", next ? "ON" : "OFF");
+}
+
 void cmdInterior(const std::string& params)
 {
 	if (!pUI || !pUI->chat() || !pGame) {
@@ -293,8 +305,8 @@ void cmdCmds(const std::string& params)
 		pUI->chat()->addInfoMessage("--- Ryzn SA-MP Client Commands ---");
 		pUI->chat()->addInfoMessage("/rec (/reconnect) - Reconnect to server | /q (/quit) - Exit game");
 		pUI->chat()->addInfoMessage("/c (/clear) - Clear chat | /pagesize [5-20] | /fontsize [10-60|-3..5]");
-		pUI->chat()->addInfoMessage("/timestamp - Chat timestamps | /fpslimit [20-120] | /headmove - Ped head look");
-		pUI->chat()->addInfoMessage("/dl - Vehicle debug | /dw - Killfeed | /save (/rs) - Save coords");
+		pUI->chat()->addInfoMessage("/timestamp - Chat timestamps | /chatbox (/cb) - PC Chatbox | /fpslimit [20-120]");
+		pUI->chat()->addInfoMessage("/headmove - Ped head look | /dl - Vehicle debug | /dw - Killfeed | /save (/rs)");
 		pUI->chat()->addInfoMessage("/interior - Interior ID | /mem - Memory stats | /rcon [cmd]");
 	}
 }
@@ -325,6 +337,8 @@ void ClientCmds::initialize()
 	chat->addClientCommand("fontsize", cmdFontSize);
 	chat->addClientCommand("fs", cmdFontSize);
 	chat->addClientCommand("timestamp", cmdTimestamp);
+	chat->addClientCommand("chatbox", cmdPcChatbox);
+	chat->addClientCommand("cb", cmdPcChatbox);
 	chat->addClientCommand("fpslimit", cmdFpsLimit);
 	chat->addClientCommand("headmove", cmdHeadMove);
 	chat->addClientCommand("interior", cmdInterior);

@@ -43,8 +43,8 @@
         <item name="android:statusBarColor">@color/manga_panel</item>
         <item name="android:navigationBarColor">@color/manga_panel</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="colorAccent">@color/manga_crimson</item>
-        <item name="colorPrimary">@color/manga_crimson</item>
+        <item name="colorAccent">@color/ryzn_accent</item>
+        <item name="colorPrimary">@color/ryzn_accent</item>
         <item name="colorPrimaryDark">@color/manga_ink</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

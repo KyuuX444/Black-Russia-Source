@@ -17,10 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ryzn.game.R;
 import com.ryzn.launcher.fragment.HomeFragment;
 import com.ryzn.launcher.fragment.SettingsFragment;
+import com.ryzn.launcher.other.MangaUiHelper;
 import com.ryzn.launcher.other.RyznGameDownloader;
 import com.ryzn.launcher.other.ServerManager;
 
@@ -136,10 +138,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindActions() {
+        View footerStatusPill = findViewById(R.id.footer_client_status);
+        MangaUiHelper.attachPressFeedback(navHomeBtn, navSettingsBtn, footerStatusPill);
+
         navHomeBtn.setOnClickListener(v -> openHomeTab());
         navSettingsBtn.setOnClickListener(v -> openSettingsTab());
 
-        findViewById(R.id.footer_client_status).setOnClickListener(v -> {
+        footerStatusPill.setOnClickListener(v -> {
             ServerManager.ClientState state = ServerManager.getClientState(this);
             if (state == ServerManager.ClientState.NEEDS_PERMISSION) {
                 requestRequiredPermissions();
@@ -167,11 +172,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void switchTab(int targetTab, Fragment fragment) {
+        int prevTab = selectedTab;
         selectedTab = targetTab;
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.fragment_container, fragment)
-                .commit();
+        FragmentTransaction tx = getSupportFragmentManager().beginTransaction().setReorderingAllowed(true);
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) != null && prevTab != targetTab) {
+            if (targetTab > prevTab) {
+                tx.setCustomAnimations(R.anim.tab_enter, R.anim.tab_exit);
+            } else {
+                tx.setCustomAnimations(R.anim.tab_pop_enter, R.anim.tab_pop_exit);
+            }
+        }
+        tx.replace(R.id.fragment_container, fragment).commit();
         updateBottomNavHighlight();
     }
 

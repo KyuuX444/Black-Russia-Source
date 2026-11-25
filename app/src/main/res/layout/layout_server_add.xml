@@ -5,10 +5,10 @@
     android:background="@drawable/ryzn_sheet_surface"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingTop="14dp"
-    android:paddingEnd="18dp"
-    android:paddingBottom="16dp">
+    android:paddingStart="18dp"
+    android:paddingTop="16dp"
+    android:paddingEnd="20dp"
+    android:paddingBottom="18dp">
 
     <TextView
         android:id="@+id/add_server_title"
@@ -19,25 +19,25 @@
         android:maxLines="1"
         android:text="Tambah Server"
         android:textColor="@color/manga_ink"
-        android:textSize="14.5sp" />
+        android:textSize="15sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/montserrat_regular"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:text="Masukkan alamat IP atau domain beserta port"
         android:textColor="@color/ryzn_text_secondary"
-        android:textSize="10.5sp" />
+        android:textSize="11sp" />
 
     <EditText
         android:id="@+id/address_input_text"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
+        android:layout_height="40dp"
         android:background="@drawable/ryzn_field_surface"
-        android:fontFamily="@font/montserrat_medium"
+        android:fontFamily="@font/roboto_medium"
         android:hint="contoh: 127.0.0.1:7777"
         android:imeOptions="actionDone"
         android:inputType="textUri|textNoSuggestions"
@@ -46,13 +46,13 @@
         android:singleLine="true"
         android:textColor="@color/manga_ink"
         android:textColorHint="@color/ryzn_text_muted"
-        android:textSize="11.5sp" />
+        android:textSize="12sp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/add_server"
         android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/bg_btn_play_purple"
         android:drawableStart="@drawable/ic_add"
         android:drawablePadding="6dp"
@@ -63,6 +63,6 @@
         android:text="Simpan ke Daftar"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
-        android:textSize="11.5sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

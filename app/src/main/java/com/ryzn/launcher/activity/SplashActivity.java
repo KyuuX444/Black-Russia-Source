@@ -3,13 +3,12 @@ package com.ryzn.launcher.activity;
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
@@ -17,13 +16,12 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.ryzn.game.R;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class SplashActivity extends AppCompatActivity {
 
     private static final int NOTIFY_ID = 101;
     private static final String CHANNEL_ID = "qq channel";
+    private final Handler launchHandler = new Handler(Looper.getMainLooper());
+    private final Runnable launchRunnable = this::startLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void startLauncher() {
+        if (isFinishing() || isDestroyed()) return;
         startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         if (Build.VERSION.SDK_INT >= 26) {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
@@ -89,20 +89,14 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (cm == null) return false;
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
+    private void startTimer() {
+        launchHandler.removeCallbacks(launchRunnable);
+        launchHandler.postDelayed(launchRunnable, 400L);
     }
 
-    private void startTimer() {
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                startLauncher();
-            }
-        }, 400L);
+    @Override
+    protected void onDestroy() {
+        launchHandler.removeCallbacks(launchRunnable);
+        super.onDestroy();
     }
 }

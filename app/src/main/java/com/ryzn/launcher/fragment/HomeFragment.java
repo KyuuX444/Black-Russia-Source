@@ -30,6 +30,7 @@ import com.ryzn.game.R;
 import com.ryzn.launcher.activity.MainActivity;
 import com.ryzn.launcher.adapter.ServerAdapter;
 import com.ryzn.launcher.model.ServerInfo;
+import com.ryzn.launcher.other.MangaUiHelper;
 import com.ryzn.launcher.other.RyznGameDownloader;
 import com.ryzn.launcher.other.ServerManager;
 
@@ -86,8 +87,9 @@ public class HomeFragment extends Fragment {
 
     private void bindBanner(View view, LayoutInflater inflater) {
         bannerNickText = view.findViewById(R.id.banner_nick_text);
-        view.findViewById(R.id.banner_nick_chip).setOnClickListener(v ->
-                showNickOrConnectDialog(inflater, null, false));
+        View nickChip = view.findViewById(R.id.banner_nick_chip);
+        MangaUiHelper.attachPressFeedback(nickChip);
+        nickChip.setOnClickListener(v -> showNickOrConnectDialog(inflater, null, false));
         updateNickBadge();
     }
 
@@ -106,11 +108,15 @@ public class HomeFragment extends Fragment {
         adapter.setOnServerLongClickListener((server, position) -> showServerQuickMenu(server));
         recyclerView.setAdapter(adapter);
 
-        view.findViewById(R.id.btn_refresh_servers).setOnClickListener(v -> {
+        View refreshBtn = view.findViewById(R.id.btn_refresh_servers);
+        View addServerBtn = view.findViewById(R.id.btn_add_server_inline);
+        MangaUiHelper.attachPressFeedback(refreshBtn, addServerBtn);
+
+        refreshBtn.setOnClickListener(v -> {
             spinRefreshIcon();
             reloadAndQueryServers();
         });
-        view.findViewById(R.id.btn_add_server_inline).setOnClickListener(v -> showAddServerDialog(inflater));
+        addServerBtn.setOnClickListener(v -> showAddServerDialog(inflater));
 
         if (searchInput != null) {
             searchInput.addTextChangedListener(new TextWatcher() {
@@ -130,7 +136,9 @@ public class HomeFragment extends Fragment {
         infoPlayers = view.findViewById(R.id.info_players);
         infoPing = view.findViewById(R.id.info_ping);
 
-        view.findViewById(R.id.btn_play_main).setOnClickListener(v -> handlePlayAction());
+        View playBtn = view.findViewById(R.id.btn_play_main);
+        MangaUiHelper.attachPressFeedback(playBtn);
+        playBtn.setOnClickListener(v -> handlePlayAction());
     }
 
     private void applyServerFilter(String rawQuery) {
@@ -264,6 +272,8 @@ public class HomeFragment extends Fragment {
         EditText passInput = dialogView.findViewById(R.id.prompt_password_input);
         Button cancelBtn = dialogView.findViewById(R.id.prompt_cancel_btn);
         Button confirmBtn = dialogView.findViewById(R.id.prompt_confirm_btn);
+        MangaUiHelper.attachPressFeedback(cancelBtn, confirmBtn);
+        MangaUiHelper.animateEntry(dialogView);
 
         nickInput.setText(ServerManager.readSavedNickname(requireContext()));
         if (connectOnConfirm && targetServer != null) {
@@ -324,6 +334,8 @@ public class HomeFragment extends Fragment {
 
         EditText addressInput = v.findViewById(R.id.address_input_text);
         Button addBtn = v.findViewById(R.id.add_server);
+        MangaUiHelper.attachPressFeedback(addBtn);
+        MangaUiHelper.animateEntry(v);
 
         addressInput.setOnEditorActionListener((tv, id, event) ->
                 id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_ACTION_NEXT);

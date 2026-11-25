@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.ryzn.game.R;
 import com.ryzn.launcher.activity.LoaderActivity;
 import com.ryzn.launcher.activity.MainActivity;
+import com.ryzn.launcher.other.MangaUiHelper;
 import com.ryzn.launcher.other.RyznGameDownloader;
 import com.ryzn.launcher.other.ServerManager;
 
@@ -43,6 +44,7 @@ public class SettingsFragment extends Fragment {
     private Switch radarRectSwitch;
     private Switch voiceSwitch;
     private Switch timestampSwitch;
+    private Switch pcChatboxSwitch;
     private Switch modifiedDataSwitch;
     private TextView chatStringsText;
     private Button chatMinusBtn;
@@ -66,6 +68,7 @@ public class SettingsFragment extends Fragment {
         radarRectSwitch = view.findViewById(R.id.radarrect_switch);
         voiceSwitch = view.findViewById(R.id.voice_switch);
         timestampSwitch = view.findViewById(R.id.timestamp_switch);
+        pcChatboxSwitch = view.findViewById(R.id.pcchatbox_switch);
         modifiedDataSwitch = view.findViewById(R.id.modifieddata_switch);
         chatStringsText = view.findViewById(R.id.chat_strings);
         chatMinusBtn = view.findViewById(R.id.chat_minus);
@@ -76,10 +79,20 @@ public class SettingsFragment extends Fragment {
         loadFromIni();
         setupInfoDialogs(view);
         setupListeners();
+        MangaUiHelper.attachPressFeedback(nickSaveBtn, chatMinusBtn, chatPlusBtn, reinstallBtn, restoreBtn);
         return view;
     }
 
     private void setupInfoDialogs(View view) {
+        int[] infoIds = {
+                R.id.displayfpsIcon, R.id.fullscreenmodeIcon, R.id.radarrectIcon,
+                R.id.voicechatIcon, R.id.chattimestampIcon, R.id.pcchatboxIcon, R.id.fontsizeIcon,
+                R.id.chatstringsIcon, R.id.modifiedDataIcon, R.id.gameDataIcon,
+                R.id.resetIcon
+        };
+        for (int id : infoIds) {
+            MangaUiHelper.attachPressFeedback(view.findViewById(id));
+        }
         view.findViewById(R.id.displayfpsIcon).setOnClickListener(v ->
                 showOptionInfo("Tampilkan FPS", "Menampilkan angka FPS bersih gaya mobile di pojok kiri bawah saat bermain."));
         view.findViewById(R.id.fullscreenmodeIcon).setOnClickListener(v ->
@@ -90,6 +103,8 @@ public class SettingsFragment extends Fragment {
                 showOptionInfo("Voice Chat", "Mengaktifkan tombol mikrofon dan indikator daftar pemain berbicara di dalam game."));
         view.findViewById(R.id.chattimestampIcon).setOnClickListener(v ->
                 showOptionInfo("Timestamp Obrolan", "Menambahkan penanda waktu [JJ:MM:DD] di depan setiap pesan obrolan."));
+        view.findViewById(R.id.pcchatboxIcon).setOnClickListener(v ->
+                showOptionInfo("PC Chatbox", "Mengaktifkan tampilan chatbox PC SA-MP dengan scrollbar vertikal kiri, riwayat gulir, dan bar input cepat (/chatbox)."));
         view.findViewById(R.id.modifiedDataIcon).setOnClickListener(v ->
                 showOptionInfo("Modified Data", "Membaca file modpack / data modifikasi yang ada langsung tanpa menimpanya saat unduh atau cek data."));
         view.findViewById(R.id.gameDataIcon).setOnClickListener(v ->
@@ -110,6 +125,7 @@ public class SettingsFragment extends Fragment {
         boolean radar = prefs.getBoolean("radar_rect", false);
         boolean voice = prefs.getBoolean("voice_chat", true);
         boolean ts = prefs.getBoolean("timestamp", false);
+        boolean pcCb = prefs.getBoolean("pc_chatbox", true);
         boolean modData = prefs.getBoolean("modified_data", false);
         int chatLines = prefs.getInt("chat_strings", 8);
         String fontSz = String.valueOf(prefs.getFloat("font_size", 30.0f));
@@ -128,6 +144,8 @@ public class SettingsFragment extends Fragment {
                 if (voiceVal != null) voice = !"0".equals(voiceVal.trim());
                 String tsVal = w.get("gui", "timestamp");
                 if (tsVal != null) ts = "1".equals(tsVal.trim());
+                String pcCbVal = w.get("gui", "pcchatbox");
+                if (pcCbVal != null) pcCb = !"0".equals(pcCbVal.trim());
                 String modVal = w.get("gui", "modifieddata");
                 if (modVal != null) modData = "1".equals(modVal.trim());
                 String linesStr = w.get("gui", "ChatMaxMessages");
@@ -146,6 +164,9 @@ public class SettingsFragment extends Fragment {
         radarRectSwitch.setChecked(radar);
         voiceSwitch.setChecked(voice);
         timestampSwitch.setChecked(ts);
+        if (pcChatboxSwitch != null) {
+            pcChatboxSwitch.setChecked(pcCb);
+        }
         if (modifiedDataSwitch != null) {
             modifiedDataSwitch.setChecked(modData);
         }
@@ -215,6 +236,14 @@ public class SettingsFragment extends Fragment {
             updateIni("gui", "timestamp", checked ? "1" : "0");
         });
 
+        if (pcChatboxSwitch != null) {
+            pcChatboxSwitch.setOnCheckedChangeListener((b, checked) -> {
+                if (bindingValues) return;
+                prefs.edit().putBoolean("pc_chatbox", checked).apply();
+                updateIni("gui", "pcchatbox", checked ? "1" : "0");
+            });
+        }
+
         if (modifiedDataSwitch != null) {
             modifiedDataSwitch.setOnCheckedChangeListener((b, checked) -> {
                 if (bindingValues) return;
@@ -253,6 +282,7 @@ public class SettingsFragment extends Fragment {
                             .putBoolean("radar_rect", false)
                             .putBoolean("voice_chat", true)
                             .putBoolean("timestamp", false)
+                            .putBoolean("pc_chatbox", true)
                             .putBoolean("modified_data", false)
                             .putInt("chat_strings", 8)
                             .putFloat("font_size", 30.0f)
@@ -262,6 +292,7 @@ public class SettingsFragment extends Fragment {
                     updateIni("gui", "radarrect", "0");
                     updateIni("gui", "voicelist", "1");
                     updateIni("gui", "timestamp", "0");
+                    updateIni("gui", "pcchatbox", "1");
                     updateIni("gui", "modifieddata", "0");
                     updateIni("gui", "ChatMaxMessages", "8");
                     updateIni("gui", "FontSize", "30.0");

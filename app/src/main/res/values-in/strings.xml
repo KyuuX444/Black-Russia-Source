@@ -38,7 +38,6 @@
     <string name="players_list_header_second_column">Nama Pemain</string>
     <string name="players_list_header_third_column">Level</string>
     <string name="players_list_search_hint">Cari pemain</string>
-    <string name="menu_settings">Pengaturan</string>
     <string name="dialog_join_from_launcher_msg">Anda harus masuk ke game menggunakan launcher</string>
     <string name="dialog_join_from_launcher_ok">Terima</string>
     <string name="autoshop_max_speed">Kecepatan Maks.</string>

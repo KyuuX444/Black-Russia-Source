@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="48dp"
+    android:viewportWidth="360"
+    android:viewportHeight="48">
+    <!-- Pure Bright White Header Base -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M0,0H360V48H0Z" />
+    <!-- Subtle Manga Halftone & Speedline Decoration along top-right only -->
+    <path
+        android:fillColor="#1406B6D4"
+        android:pathData="M245,0L265,0L230,48L212,48Z M285,0L300,0L270,48L256,48Z M324,0L336,0L310,48L298,48Z" />
+    <path
+        android:fillColor="#1218181B"
+        android:pathData="M342,10a2,2 0 1,0 4,0a2,2 0 1,0 -4,0 M350,18a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M332,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M344,30a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M352,38a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M316,12a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#14EC4899"
+        android:pathData="M304,0L312,0L284,48L276,48Z" />
+</vector>

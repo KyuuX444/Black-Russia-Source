@@ -4,46 +4,53 @@
     android:height="200dp"
     android:viewportWidth="400"
     android:viewportHeight="200">
-    <!-- Manga halftone sun disc -->
+    <!-- Manga Electric Cyan & Sakura Halftone Sun -->
     <path
-        android:fillColor="#24E11D48"
-        android:pathData="M312,68 m-44,0 a44,44 0 1,0 88,0 a44,44 0 1,0 -88,0" />
+        android:fillColor="#1806B6D4"
+        android:pathData="M312,68 m-46,0 a46,46 0 1,0 92,0 a46,46 0 1,0 -92,0" />
     <path
-        android:fillColor="#3AE11D48"
+        android:fillColor="#26EC4899"
         android:pathData="M312,68 m-24,0 a24,24 0 1,0 48,0 a24,24 0 1,0 -48,0" />
+    <!-- Subtle Screentone Halftone Dots (header/banner only) -->
+    <path
+        android:fillColor="#2218181B"
+        android:pathData="M268,26a2,2 0 1,0 4,0a2,2 0 1,0 -4,0 M282,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M296,30a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M338,24a2,2 0 1,0 4,0a2,2 0 1,0 -4,0 M354,32a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0 M368,20a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" />
     <!-- Subtle diagonal Manga speedlines from top-right -->
     <path
-        android:fillColor="#14151824"
-        android:pathData="M210,0L224,0L0,136L0,126Z M260,0L270,0L40,145L30,145Z M328,0L334,0L142,135L136,135Z M395,8L400,14L245,128L239,128Z" />
-    <!-- Far Los Santos Slate Towers -->
+        android:fillColor="#1A06B6D4"
+        android:pathData="M210,0L226,0L0,136L0,126Z M260,0L272,0L40,145L28,145Z M328,0L336,0L142,135L134,135Z M395,8L400,15L245,128L238,128Z" />
+    <!-- Far Los Santos Light Manga Tone Towers -->
     <path
-        android:fillColor="#AEB9CE"
+        android:fillColor="#E4E4E7"
         android:pathData="M0,200V128H28V105H52V132H84V92H108V122H134V74H158V52H172V74H184V118H206V60H234V32H248V18H256V32H270V62H288V108H316V84H344V114H372V96H400V200H0Z" />
     <!-- Foreground Ink Cityscape Silhouette -->
     <path
-        android:fillColor="#262E40"
+        android:fillColor="#27272A"
         android:pathData="M0,200V146H38V134H68V152H112V128H144V150H178V118H198V152H242V132H276V148H318V124H352V146H400V200H0Z" />
-    <!-- Bold Ink Palms -->
+    <!-- Crisp Manga Ink Palms -->
     <path
-        android:fillColor="#151824"
+        android:fillColor="#18181B"
         android:pathData="M48,162L54,74L60,162Z" />
     <path
-        android:fillColor="#151824"
+        android:fillColor="#18181B"
         android:pathData="M54,74C42,64 26,66 18,74C28,72 41,72 52,78C38,80 28,88 22,98C33,89 45,84 54,82C46,92 43,104 44,114C48,100 54,90 56,82C65,92 72,102 74,112C76,98 70,86 60,80C72,78 84,82 92,88C84,74 70,68 54,74Z" />
     <path
-        android:fillColor="#151824"
+        android:fillColor="#18181B"
         android:pathData="M342,166L347,62L353,166Z" />
     <path
-        android:fillColor="#151824"
+        android:fillColor="#18181B"
         android:pathData="M347,62C332,52 314,54 304,64C317,61 332,62 344,67C328,70 317,79 311,91C324,81 337,76 347,74C339,85 336,98 337,108C342,94 347,83 350,74C360,84 368,96 371,106C372,91 365,78 354,72C368,70 381,74 391,81C381,65 365,58 347,62Z" />
-    <!-- Sumi Ink Asphalt & Crimson Horizon Slash -->
+    <!-- Ink Asphalt & Vibrant Indigo-Cyan Horizon Slash -->
     <path
-        android:fillColor="#151824"
+        android:fillColor="#18181B"
         android:pathData="M0,160L400,152V200H0Z" />
     <path
-        android:fillColor="#E11D48"
+        android:fillColor="#6366F1"
         android:pathData="M0,159L400,151V155L0,163Z" />
     <path
-        android:fillColor="#F6F8FC"
+        android:fillColor="#06B6D4"
+        android:pathData="M210,155L400,151V153.5L210,157.5Z" />
+    <path
+        android:fillColor="#FAFAFA"
         android:pathData="M110,188L145,180L154,180L122,188Z M192,179L225,172L233,172L202,179Z M270,171L300,165L307,165L279,171Z" />
 </vector>

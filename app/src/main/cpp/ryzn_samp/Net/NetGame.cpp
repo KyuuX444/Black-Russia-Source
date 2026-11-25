@@ -93,7 +93,7 @@ NetGame::NetGame(const char* host, int port, const char* playerName, const char*
 
 	if (pUI) {
 		pUI->chat()->addDebugMessage("{FFFFFF}Ryzn SA-MP {B9C9BF}" + Client::sampVersion() + " {FFFFFF}Started");
-		pUI->chat()->addInfoMessage("-> Cmd: /rec, /c, /q, /pagesize, /fontsize, /timestamp, /fpslimit");
+		pUI->chat()->addInfoMessage("-> Cmd: /rec, /c, /q, /chatbox, /pagesize, /fontsize, /timestamp, /fpslimit");
 		pUI->chat()->addInfoMessage("-> Lainnya: /headmove, /dl, /dw, /save, /interior, /mem (/help)");
 	}
 }

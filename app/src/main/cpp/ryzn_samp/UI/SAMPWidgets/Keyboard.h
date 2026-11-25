@@ -141,6 +141,7 @@ public:
 	virtual void draw(ImGuiRenderer* renderer) override;
 	KeyboardInput* input() const { return m_input; }
 	KeyboardHistory* history() const { return m_history; }
+	Widget* caller() const { return m_caller; }
 	void setActiveLayout(KeyboardLayout::Type type);
 	void changeCase(KeyboardLayout::KeyCase key_case);
 
