@@ -42,7 +42,7 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
-            <!-- Card 1: Karakter & Tampilan -->
+            <!-- Card 1: Tampilan & HUD -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,91 +52,6 @@
                 android:background="@drawable/alyn_settings_card"
                 android:orientation="vertical"
                 android:padding="14dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp">
-
-                    <ImageView
-                        android:id="@+id/nicknameIcon"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/alyn_icon_circle"
-                        android:padding="9dp"
-                        android:src="@drawable/security_icon"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="14dp"
-                        android:layout_toEndOf="@id/nicknameIcon"
-                        android:fontFamily="@font/montserrat_bold"
-                        android:text="Nama Karakter"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <EditText
-                        android:id="@+id/settings_nick_input"
-                        android:layout_width="140dp"
-                        android:layout_height="36dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/alyn_search_bg"
-                        android:fontFamily="@font/montserrat_regular"
-                        android:hint="Nick_Name"
-                        android:imeOptions="actionDone"
-                        android:inputType="textNoSuggestions"
-                        android:maxLength="24"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:singleLine="true"
-                        android:textColor="#FFFFFF"
-                        android:textColorHint="#8A8A8A"
-                        android:textSize="12sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp">
-
-                    <ImageView
-                        android:id="@+id/systemkeyboardIcon"
-                        android:layout_width="34dp"
-                        android:layout_height="34dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/alyn_icon_circle"
-                        android:padding="9dp"
-                        android:src="@drawable/security_icon"
-                        tools:ignore="ContentDescription" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="14dp"
-                        android:layout_toEndOf="@id/systemkeyboardIcon"
-                        android:fontFamily="@font/montserrat_bold"
-                        android:text="Keyboard Sistem"
-                        android:textColor="#FFFFFF"
-                        android:textSize="13sp" />
-
-                    <Switch
-                        android:id="@+id/systemkeyboard_switch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:scaleX="1"
-                        android:scaleY="1.2"
-                        android:thumb="@drawable/ic_thumb"
-                        android:track="@drawable/alyn_switch_track"
-                        tools:ignore="UseSwitchCompatOrMaterialXml" />
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -215,9 +130,48 @@
                         android:track="@drawable/alyn_switch_track"
                         tools:ignore="UseSwitchCompatOrMaterialXml" />
                 </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/radarrectIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/radarrectIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Radar Kotak"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/radarrect_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
             </LinearLayout>
 
-            <!-- Card 2: Voice Chat & Data Game -->
+            <!-- Card 2: Voice Chat, Timestamp & Data Game -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -250,12 +204,51 @@
                         android:layout_marginStart="14dp"
                         android:layout_toEndOf="@id/voicechatIcon"
                         android:fontFamily="@font/montserrat_bold"
-                        android:text="Daftar Voice Chat"
+                        android:text="Voice Chat"
                         android:textColor="#FFFFFF"
                         android:textSize="13sp" />
 
                     <Switch
                         android:id="@+id/voice_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:scaleX="1"
+                        android:scaleY="1.2"
+                        android:thumb="@drawable/ic_thumb"
+                        android:track="@drawable/alyn_switch_track"
+                        tools:ignore="UseSwitchCompatOrMaterialXml" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp">
+
+                    <ImageView
+                        android:id="@+id/chattimestampIcon"
+                        android:layout_width="34dp"
+                        android:layout_height="34dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/alyn_icon_circle"
+                        android:padding="9dp"
+                        android:src="@drawable/security_icon"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="14dp"
+                        android:layout_toEndOf="@id/chattimestampIcon"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="Timestamp Obrolan"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp" />
+
+                    <Switch
+                        android:id="@+id/timestamp_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"

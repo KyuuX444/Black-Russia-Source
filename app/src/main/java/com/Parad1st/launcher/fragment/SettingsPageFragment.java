@@ -21,7 +21,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.byparad1st.game.R;
-import com.byparad1st.launcher.Registration.reg;
 import com.byparad1st.launcher.activity.LoaderActivity;
 import com.byparad1st.launcher.other.AlyaLiteDownloader;
 
@@ -31,12 +30,12 @@ import java.io.File;
 
 public class SettingsPageFragment extends Fragment {
 
-    private EditText nickInput;
     private EditText fontSizeInput;
-    private Switch systemKeyboardSwitch;
     private Switch displayFpsSwitch;
     private Switch fullscreenSwitch;
+    private Switch radarRectSwitch;
     private Switch voiceSwitch;
+    private Switch timestampSwitch;
     private TextView chatStringsText;
     private Button chatMinusBtn;
     private Button chatPlusBtn;
@@ -51,12 +50,12 @@ public class SettingsPageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings_page, container, false);
         prefs = requireActivity().getSharedPreferences("samp_settings", Context.MODE_PRIVATE);
 
-        nickInput = view.findViewById(R.id.settings_nick_input);
         fontSizeInput = view.findViewById(R.id.fontsize);
-        systemKeyboardSwitch = view.findViewById(R.id.systemkeyboard_switch);
         displayFpsSwitch = view.findViewById(R.id.displayfps_switch);
         fullscreenSwitch = view.findViewById(R.id.fullscreen_switch);
+        radarRectSwitch = view.findViewById(R.id.radarrect_switch);
         voiceSwitch = view.findViewById(R.id.voice_switch);
+        timestampSwitch = view.findViewById(R.id.timestamp_switch);
         chatStringsText = view.findViewById(R.id.chat_strings);
         chatMinusBtn = view.findViewById(R.id.chat_minus);
         chatPlusBtn = view.findViewById(R.id.chat_plus);
@@ -70,33 +69,33 @@ public class SettingsPageFragment extends Fragment {
     }
 
     private void setupInfoDialogs(View view) {
-        view.findViewById(R.id.nicknameIcon).setOnClickListener(v ->
-                showOptionInfo("Nama Karakter", "Masukkan Nick_Name SA-MP yang akan digunakan saat masuk ke server."));
-        view.findViewById(R.id.systemkeyboardIcon).setOnClickListener(v ->
-                showOptionInfo("Keyboard Sistem", "Gunakan keyboard bawaan Android saat mengetik obrolan di dalam game."));
         view.findViewById(R.id.displayfpsIcon).setOnClickListener(v ->
-                showOptionInfo("Tampilkan FPS", "Menampilkan penghitung FPS di pojok layar saat bermain."));
+                showOptionInfo("Tampilkan FPS", "Menampilkan angka FPS bersih gaya mobile di pojok kiri bawah saat bermain."));
         view.findViewById(R.id.fullscreenmodeIcon).setOnClickListener(v ->
-                showOptionInfo("Mode Layar Penuh", "Mengaktifkan rendering layar penuh hingga area notch/cutout."));
+                showOptionInfo("Mode Layar Penuh", "Mengaktifkan rendering layar penuh hingga area notch/cutout saat bermain."));
+        view.findViewById(R.id.radarrectIcon).setOnClickListener(v ->
+                showOptionInfo("Radar Kotak", "Mengubah radar/minimap GTA:SA menjadi kotak (mati = radar bulat standar)."));
         view.findViewById(R.id.voicechatIcon).setOnClickListener(v ->
-                showOptionInfo("Daftar Voice Chat", "Menampilkan indikator daftar pemain yang berbicara melalui voice chat."));
+                showOptionInfo("Voice Chat", "Mengaktifkan tombol mikrofon dan indikator daftar pemain berbicara di dalam game."));
+        view.findViewById(R.id.chattimestampIcon).setOnClickListener(v ->
+                showOptionInfo("Timestamp Obrolan", "Menambahkan penanda waktu [JJ:MM:DD] di depan setiap pesan obrolan."));
         view.findViewById(R.id.gameDataIcon).setOnClickListener(v ->
                 showOptionInfo("Data Game", "Mengunduh ulang atau memperbaiki file data Ryzn SA-MP."));
         view.findViewById(R.id.fontsizeIcon).setOnClickListener(v ->
-                showOptionInfo("Ukuran Font", "Mengatur ukuran font di dalam game (bawaan: 30.0)."));
+                showOptionInfo("Ukuran Font", "Mengatur ukuran teks obrolan di dalam game (bawaan: 30.0)."));
         view.findViewById(R.id.chatstringsIcon).setOnClickListener(v ->
-                showOptionInfo("Baris Obrolan", "Mengatur jumlah baris pesan yang tampil pada kotak chat (5–20)."));
+                showOptionInfo("Baris Obrolan", "Mengatur tinggi & jumlah baris pesan yang terlihat di kotak chat (5–20)."));
         view.findViewById(R.id.resetIcon).setOnClickListener(v ->
                 showOptionInfo("Reset Pengaturan", "Mengembalikan semua pengaturan klien ke nilai awal."));
     }
 
     private void loadFromIni() {
         bindingValues = true;
-        String nick = prefs.getString("nick_name", "");
-        boolean sysKb = prefs.getBoolean("system_keyboard", true);
         boolean fps = prefs.getBoolean("display_fps", false);
         boolean full = prefs.getBoolean("fullscreen", false);
+        boolean radar = prefs.getBoolean("radar_rect", false);
         boolean voice = prefs.getBoolean("voice_chat", true);
+        boolean ts = prefs.getBoolean("timestamp", false);
         int chatLines = prefs.getInt("chat_strings", 8);
         String fontSz = String.valueOf(prefs.getFloat("font_size", 30.0f));
 
@@ -104,12 +103,16 @@ public class SettingsPageFragment extends Fragment {
             File ini = AlyaLiteDownloader.getSettingsFile();
             if (ini.exists()) {
                 Wini w = new Wini(ini);
-                String n = w.get("client", "name");
-                if (n != null && !n.trim().isEmpty()) nick = n.trim();
-                sysKb = !"0".equals(w.get("gui", "androidKeyboard"));
-                fps = "1".equals(w.get("gui", "fpscounter"));
-                full = "1".equals(w.get("gui", "cutout"));
-                voice = !"0".equals(w.get("gui", "voicelist"));
+                String fpsVal = w.get("gui", "fpscounter");
+                if (fpsVal != null) fps = "1".equals(fpsVal.trim());
+                String cutVal = w.get("gui", "cutout");
+                if (cutVal != null) full = "1".equals(cutVal.trim());
+                String radarVal = w.get("gui", "radarrect");
+                if (radarVal != null) radar = "1".equals(radarVal.trim());
+                String voiceVal = w.get("gui", "voicelist");
+                if (voiceVal != null) voice = !"0".equals(voiceVal.trim());
+                String tsVal = w.get("gui", "timestamp");
+                if (tsVal != null) ts = "1".equals(tsVal.trim());
                 String linesStr = w.get("gui", "ChatMaxMessages");
                 if (linesStr != null) {
                     chatLines = Math.max(5, Math.min(20, Integer.parseInt(linesStr.trim())));
@@ -120,29 +123,17 @@ public class SettingsPageFragment extends Fragment {
         } catch (Exception ignored) {
         }
 
-        nickInput.setText(nick);
-        systemKeyboardSwitch.setChecked(sysKb);
         displayFpsSwitch.setChecked(fps);
         fullscreenSwitch.setChecked(full);
+        radarRectSwitch.setChecked(radar);
         voiceSwitch.setChecked(voice);
+        timestampSwitch.setChecked(ts);
         chatStringsText.setText(String.valueOf(chatLines));
         fontSizeInput.setText(fontSz);
         bindingValues = false;
     }
 
     private void setupListeners() {
-        nickInput.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (bindingValues) return;
-                String v = s != null ? s.toString().trim() : "";
-                prefs.edit().putString("nick_name", v).apply();
-                reg.setNick(v);
-                updateIni("client", "name", v);
-            }
-            @Override public void afterTextChanged(Editable s) { }
-        });
-
         fontSizeInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -159,12 +150,6 @@ public class SettingsPageFragment extends Fragment {
             @Override public void afterTextChanged(Editable s) { }
         });
 
-        systemKeyboardSwitch.setOnCheckedChangeListener((b, checked) -> {
-            if (bindingValues) return;
-            prefs.edit().putBoolean("system_keyboard", checked).apply();
-            updateIni("gui", "androidKeyboard", checked ? "1" : "0");
-        });
-
         displayFpsSwitch.setOnCheckedChangeListener((b, checked) -> {
             if (bindingValues) return;
             prefs.edit().putBoolean("display_fps", checked).apply();
@@ -177,10 +162,22 @@ public class SettingsPageFragment extends Fragment {
             updateIni("gui", "cutout", checked ? "1" : "0");
         });
 
+        radarRectSwitch.setOnCheckedChangeListener((b, checked) -> {
+            if (bindingValues) return;
+            prefs.edit().putBoolean("radar_rect", checked).apply();
+            updateIni("gui", "radarrect", checked ? "1" : "0");
+        });
+
         voiceSwitch.setOnCheckedChangeListener((b, checked) -> {
             if (bindingValues) return;
             prefs.edit().putBoolean("voice_chat", checked).apply();
             updateIni("gui", "voicelist", checked ? "1" : "0");
+        });
+
+        timestampSwitch.setOnCheckedChangeListener((b, checked) -> {
+            if (bindingValues) return;
+            prefs.edit().putBoolean("timestamp", checked).apply();
+            updateIni("gui", "timestamp", checked ? "1" : "0");
         });
 
         chatMinusBtn.setOnClickListener(v -> adjustChatStrings(-1));
@@ -201,17 +198,19 @@ public class SettingsPageFragment extends Fragment {
                 .setMessage("Kembalikan semua pengaturan ke default?")
                 .setPositiveButton("Ya", (d, w) -> {
                     prefs.edit()
-                            .putBoolean("system_keyboard", true)
                             .putBoolean("display_fps", false)
                             .putBoolean("fullscreen", false)
+                            .putBoolean("radar_rect", false)
                             .putBoolean("voice_chat", true)
+                            .putBoolean("timestamp", false)
                             .putInt("chat_strings", 8)
                             .putFloat("font_size", 30.0f)
                             .apply();
-                    updateIni("gui", "androidKeyboard", "1");
                     updateIni("gui", "fpscounter", "0");
                     updateIni("gui", "cutout", "0");
+                    updateIni("gui", "radarrect", "0");
                     updateIni("gui", "voicelist", "1");
+                    updateIni("gui", "timestamp", "0");
                     updateIni("gui", "ChatMaxMessages", "8");
                     updateIni("gui", "FontSize", "30.0");
                     loadFromIni();
@@ -231,13 +230,14 @@ public class SettingsPageFragment extends Fragment {
     }
 
     private void updateIni(String section, String key, String value) {
-        if (getActivity() == null || !AlyaLiteDownloader.hasStoragePermission(getActivity())) {
+        Context ctx = getActivity();
+        if (ctx == null || !AlyaLiteDownloader.hasStoragePermission(ctx)) {
             return;
         }
         try {
             File ini = AlyaLiteDownloader.getSettingsFile();
             if (!ini.exists()) {
-                AlyaLiteDownloader.ensureClientConfigAndFonts(nickInput != null ? nickInput.getText().toString() : "Player");
+                AlyaLiteDownloader.ensureClientConfigAndFonts(ctx, "");
             }
             if (ini.exists()) {
                 Wini w = new Wini(ini);

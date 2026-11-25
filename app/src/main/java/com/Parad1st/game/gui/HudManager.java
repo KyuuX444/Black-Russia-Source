@@ -1,9 +1,12 @@
 package com.byparad1st.game.gui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,12 +25,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.byparad1st.game.R;
 import com.byparad1st.game.gui.util.Utils;
+import com.byparad1st.launcher.other.AlyaLiteDownloader;
 import com.nvidia.devtech.NvEventQueueActivity;
 
+import org.ini4j.Wini;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class HudManager {
     public Activity activity;
@@ -43,6 +52,12 @@ public class HudManager {
     private boolean panelExtended = false;
     public int keybo = 0;
 
+    private boolean showVoiceButton = true;
+    private boolean showTimestamps = false;
+    private int maxChatHistory = 60;
+    private float chatTextSizeSp = 11.5f;
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+
     public HudManager(Activity aactivity) {
         this.activity = aactivity;
         this.hud_layout = aactivity.findViewById(R.id.hud_main);
@@ -52,9 +67,56 @@ public class HudManager {
         this.bpScroll = aactivity.findViewById(R.id.bp_scroll);
         this.voiceButton = aactivity.findViewById(R.id.alyn_voice_btn);
 
+        loadChatAndHudSettings();
         setupChatList();
         setupButtonPanel();
         setupVoiceButton();
+    }
+
+    private void loadChatAndHudSettings() {
+        SharedPreferences prefs = activity.getSharedPreferences("samp_settings", Context.MODE_PRIVATE);
+        showVoiceButton = prefs.getBoolean("voice_chat", true);
+        showTimestamps = prefs.getBoolean("timestamp", false);
+        int visibleLines = prefs.getInt("chat_strings", 8);
+        float iniFontSize = prefs.getFloat("font_size", 30.0f);
+
+        try {
+            File ini = AlyaLiteDownloader.getSettingsFile();
+            if (ini.exists()) {
+                Wini w = new Wini(ini);
+                String voice = w.get("gui", "voicelist");
+                if (voice != null) {
+                    showVoiceButton = !"0".equals(voice.trim());
+                }
+                String ts = w.get("gui", "timestamp");
+                if (ts != null) {
+                    showTimestamps = "1".equals(ts.trim());
+                }
+                String linesStr = w.get("gui", "ChatMaxMessages");
+                if (linesStr != null) {
+                    visibleLines = Math.max(5, Math.min(20, Integer.parseInt(linesStr.trim())));
+                }
+                String fsStr = w.get("gui", "FontSize");
+                if (fsStr != null) {
+                    iniFontSize = Float.parseFloat(fsStr.trim());
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        chatTextSizeSp = Math.max(8.0f, Math.min(18.0f, iniFontSize * 0.38f));
+        maxChatHistory = Math.max(40, visibleLines * 4);
+
+        if (chatBox != null) {
+            int lineHeightPx = NvEventQueueActivity.dpToPx(chatTextSizeSp + 5.0f, activity);
+            int targetHeight = Math.max(NvEventQueueActivity.dpToPx(72f, activity),
+                    Math.min(NvEventQueueActivity.dpToPx(170f, activity), lineHeightPx * visibleLines + NvEventQueueActivity.dpToPx(10f, activity)));
+            ViewGroup.LayoutParams lp = chatBox.getLayoutParams();
+            if (lp != null) {
+                lp.height = targetHeight;
+                chatBox.setLayoutParams(lp);
+            }
+        }
     }
 
     private void setupChatList() {
@@ -70,7 +132,6 @@ public class HudManager {
         chat.setAdapter(adapter);
         chat.setVisibility(View.VISIBLE);
 
-        // Allow tapping anywhere inside chat box (even empty area) to open chat keyboard
         final int touchSlop = ViewConfiguration.get(activity).getScaledTouchSlop();
         chat.setOnTouchListener(new View.OnTouchListener() {
             float downX, downY;
@@ -134,6 +195,7 @@ public class HudManager {
 
     private void setupVoiceButton() {
         if (voiceButton != null) {
+            voiceButton.setVisibility(showVoiceButton ? View.VISIBLE : View.GONE);
             voiceButton.setOnClickListener(v -> {
                 v.startAnimation(AnimationUtils.loadAnimation(activity, R.anim.button_click));
                 boolean recording = NvEventQueueActivity.getInstance().toggleVoiceInput();
@@ -159,7 +221,8 @@ public class HudManager {
                 rgb = textcolor & 0xFFFFFF;
             }
             String hex = String.format("%06X", rgb);
-            adapter.addItem("{" + hex + "}" + msg);
+            String prefix = showTimestamps ? ("{AFAFAF}[" + timeFormat.format(new Date()) + "] {" + hex + "}") : ("{" + hex + "}");
+            adapter.addItem(prefix + msg);
         });
     }
 
@@ -168,7 +231,7 @@ public class HudManager {
         if (act == null) {
             return;
         }
-        if (keybo == 0) {
+        if (!act.isInputShowing()) {
             act.showInputLayout();
             keybo = 1;
         } else {
@@ -223,7 +286,11 @@ public class HudManager {
     }
 
     public void closekey() {
-        NvEventQueueActivity.getInstance().togglePlayer(0);
+        NvEventQueueActivity act = NvEventQueueActivity.getInstance();
+        if (act != null) {
+            act.hideInputLayout();
+            act.togglePlayer(0);
+        }
         keybo = 0;
     }
 
@@ -247,6 +314,7 @@ public class HudManager {
 
         @Override
         public void onBindViewHolder(@NotNull ViewHolder holder, int position) {
+            holder.chatLineText.setTextSize(TypedValue.COMPLEX_UNIT_SP, chatTextSizeSp);
             holder.chatLineText.setText(items.get(position));
         }
 
@@ -270,7 +338,7 @@ public class HudManager {
 
         public void addItem(String item) {
             activity.runOnUiThread(() -> {
-                if (this.items.size() > 60) {
+                if (this.items.size() > maxChatHistory) {
                     this.items.remove(0);
                     notifyItemRemoved(0);
                 }

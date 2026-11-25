@@ -160,7 +160,7 @@ public class ServerAdapter extends RecyclerView.Adapter<ServerAdapter.ViewHolder
                     .apply();
             reg.setNick(nick);
 
-            AlyaLiteDownloader.ensureClientConfigAndFonts(nick);
+            AlyaLiteDownloader.ensureClientConfigAndFonts(activity, nick);
             AlyaLiteDownloader.saveServerConfig(model.server_host + ":" + model.server_port, pass);
 
             dialog.dismiss();

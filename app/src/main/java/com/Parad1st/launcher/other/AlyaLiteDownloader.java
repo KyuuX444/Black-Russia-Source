@@ -117,6 +117,10 @@ public class AlyaLiteDownloader {
     }
 
     public static void ensureClientConfigAndFonts(String nickname) {
+        ensureClientConfigAndFonts(null, nickname);
+    }
+
+    public static void ensureClientConfigAndFonts(Context context, String nickname) {
         File gameDir = getGameDir();
         if (!gameDir.exists()) {
             gameDir.mkdirs();
@@ -152,6 +156,17 @@ public class AlyaLiteDownloader {
             settingsFile.getParentFile().mkdirs();
         }
         String cleanNick = (nickname == null || nickname.trim().isEmpty()) ? "Player" : nickname.trim();
+        android.content.SharedPreferences sp = context != null
+                ? context.getSharedPreferences("samp_settings", Context.MODE_PRIVATE)
+                : null;
+        int fpsCounter = (sp != null && sp.getBoolean("display_fps", false)) ? 1 : 0;
+        int cutout = (sp != null && sp.getBoolean("fullscreen", false)) ? 1 : 0;
+        int voicelist = (sp == null || sp.getBoolean("voice_chat", true)) ? 1 : 0;
+        int radarrect = (sp != null && sp.getBoolean("radar_rect", false)) ? 1 : 0;
+        int timestamp = (sp != null && sp.getBoolean("timestamp", false)) ? 1 : 0;
+        int chatStrings = sp != null ? Math.max(5, Math.min(20, sp.getInt("chat_strings", 8))) : 8;
+        float fontSize = sp != null ? sp.getFloat("font_size", 30.0f) : 30.0f;
+
         if (!settingsFile.exists()) {
             String iniContent = "[client]\n"
                     + "name = " + cleanNick + "\n"
@@ -165,20 +180,24 @@ public class AlyaLiteDownloader {
                     + "online = 0\n\n"
                     + "[gui]\n"
                     + "Font = Arial.ttf\n"
-                    + "FontSize = 30.0\n"
+                    + "FontSize = " + fontSize + "\n"
                     + "FontOutline = 2\n"
                     + "ChatPosX = 325.0\n"
                     + "ChatPosY = 25.0\n"
                     + "ChatSizeX = 1150.0\n"
                     + "ChatSizeY = 220.0\n"
-                    + "ChatMaxMessages = 8\n"
+                    + "ChatMaxMessages = " + chatStrings + "\n"
                     + "HealthBarWidth = 60.0\n"
                     + "HealthBarHeight = 10.0\n"
                     + "ScoreBoardSizeX = 1024.0\n"
                     + "ScoreBoardSizeY = 768.0\n"
-                    + "androidKeyboard = 0\n"
+                    + "androidKeyboard = 1\n"
                     + "hud = 0\n"
-                    + "Cutout = 0\n"
+                    + "cutout = " + cutout + "\n"
+                    + "fpscounter = " + fpsCounter + "\n"
+                    + "voicelist = " + voicelist + "\n"
+                    + "radarrect = " + radarrect + "\n"
+                    + "timestamp = " + timestamp + "\n"
                     + "fps = 60\n";
             try (FileOutputStream fos = new FileOutputStream(settingsFile)) {
                 fos.write(iniContent.getBytes(StandardCharsets.UTF_8));
@@ -443,7 +462,7 @@ public class AlyaLiteDownloader {
 
                 updateUi(mainHandler, statusText, percentText, progressBar,
                         "Menyiapkan konfigurasi & font Ryzn SA-MP...", "100%", 100);
-                ensureClientConfigAndFonts(com.byparad1st.launcher.Registration.reg.getNick());
+                ensureClientConfigAndFonts(activity.getApplicationContext(), com.byparad1st.launcher.Registration.reg.getNick());
 
                 if (!cancelled && callback != null) {
                     mainHandler.post(callback::onSuccess);

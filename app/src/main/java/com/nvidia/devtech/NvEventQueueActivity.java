@@ -263,16 +263,23 @@ public abstract class NvEventQueueActivity
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
         {
-            if(mUseFullscreen == 1)
+            WindowManager.LayoutParams lp = getWindow().getAttributes();
+            if (mUseFullscreen == 1)
             {
-                getWindow().getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+                lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
             }
+            else
+            {
+                lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
+            }
+            getWindow().setAttributes(lp);
         }
     }
 
     public void setUseFullscreen(int b)
     {
         mUseFullscreen = b;
+        runOnUiThread(this::processCutout);
     }
 
     public void showClientSettings()
@@ -1491,6 +1498,11 @@ public static void fixEditTextForAndroid10Xiaomi(EditText editText) {
             }
         });
 
+    }
+
+    public boolean isInputShowing()
+    {
+        return mInputManager != null && mInputManager.IsShowing();
     }
 
     public void showInputLayout()

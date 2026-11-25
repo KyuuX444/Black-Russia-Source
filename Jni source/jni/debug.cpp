@@ -39,8 +39,10 @@ void CDebugInfo::Draw()
 	if (m_uiDrawDebug || m_uiDrawFPS)
 	{
 		float* pFPS = (float*)(g_libGTASA + 0x00608E00);
-		snprintf(&szStr[0], 30, "%.1f", *pFPS);
-		pos = ImVec2(pGUI->ScaleX(20.0f), pGUI->ScaleY(1080.0f - pGUI->GetFontSize()));
+		float fps = *pFPS;
+		if (fps < 0.0f || fps > 999.0f) fps = 0.0f;
+		snprintf(&szStr[0], 30, "%.1f", fps);
+		pos = ImVec2(pGUI->ScaleX(20.0f), pGUI->ScaleY(1080.0f - pGUI->GetFontSize() - 8.0f));
 
 		pGUI->RenderText(pos, (ImU32)0xFFFFFFFF, true, &szStr[0]);
 	}

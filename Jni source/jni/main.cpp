@@ -49,6 +49,7 @@ CAudioStream* pAudioStream = nullptr;
 CGUI *pGUI = nullptr;
 CKeyBoard *pKeyBoard = nullptr;
 CSettings *pSettings = nullptr;
+extern bool g_bShowVoiceList;
 
 void InitHookStuff();
 void InstallSpecialHooks();
@@ -127,6 +128,7 @@ void InitSAMP(JNIEnv* pEnv, jobject thiz)
 	CRadarRect::SetEnabled(pSettings->GetReadOnly().iRadarRect);
 	CGame::SetEnabledPCMoney(pSettings->GetReadOnly().iPCMoney);
 	CDebugInfo::SetDrawFPS(pSettings->GetReadOnly().iFPSCounter);
+	g_bShowVoiceList = (pSettings->GetReadOnly().iVoiceList != 0);
 	CInfoBarText::SetEnabled(pSettings->GetReadOnly().iHPArmourText);
 	CSnow::SetCurrentSnow(pSettings->GetReadOnly().iSnow);
 
@@ -232,7 +234,29 @@ void InitInGame()
 
 	if (!bNetworkInited)
 	{
-                                    //brp kostile
+		if (!pNetGame && pSettings)
+		{
+			const char* szHost = pSettings->GetReadOnly().szServerHost[0] != '\0'
+				? pSettings->GetReadOnly().szServerHost
+				: "127.0.0.1";
+			int targetPort = pSettings->GetReadOnly().iServerPort;
+			if (targetPort <= 0 || targetPort > 65535) targetPort = 7777;
+			Log("Direct SA-MP connect to %s:%d", szHost, targetPort);
+			pNetGame = new CNetGame(
+				szHost,
+				targetPort,
+				pSettings->GetReadOnly().szNickName,
+				pSettings->GetReadOnly().szPassword);
+			pSettings->GetWrite().last_server = 0;
+			if (g_pJavaWrapper)
+			{
+				g_pJavaWrapper->HideGPS();
+				g_pJavaWrapper->ShowRadar();
+				g_pJavaWrapper->HideZona();
+				g_pJavaWrapper->HideX2();
+				g_pJavaWrapper->ShowHud();
+			}
+		}
 		bNetworkInited = true;
 		return;
 	}
