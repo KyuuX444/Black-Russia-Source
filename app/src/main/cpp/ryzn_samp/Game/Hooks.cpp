@@ -769,25 +769,27 @@ DECL_HOOK(RwTexture *, CTxdStore_TxdStoreFindCB, const char *texture_name)
 	for (const auto &texture_database : texture_databases)
 	{
 		auto database_handle = sa::TextureDatabaseRuntime::GetDatabase(texture_database.c_str());
-		auto registered = sa::TextureDatabaseRuntime::registered();
-
-		if (!registered.dataPtr)
+		if (!database_handle)
 		{
-			break;
+			continue;
 		}
 
-		for (int index = 0; index <= registered.numEntries; ++index)
+		auto& registered = sa::TextureDatabaseRuntime::registered();
+		bool alreadyRegistered = false;
+		if (registered.dataPtr)
 		{
-			if (registered.dataPtr[index] == database_handle)
+			for (uint32_t index = 0; index < registered.numEntries; ++index)
 			{
-				break;
+				if (registered.dataPtr[index] == database_handle)
+				{
+					alreadyRegistered = true;
+					break;
+				}
 			}
+		}
 
-			if (index != registered.numEntries)
-			{
-				continue;
-			}
-
+		if (!alreadyRegistered)
+		{
 			sa::TextureDatabaseRuntime::Register(database_handle);
 			RwTexture *texture = sa::TextureDatabaseRuntime::GetTexture(texture_name);
 			sa::TextureDatabaseRuntime::Unregister(database_handle);
@@ -1278,7 +1280,7 @@ DECL_HOOK(RwBool, _RwTextureDestroy, uintptr_t texture)
 	return _RwTextureDestroy(texture);
 }
 
-DECL_HOOK(int, RwFrameAddChild, int a1, int a2)
+DECL_HOOK(uintptr_t, RwFrameAddChild, uintptr_t a1, uintptr_t a2)
 {
 	if (!a1 || !a2)
 	{
@@ -1288,9 +1290,9 @@ DECL_HOOK(int, RwFrameAddChild, int a1, int a2)
 	return RwFrameAddChild(a1, a2);
 }
 
-DECL_HOOK(int, RLEDecompress, int a1, unsigned int a2, const char *a3, unsigned int a4, unsigned int a5)
+DECL_HOOK(uintptr_t, RLEDecompress, uintptr_t a1, unsigned int a2, const char *a3, unsigned int a4, unsigned int a5)
 {
-	if (!a3)
+	if (!a1 || !a3)
 	{
 		spdlog::warn("RLEDecompress: Prevent crash");
 		return 0;
@@ -1298,7 +1300,7 @@ DECL_HOOK(int, RLEDecompress, int a1, unsigned int a2, const char *a3, unsigned 
 	return RLEDecompress(a1, a2, a3, a4, a5);
 }
 
-DECL_HOOK(int, RwResourcesFreeResEntry, int a1)
+DECL_HOOK(RwBool, RwResourcesFreeResEntry, uintptr_t a1)
 {
 	if (!a1)
 	{
@@ -1332,28 +1334,14 @@ DECL_HOOK(void*, TextureDatabaseRuntime_GetTexture, const char* name)
 {
 	if (!name) return nullptr;
 
-	auto pRegistered = g_saSym->GetSymbol<uintptr_t*>("_ZN22TextureDatabaseRuntime10registeredE");
-	if (!pRegistered || !*pRegistered) {
-		spdlog::warn("TextureDatabaseRuntime::GetTexture(\"{}\"): registered DB is NULL, preventing crash", name);
+	auto pRegistered = g_saSym->GetSymbol<sa::TDBArray<uintptr_t>*>("_ZN22TextureDatabaseRuntime10registeredE");
+	if (!pRegistered || pRegistered->numEntries == 0 || !pRegistered->dataPtr) {
 		return nullptr;
 	}
 
-	uintptr_t curParent = *pRegistered;
-	int numSubDatabases = *reinterpret_cast<int*>(curParent + 4);
-	if (numSubDatabases <= 0) {
-		spdlog::warn("TextureDatabaseRuntime::GetTexture(\"{}\"): numSubDatabases is <= 0, returning nullptr", name);
-		return nullptr;
-	}
-
-	uintptr_t* subDatabases = *reinterpret_cast<uintptr_t**>(curParent + 8);
-	if (!subDatabases) {
-		spdlog::warn("TextureDatabaseRuntime::GetTexture(\"{}\"): subDatabases array is NULL, returning nullptr", name);
-		return nullptr;
-	}
-
-	for (int i = 0; i < numSubDatabases; i++) {
-		if (!subDatabases[i]) {
-			spdlog::warn("TextureDatabaseRuntime::GetTexture(\"{}\"): subDatabase[{}] is NULL, returning nullptr", name, i);
+	for (uint32_t i = 0; i < pRegistered->numEntries; i++) {
+		if (!pRegistered->dataPtr[i]) {
+			spdlog::warn("TextureDatabaseRuntime::GetTexture(\"{}\"): registered.dataPtr[{}] is NULL, returning nullptr", name, i);
 			return nullptr;
 		}
 	}
