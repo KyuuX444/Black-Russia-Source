@@ -7,7 +7,7 @@
 
 void RemoveBuilding::add(uint32_t model, sa::CVector pos, float radius)
 {
-	spdlog::info("RemoveBuilding::add {}, ({}, {}, {}), {}", model, pos.x, pos.y, pos.z, radius);
+	spdlog::debug("RemoveBuilding::add {}, ({}, {}, {}), {}", model, pos.x, pos.y, pos.z, radius);
 
 	if (model == 19300) {
 		return;
@@ -27,71 +27,46 @@ void RemoveBuilding::add(uint32_t model, sa::CVector pos, float radius)
 
 void RemoveBuilding::removeObjectInRange(uint32_t model, sa::CVector pos, float radius)
 {
-	removeOccludersInRadius(pos, 20000.0f);
+	static bool s_fullMapOccludersCleared = false;
+	if (!s_fullMapOccludersCleared) {
+		removeOccludersInRadius(pos, 20000.0f);
+		s_fullMapOccludersCleared = true;
+	}
 
 	typedef sa::CPool<sa::CEntity, sa::CEntity> CPool;
-
-	// CPools::ms_pBuildingPool
-	CPool* pBuildingPool = *g_saSym->GetSymbol<CPool**>("_ZN6CPools16ms_pBuildingPoolE");
-	if (!pBuildingPool) {
-		spdlog::error("RemoveBuilding::removeObjectInRange: ms_pBuildingPool is null");
-		return;
-	}
-
-	for (int i = 0; i < pBuildingPool->m_nSize; i++) {
-		sa::CEntity* pEntity = pBuildingPool->GetAt(i);
-		if (pEntity) {
-			if (model == -1 || pEntity->m_nModelIndex == model) {
-				float fDistance = sa::DistanceBetweenPoints(pEntity->GetPosition(), pos);
-				if (fDistance <= radius) {
-					if (&pEntity->m_placement) {
-						pEntity->m_placement.m_vPosn.z -= 2000.0;
-					}
-				}
+	const float radiusSq = radius * radius;
+	auto processPool = [&](CPool* pool) {
+		if (!pool) return;
+		for (int i = 0; i < pool->m_nSize; i++) {
+			sa::CEntity* pEntity = pool->GetAt(i);
+			if (!pEntity) continue;
+			if (model != static_cast<uint32_t>(-1) && pEntity->m_nModelIndex != model) continue;
+			sa::CVector entPos = pEntity->GetPosition();
+			float dx = entPos.x - pos.x;
+			if (dx < -radius || dx > radius) continue;
+			float dy = entPos.y - pos.y;
+			if (dy < -radius || dy > radius) continue;
+			float dz = entPos.z - pos.z;
+			if (dz < -radius || dz > radius) continue;
+			if ((dx * dx + dy * dy + dz * dz) <= radiusSq) {
+				pEntity->m_placement.m_vPosn.z -= 2000.0f;
 			}
 		}
+	};
+
+	static CPool** ppBuildingPool = g_saSym->GetSymbol<CPool**>("_ZN6CPools16ms_pBuildingPoolE");
+	if (ppBuildingPool && *ppBuildingPool) {
+		processPool(*ppBuildingPool);
 	}
 
-	// CPools::ms_pDummyPool
-	CPool* pDummyPool = *g_saSym->GetSymbol<CPool**>("_ZN6CPools13ms_pDummyPoolE");
-	if (!pDummyPool) {
-		spdlog::error("RemoveBuilding::removeObjectInRange: ms_pDummyPool is null");
-		return;
+	static CPool** ppDummyPool = g_saSym->GetSymbol<CPool**>("_ZN6CPools13ms_pDummyPoolE");
+	if (ppDummyPool && *ppDummyPool) {
+		processPool(*ppDummyPool);
 	}
 
-	for (int i = 0; i < pDummyPool->m_nSize; i++) {
-		sa::CEntity* pEntity = pDummyPool->GetAt(i);
-		if (pEntity) {
-			if (model == -1 || pEntity->m_nModelIndex == model) {
-				float fDistance = sa::DistanceBetweenPoints(pEntity->GetPosition(), pos);
-				if (fDistance <= radius) {
-					if (&pEntity->m_placement) {
-						pEntity->m_placement.m_vPosn.z -= 2000.0;
-					}
-				}
-			}
-		}
-	}
-
-	// CPools::ms_pObjectPool
-	CPool* pObjectPool = *g_saSym->GetSymbol<CPool**>("_ZN6CPools14ms_pObjectPoolE");
-	if (!pObjectPool) {
-		spdlog::error("RemoveBuilding::removeObjectInRange: ms_pObjectPool is null");
-		return;
-	}
-
-	for (int i = 0; i < pObjectPool->m_nSize; i++) {
-		sa::CEntity* pEntity = pObjectPool->GetAt(i);
-		if (pEntity) {
-			if (model == -1 || pEntity->m_nModelIndex == model) {
-				float fDistance = sa::DistanceBetweenPoints(pEntity->GetPosition(), pos);
-				if (fDistance <= radius) {
-					if (&pEntity->m_placement) {
-						pEntity->m_placement.m_vPosn.z -= 2000.0;
-					}
-				}
-			}
-		}
+	static CPool** ppObjectPool = g_saSym->GetSymbol<CPool**>("_ZN6CPools14ms_pObjectPoolE");
+	if (ppObjectPool && *ppObjectPool) {
+		processPool(*ppObjectPool);
 	}
 }
 
@@ -116,22 +91,24 @@ int32_t NumOccludersOnMap = 0;
 
 void RemoveBuilding::removeOccludersInRadius(sa::CVector pos, float radius)
 {
-	if (NumOccludersOnMap >= 1) {
-		for (int i = 0; i <= NumOccludersOnMap; i++) {
-			sa::CVector vecOccluderPos;
-			vecOccluderPos.x = (float) (aOccluders[i].fMidX * 0.25);
-			vecOccluderPos.y = (float) (aOccluders[i].fMidY * 0.25);
-			vecOccluderPos.z = (float) (aOccluders[i].fMidZ * 0.25);
-
-			float fDistance = sa::DistanceBetweenPoints(vecOccluderPos, pos);
-			if (fDistance <= radius) {
-				aOccluders[i].fMidX = 0;
-				aOccluders[i].fMidY = 0;
-				aOccluders[i].fMidZ = 0;
-				aOccluders[i].fWidthX = 0;
-				aOccluders[i].fWidthY = 0;
-				aOccluders[i].fHeight = 0;
-			}
+	if (!aOccluders || NumOccludersOnMap < 1) {
+		return;
+	}
+	const float radiusSq = radius * radius;
+	for (int i = 0; i < NumOccludersOnMap; i++) {
+		float ox = static_cast<float>(aOccluders[i].fMidX) * 0.25f;
+		float oy = static_cast<float>(aOccluders[i].fMidY) * 0.25f;
+		float oz = static_cast<float>(aOccluders[i].fMidZ) * 0.25f;
+		float dx = ox - pos.x;
+		float dy = oy - pos.y;
+		float dz = oz - pos.z;
+		if ((dx * dx + dy * dy + dz * dz) <= radiusSq) {
+			aOccluders[i].fMidX = 0;
+			aOccluders[i].fMidY = 0;
+			aOccluders[i].fMidZ = 0;
+			aOccluders[i].fWidthX = 0;
+			aOccluders[i].fWidthY = 0;
+			aOccluders[i].fHeight = 0;
 		}
 	}
 }
@@ -143,8 +120,16 @@ bool RemoveBuilding::needsRemove(uint32_t model, sa::CVector pos)
 	}
 
 	for (int i = 0; i < m_buildingToRemoveCount; i++) {
-		if (m_buildingToRemove[i].model == -1 || m_buildingToRemove[i].model == model) {
-			if (sa::DistanceBetweenPoints(pos, m_buildingToRemove[i].pos) <= m_buildingToRemove[i].radius) {
+		const auto& entry = m_buildingToRemove[i];
+		if (entry.model == static_cast<uint32_t>(-1) || entry.model == model) {
+			float r = entry.radius;
+			float dx = pos.x - entry.pos.x;
+			if (dx < -r || dx > r) continue;
+			float dy = pos.y - entry.pos.y;
+			if (dy < -r || dy > r) continue;
+			float dz = pos.z - entry.pos.z;
+			if (dz < -r || dz > r) continue;
+			if ((dx * dx + dy * dy + dz * dz) <= (r * r)) {
 				return true;
 			}
 		}
@@ -159,7 +144,7 @@ DECL_HOOK(void, CFileLoader_LoadObjectInstance, sa::CFileObjectInstance* instanc
 	int* model = &instance->m_nModelId;
 
 	if (instance && RemoveBuilding::needsRemove(*model, pos)) {
-		spdlog::info("RemoveBuilding hook: model {}", *model);
+		spdlog::debug("RemoveBuilding hook: model {}", *model);
 		*model = 19300;
 	}
 

@@ -195,7 +195,7 @@ int iTotalObjects = 0;
 
 void ScrCreateObject(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrCreateObject");
+	spdlog::debug("ScriptRPC: ScrCreateObject");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -323,7 +323,7 @@ void ScrCreateObject(RPCParameters* rpcParams)
 
 void ScrDestroyObject(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrDestroyObject");
+	spdlog::debug("ScriptRPC: ScrDestroyObject");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -332,7 +332,7 @@ void ScrDestroyObject(RPCParameters* rpcParams)
 	bsData.Read(ObjectID);
 
 	iTotalObjects--;
-	spdlog::info("DestroyObject; Total objects: {}", iTotalObjects);
+	spdlog::debug("DestroyObject; Total objects: {}", iTotalObjects);
 
 	CObjectPool* pObjectPool = pNetGame->GetObjectPool();
 	pObjectPool->Delete(ObjectID);
@@ -340,7 +340,7 @@ void ScrDestroyObject(RPCParameters* rpcParams)
 
 void ScrSetObjectMaterial(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrSetObjectMaterial");
+	spdlog::debug("ScriptRPC: ScrSetObjectMaterial");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
@@ -430,7 +430,7 @@ void ScrSetObjectMaterial(RPCParameters* rpcParams)
 
 void ScrRemoveBuilding(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrRemoveBuilding");
+	spdlog::debug("ScriptRPC: ScrRemoveBuilding");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
@@ -605,7 +605,7 @@ void ScrApplyPlayerAnimation(RPCParameters* rpcParams)
 
 void ScrClearPlayerAnimations(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrClearPlayerAnimations");
+	spdlog::debug("ScriptRPC: ScrClearPlayerAnimations");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 	RakNet::BitStream bsData(Data, (iBitLength / 8) + 1, false);
@@ -678,7 +678,7 @@ void ScrSetPlayerInterior(RPCParameters* rpcParams)
 
 void ScrShowTextDraw(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrShowTextDraw");
+	spdlog::debug("ScriptRPC: ScrShowTextDraw");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -710,7 +710,7 @@ void ScrShowTextDraw(RPCParameters* rpcParams)
 
 void ScrHideTextDraw(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrHideTextDraw");
+	spdlog::debug("ScriptRPC: ScrHideTextDraw");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -728,7 +728,7 @@ void ScrHideTextDraw(RPCParameters* rpcParams)
 
 void ScrTextDrawSetString(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrTextDrawSetString");
+	spdlog::debug("ScriptRPC: ScrTextDrawSetString");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -1318,7 +1318,7 @@ void ScrSetPlayerTeam(RPCParameters* rpcParams)
 
 void ScrSetPlayerName(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrSetPlayerName");
+	spdlog::debug("ScriptRPC: ScrSetPlayerName");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 
@@ -1446,7 +1446,7 @@ void ScrRemovePlayerFromVehicle(RPCParameters* rpcParams)
 
 void ScrSetPlayerColor(RPCParameters* rpcParams)
 {
-	spdlog::info("ScriptRPC: ScrSetPlayerColor");
+	spdlog::debug("ScriptRPC: ScrSetPlayerColor");
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
 

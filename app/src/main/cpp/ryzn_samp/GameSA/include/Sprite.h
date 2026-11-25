@@ -10,13 +10,11 @@ class CSprite2d {
 public:
 	CSprite2d()
 	{
-		spdlog::info("CSprite2d::CSprite2d()");
 		m_pTexture = nullptr;
 	}
 
 	~CSprite2d()
 	{
-		spdlog::info("CSprite2d::~CSprite2d()");
 		if (m_pTexture) {
 			RwTextureDestroy(m_pTexture);
 			m_pTexture = nullptr;
@@ -25,7 +23,6 @@ public:
 
 	void SetTexture(const char* pFilename)
 	{
-		spdlog::info("CSprite2d::SetTexture({})", pFilename);
 		Memory::callFunction("_ZN9CSprite2d10SetTextureEPc", this, pFilename);
 	}
 

@@ -43,7 +43,7 @@ uint8_t FindPlayerNumFromPedPtr(sa::CPed* dwPedPtr)
  */
 RwTexture* LoadTextureFromTxd(const char* txdName, const char* textureName)
 {
-	spdlog::info("LoadTextureFromTxd: txdName: {}, textureName: {}", txdName, textureName);
+	spdlog::debug("LoadTextureFromTxd: txdName: {}, textureName: {}", txdName, textureName);
 
 	RwTexture* pTexture = nullptr;
 
@@ -263,7 +263,7 @@ uint32_t ModelInfoGetFlags(int iModelID)
 		return 0;
 	}
 
-	spdlog::info("ModelInfoGetFlags: ({})", iModelID);
+	spdlog::debug("ModelInfoGetFlags: ({})", iModelID);
 	return pModel->m_flags;
 }
 
@@ -275,7 +275,7 @@ uint16_t ModelInfoGetReferenceCount(int iModelID)
 		return 0;
 	}
 
-	spdlog::info("ModelInfoGetReferenceCount: ({})", iModelID);
+	spdlog::debug("ModelInfoGetReferenceCount: ({})", iModelID);
 	return pModel->m_numRefs;
 }
 
@@ -299,7 +299,7 @@ bool IsValidPedModel(uint modelID)
 			return false;
 		}
 
-		spdlog::info("IsValidPedModel: ({})", modelID);
+		spdlog::debug("IsValidPedModel: ({})", modelID);
 
 		if ((*(uintptr_t*) modelInfo) == g_saSym->Abs<uintptr_t>(addr::vptr$CPedModelInfo)) {
 			return true;
@@ -312,7 +312,7 @@ bool IsValidPedModel(uint modelID)
 
 sa::CBaseModelInfo* GetModelInfoByID(int iModelID)
 {
-	spdlog::info("GetModelInfoByID: {}", iModelID);
+	spdlog::debug("GetModelInfoByID: {}", iModelID);
 
 	if (iModelID < 0 || iModelID > 20000) {
 		spdlog::error("Invalid model ID: {}", iModelID);
@@ -336,7 +336,7 @@ sa::CBaseModelInfo* GetModelInfoByID(int iModelID)
 
 bool IsExistInfoForModel(int iModelID)
 {
-	spdlog::info("IsExistInfoForModel: {}", iModelID);
+	spdlog::debug("IsExistInfoForModel: {}", iModelID);
 	return GetModelInfoByID(iModelID) != nullptr;
 }
 
@@ -352,7 +352,7 @@ RwObject* GetModelRWObject(uint uiModel)
 		return nullptr;
 	}
 
-	spdlog::info("GetModelRWObject: {}", uiModel);
+	spdlog::debug("GetModelRWObject: {}", uiModel);
 	return modelInfo->m_pRwObject;
 }
 
@@ -860,11 +860,11 @@ void RenderClumpOrAtomic(uintptr_t rwObject)
 	if (rwObject) {
 		if (*(uint8_t*) rwObject == 1) {
 			// Atomic
-			spdlog::info("Render Atomic!");
+			spdlog::debug("Render Atomic!");
 			Memory::callFunction("_Z27AtomicDefaultRenderCallBackP8RpAtomic", rwObject);
 		}
 		else if (*(uint8_t*) rwObject == 2) {
-			spdlog::info("Render Clump!");
+			spdlog::debug("Render Clump!");
 			// rpClumpRender
 			Memory::callFunction("_Z13RpClumpRenderP7RpClump", rwObject);
 		}

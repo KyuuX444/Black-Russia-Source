@@ -1,9 +1,13 @@
 #include <sys/sysinfo.h>
+#include <sys/stat.h>
 #include <EGL/egl.h>
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <dirent.h>
+#include <mutex>
 #include <sstream>
+#include <unordered_map>
 
 #include "Game.h"
 #include "../UI/UI.h"
@@ -246,6 +250,78 @@ static bool file_readable(const std::string& path) {
 	return access(path.c_str(), R_OK) == 0;
 }
 
+static std::mutex s_fsCacheMutex;
+static std::vector<std::string> s_validBases;
+static bool s_basesInitialized = false;
+static std::unordered_map<std::string, std::unordered_map<std::string, std::string>> s_dirCache;
+static std::unordered_map<std::string, std::string> s_pathCache;
+
+static std::string to_lower_ascii(std::string s)
+{
+	for (char& c : s) {
+		c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+	}
+	return s;
+}
+
+static const std::vector<std::string>& get_valid_bases()
+{
+	if (s_basesInitialized) {
+		return s_validBases;
+	}
+	const char* candidateBases[] = {
+		Client::gameDir(),
+		"/storage/emulated/0/ryznSAMP/",
+		"/storage/emulated/0/Android/data/com.ryzn.samp/files/",
+		"/data/data/com.ryzn.samp/files/",
+		"/storage/emulated/0/Android/data/com.rockstargames.gtasa/files/"
+	};
+	for (const char* b : candidateBases) {
+		if (!b || !b[0]) continue;
+		std::string base(b);
+		if (base.back() != '/') base += '/';
+		bool dup = false;
+		for (const auto& existing : s_validBases) {
+			if (existing == base) {
+				dup = true;
+				break;
+			}
+		}
+		if (dup) continue;
+		struct stat st{};
+		if (stat(base.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+			s_validBases.push_back(std::move(base));
+		}
+	}
+	s_basesInitialized = true;
+	return s_validBases;
+}
+
+static std::string lookup_cached_entry(const std::string& dirPathWithSlash, const std::string& segment)
+{
+	std::string lowerSeg = to_lower_ascii(segment);
+	auto it = s_dirCache.find(dirPathWithSlash);
+	if (it == s_dirCache.end()) {
+		std::unordered_map<std::string, std::string> entries;
+		DIR* dir = opendir(dirPathWithSlash.c_str());
+		if (dir) {
+			struct dirent* entry;
+			while ((entry = readdir(dir)) != nullptr) {
+				if (entry->d_name[0] == '.' &&
+					(entry->d_name[1] == '\0' || (entry->d_name[1] == '.' && entry->d_name[2] == '\0'))) {
+					continue;
+				}
+				entries.emplace(to_lower_ascii(entry->d_name), entry->d_name);
+			}
+			closedir(dir);
+		}
+		it = s_dirCache.emplace(dirPathWithSlash, std::move(entries)).first;
+	}
+
+	auto found = it->second.find(lowerSeg);
+	return found != it->second.end() ? found->second : "";
+}
+
 static std::string resolve_case_insensitive_path(const std::string& baseDir, const std::string& relPath)
 {
 	std::string cleanRel = relPath;
@@ -272,33 +348,12 @@ static std::string resolve_case_insensitive_path(const std::string& baseDir, con
 	while (std::getline(ss, segment, '/')) {
 		if (segment.empty() || segment == ".") continue;
 
-		std::string tryPath = currentPath + segment;
-		struct stat st;
-		if (stat(tryPath.c_str(), &st) == 0) {
-			currentPath = tryPath + "/";
-			continue;
-		}
-
-		DIR* dir = opendir(currentPath.c_str());
-		if (!dir) {
+		std::string actualName = lookup_cached_entry(currentPath, segment);
+		if (actualName.empty()) {
 			return "";
 		}
-
-		struct dirent* entry;
-		bool found = false;
-		while ((entry = readdir(dir)) != nullptr) {
-			if (strcasecmp(entry->d_name, segment.c_str()) == 0) {
-				currentPath += entry->d_name;
-				currentPath += '/';
-				found = true;
-				break;
-			}
-		}
-		closedir(dir);
-
-		if (!found) {
-			return "";
-		}
+		currentPath += actualName;
+		currentPath += '/';
 	}
 
 	if (!currentPath.empty() && currentPath.back() == '/') {
@@ -310,7 +365,7 @@ static std::string resolve_case_insensitive_path(const std::string& baseDir, con
 	return "";
 }
 
-static std::string find_real_file(const std::string& requestedPath)
+static std::string find_real_file(const std::string& requestedPath, bool useCache = true)
 {
 	std::string clean = requestedPath;
 	for (char& c : clean) {
@@ -330,38 +385,56 @@ static std::string find_real_file(const std::string& requestedPath)
 	while (!rel.empty() && rel.front() == '/') {
 		rel.erase(rel.begin());
 	}
+	if (rel.empty()) {
+		return "";
+	}
 
-	const char* candidateBases[] = {
-		Client::gameDir(),
-		"/storage/emulated/0/ryznSAMP/",
-		"/storage/emulated/0/Android/data/com.ryzn.samp/files/",
-		"/data/data/com.ryzn.samp/files/",
-		"/storage/emulated/0/Android/data/com.rockstargames.gtasa/files/"
-	};
+	std::string cacheKey = to_lower_ascii(rel);
+	std::lock_guard<std::mutex> lock(s_fsCacheMutex);
 
-	for (const char* base : candidateBases) {
-		if (!base || !base[0]) continue;
+	if (useCache) {
+		auto cached = s_pathCache.find(cacheKey);
+		if (cached != s_pathCache.end()) {
+			return cached->second;
+		}
+	}
+
+	std::string foundPath;
+	for (const auto& base : get_valid_bases()) {
 		std::string resolved = resolve_case_insensitive_path(base, rel);
 		if (!resolved.empty()) {
-			return resolved;
+			foundPath = std::move(resolved);
+			break;
 		}
 
 		// Special case: decision files (PedEvent.txt, *.ped, *.grp) might be inside data/Decision/
 		if (rel.find("Decision") == std::string::npos && (rel.find(".ped") != std::string::npos || rel.find(".grp") != std::string::npos || rel == "PedEvent.txt")) {
 			std::string tryDec1 = resolve_case_insensitive_path(base, "data/Decision/" + rel);
-			if (!tryDec1.empty()) return tryDec1;
+			if (!tryDec1.empty()) {
+				foundPath = std::move(tryDec1);
+				break;
+			}
 			std::string tryDec2 = resolve_case_insensitive_path(base, "data/Decision/Allowed/" + rel);
-			if (!tryDec2.empty()) return tryDec2;
+			if (!tryDec2.empty()) {
+				foundPath = std::move(tryDec2);
+				break;
+			}
 		}
 
 		// Bare config/data filenames requested without directory prefix (e.g. TouchDefaultPhoneWidescreen.cfg, ShopUVs.dat)
 		if (rel.find('/') == std::string::npos) {
 			std::string tryData = resolve_case_insensitive_path(base, "data/" + rel);
-			if (!tryData.empty()) return tryData;
+			if (!tryData.empty()) {
+				foundPath = std::move(tryData);
+				break;
+			}
 		}
 	}
 
-	return "";
+	if (useCache) {
+		s_pathCache.emplace(std::move(cacheKey), foundPath);
+	}
+	return foundPath;
 }
 
 static std::string to_storage_relative(const std::string& absPath)
@@ -391,8 +464,9 @@ DECL_HOOK(uintptr_t, CFileMgr_OpenFile, const char* filename, const char* mode)
 	static thread_local bool s_retrying = false;
 	uintptr_t handle = CFileMgr_OpenFile(filename, mode);
 	if (!handle && filename) {
+		bool isReadOnly = (!mode || (mode[0] == 'r' && strchr(mode, '+') == nullptr));
 		if (!s_retrying && filename[0] != '/') {
-			std::string real = find_real_file(filename);
+			std::string real = find_real_file(filename, isReadOnly);
 			if (!real.empty()) {
 				std::string rel = to_storage_relative(real);
 				if (!rel.empty() && rel != filename) {
@@ -400,13 +474,13 @@ DECL_HOOK(uintptr_t, CFileMgr_OpenFile, const char* filename, const char* mode)
 					handle = CFileMgr_OpenFile(rel.c_str(), mode);
 					s_retrying = false;
 					if (handle) {
-						spdlog::info("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, rel);
+						spdlog::debug("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, rel);
 						return handle;
 					}
 				}
 			}
 		}
-		spdlog::warn("CFileMgr::OpenFile(\"{}\", \"{}\") failed (NULL handle)", filename, mode ? mode : "null");
+		spdlog::debug("CFileMgr::OpenFile(\"{}\", \"{}\") returned NULL", filename, mode ? mode : "null");
 		if (str_contains_case_insensitive(filename, "TIMECYC")) {
 			s_timecyc_offset = 0;
 			spdlog::info("Providing in-memory fallback handle for {}", filename);
@@ -704,7 +778,7 @@ ret:
 			snprintf(storageRoot, 512, "%s", Client::gameDir());
 		}
 
-		std::string real = find_real_file(name);
+		std::string real = find_real_file(name, a2 != 1 && a2 != 2);
 		std::string relName = !real.empty() ? to_storage_relative(real) : "";
 		if (!relName.empty()) {
 			snprintf(path, sizeof(path), "%s", relName.c_str());
@@ -1320,6 +1394,78 @@ DECL_HOOK(int, TextureDatabaseRuntime_GetEntry, uintptr_t _this, const char *a2,
 	return TextureDatabaseRuntime_GetEntry(_this, a2, a3);
 }
 
+static bool can_open_mobile_pause_menu()
+{
+	static bool s_checked = false;
+	static bool s_supported = false;
+	if (s_checked) {
+		return s_supported;
+	}
+	if (!TextureDatabaseRuntime_GetEntry) {
+		return false;
+	}
+
+	auto* menuDb = sa::TextureDatabaseRuntime::GetDatabase("menu");
+	if (!menuDb) {
+		menuDb = sa::TextureDatabaseRuntime::Load("menu", false, sa::DF_Default);
+	}
+	auto* mobileDb = sa::TextureDatabaseRuntime::GetDatabase("mobile");
+	if (!menuDb && !mobileDb) {
+		spdlog::warn("MobileMenu: 'menu'/'mobile' texture database unavailable, pause menu disabled safely");
+		s_checked = true;
+		s_supported = false;
+		return false;
+	}
+
+	const char* requiredTextures[] = {
+		"menu_selector",
+		"menu_bgmap",
+		"menu_sliderempty",
+		"menu_sliderfull",
+		"menu_slidernub",
+		"menu_adjback",
+		"menu_adjback2"
+	};
+
+	bool allFound = true;
+	bool needMobileRegistered = false;
+	for (const char* texName : requiredTextures) {
+		bool isAlpha = false;
+		int idx = menuDb ? TextureDatabaseRuntime_GetEntry(reinterpret_cast<uintptr_t>(menuDb), texName, &isAlpha) : -1;
+		if (idx < 0 && mobileDb) {
+			idx = TextureDatabaseRuntime_GetEntry(reinterpret_cast<uintptr_t>(mobileDb), texName, &isAlpha);
+			if (idx >= 0) {
+				needMobileRegistered = true;
+			}
+		}
+		if (idx < 0) {
+			spdlog::warn("MobileMenu: missing '{}' in menu/mobile texdb, pause menu disabled safely", texName);
+			allFound = false;
+			break;
+		}
+	}
+
+	if (allFound && needMobileRegistered && mobileDb) {
+		auto& reg = sa::TextureDatabaseRuntime::registered();
+		bool already = false;
+		if (reg.dataPtr) {
+			for (uint32_t i = 0; i < reg.numEntries; ++i) {
+				if (reg.dataPtr[i] == mobileDb) {
+					already = true;
+					break;
+				}
+			}
+		}
+		if (!already) {
+			sa::TextureDatabaseRuntime::Register(mobileDb);
+		}
+	}
+
+	s_checked = true;
+	s_supported = allFound;
+	return s_supported;
+}
+
 DECL_HOOK(void, MobileMenu_InitForTitle, uintptr_t _this)
 {
 	spdlog::info("MobileMenu::InitForTitle called - safely bypassing single-player title menu");
@@ -1327,7 +1473,25 @@ DECL_HOOK(void, MobileMenu_InitForTitle, uintptr_t _this)
 
 DECL_HOOK(void, MobileMenu_Load, uintptr_t _this)
 {
-	spdlog::info("MobileMenu::Load called - safely bypassing singleplayer menu textures");
+	if (!can_open_mobile_pause_menu()) {
+		spdlog::warn("MobileMenu::Load bypassed (missing menu textures)");
+		return;
+	}
+	MobileMenu_Load(_this);
+}
+
+DECL_HOOK(void, MobileMenu_InitForPause, uintptr_t _this)
+{
+	if (!can_open_mobile_pause_menu()) {
+		if (auto* pUserPause = g_saSym->GetSymbol<bool*>("_ZN6CTimer11m_UserPauseE")) {
+			*pUserPause = false;
+		}
+		if (auto* pCodePause = g_saSym->GetSymbol<bool*>("_ZN6CTimer11m_CodePauseE")) {
+			*pCodePause = false;
+		}
+		return;
+	}
+	MobileMenu_InitForPause(_this);
 }
 
 DECL_HOOK(void*, TextureDatabaseRuntime_GetTexture, const char* name)
@@ -1678,6 +1842,7 @@ void Hooks::install()
 	HOOK("_ZN22TextureDatabaseRuntime10GetTextureEPKc", TextureDatabaseRuntime_GetTexture);
 	HOOK("_ZN10MobileMenu12InitForTitleEv", MobileMenu_InitForTitle);
 	HOOK("_ZN10MobileMenu4LoadEv", MobileMenu_Load);
+	HOOK("_ZN10MobileMenu12InitForPauseEv", MobileMenu_InitForPause);
 	HOOK("_Z10OALServicev", OALService);
 	HOOK("_ZN22CAEFrontendAudioEntity13AddAudioEventEiff", CAEFrontendAudioEntity_AddAudioEvent);
 	HOOK("_ZN10CPlayerPed29GetPlayerInfoForThisPlayerPedEv", GetPlayerInfoForThisPlayerPed);

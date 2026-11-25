@@ -507,7 +507,8 @@ bool CLocalPlayer::Spawn()
 
 	spdlog::info("Spawn localplayer");
 
-	if (!g_saSym->GetSymbol("_ZZ20Menu_SwitchOffToGamevE12bInitWidgets")) {
+	auto* pInitWidgets = g_saSym->Abs<uint8_t*>(VER_x32 ? 0x6E03C4 : 0x8BEAF6);
+	if (!pInitWidgets || !*pInitWidgets) {
 		spdlog::info("Widgets not inited");
 		Memory::callFunction("_Z20Menu_SwitchOffToGamev");
 	}

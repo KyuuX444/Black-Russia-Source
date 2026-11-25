@@ -73,11 +73,11 @@ void init_logger(const std::string& gameDir)
 		// Set log level and pattern
 		logger->set_level(spdlog::level::info);
 		logger->set_pattern("[%d-%m-%Y %H:%M:%S] [%^%l%$] %v");
-		logger->flush_on(spdlog::level::info);
+		logger->flush_on(spdlog::level::err);
 
 		// Set as default logger
 		spdlog::set_default_logger(logger);
-		spdlog::flush_every(std::chrono::seconds(1));
+		spdlog::flush_every(std::chrono::seconds(2));
 	}
 	catch (const spdlog::spdlog_ex& ex) {
 		__android_log_print(ANDROID_LOG_ERROR, "Ryzn SA-MP", "Log initialization failed: %s", ex.what());
@@ -367,7 +367,8 @@ void Client::process()
 			pGame->FindPlayerPed()->SetTargetRotation(72.8293);
 			pGame->NewVehicle(411, mat.pos.x, mat.pos.y + 5.0f, mat.pos.z, 0.0f, false);
 
-			if (!g_saSym->GetSymbol("_ZZ20Menu_SwitchOffToGamevE12bInitWidgets")) {
+			auto* pInitWidgets = g_saSym->Abs<uint8_t*>(VER_x32 ? 0x6E03C4 : 0x8BEAF6);
+			if (!pInitWidgets || !*pInitWidgets) {
 				spdlog::info("Widgets not inited");
 				Memory::callFunction("_Z20Menu_SwitchOffToGamev");
 			}

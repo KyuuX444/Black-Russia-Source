@@ -14,7 +14,7 @@ RwTexture* g_blankTexture;
 
 CObject::CObject(int iModel, sa::CVector vecPos, sa::CVector vecRot, float fDrawDistance, uint8_t bAttached)
 {
-	spdlog::info("CObject::CObject({}, [{} {} {}], [{} {} {}], {}, {}).", iModel, vecPos.x, vecPos.y, vecPos.z, vecRot.x, vecRot.y, vecRot.z, fDrawDistance, bAttached);
+	spdlog::debug("CObject::CObject({}, [{} {} {}], [{} {} {}], {}, {}).", iModel, vecPos.x, vecPos.y, vecPos.z, vecRot.x, vecRot.y, vecRot.z, fDrawDistance, bAttached);
 	m_AttachedVehicleID = INVALID_VEHICLE_ID;
 	m_AttachedObjectID = INVALID_OBJECT_ID;
 	m_bAttachedToPed = bAttached;
@@ -31,13 +31,13 @@ CObject::CObject(int iModel, sa::CVector vecPos, sa::CVector vecRot, float fDraw
 	m_bSyncRotation = true;
 
 	if (!IsValidModel(iModel)) {
-		spdlog::info("Object model {} is invalid, using default model.", iModel);
+		spdlog::debug("Object model {} is invalid, using default model.", iModel);
 		iModel = 18631;
 	}
 
 	uint32_t dwRetID;
 	ScriptCommand(&create_object, iModel, vecPos.x, vecPos.y, vecPos.z, &dwRetID);
-	spdlog::info("Object created with model {} at [{} {} {}].", iModel, vecPos.x, vecPos.y, vecPos.z);
+	spdlog::debug("Object created with model {} at [{} {} {}].", iModel, vecPos.x, vecPos.y, vecPos.z);
 
 	sa::CObject* pEntity = GamePool_Object_GetAt(dwRetID);
 
@@ -558,7 +558,7 @@ bool CObject::AttachedToMovingEntity()
 
 void CObject::SetMaterial(int iModel, uint8_t byteMaterialIndex, char* txdname, char* texturename, uint32_t dwColor)
 {
-	spdlog::info("CObject::SetMaterial({}, {}, {}, {}, 0x{:X}).", iModel, byteMaterialIndex, txdname, texturename, dwColor);
+	spdlog::debug("CObject::SetMaterial({}, {}, {}, {}, 0x{:X}).", iModel, byteMaterialIndex, txdname, texturename, dwColor);
 
 	if (byteMaterialIndex < MAX_MATERIALS) {
 		if (!txdname || !strlen(txdname) || !texturename || !strlen(texturename)) {
@@ -581,7 +581,7 @@ void CObject::SetMaterial(int iModel, uint8_t byteMaterialIndex, char* txdname, 
 				}
 			}
 			else {
-				int iWaitPreloaded;
+				int iWaitPreloaded = 0;
 				if (!pGame->IsModelLoaded(iModel)) {
 					pGame->RequestModel(iModel);
 					pGame->LoadRequestedModels();
@@ -613,7 +613,7 @@ void CObject::SetMaterial(int iModel, uint8_t byteMaterialIndex, char* txdname, 
 
 void CObject::SetMaterialText(uint8_t byteMaterialIndex, uint8_t byteMaterialSize, const char* szFontName, uint8_t byteFontSize, uint8_t byteFontBold, uint32_t dwFontColor, uint32_t dwBackgroundColor, uint8_t byteAlign, const char* szText)
 {
-	spdlog::info("CObject::SetMaterialText({}, {}, {}, {}, {}, 0x{:X}, 0x{:X}, {}, {}).", byteMaterialIndex, byteMaterialSize, szFontName, byteFontSize, byteFontBold, dwFontColor, dwBackgroundColor, byteAlign, szText);
+	spdlog::debug("CObject::SetMaterialText({}, {}, {}, {}, {}, 0x{:X}, 0x{:X}, {}, {}).", byteMaterialIndex, byteMaterialSize, szFontName, byteFontSize, byteFontBold, dwFontColor, dwBackgroundColor, byteAlign, szText);
 
 	if (byteMaterialIndex < MAX_MATERIALS) {
 		if (!szText || !strlen(szText)) {

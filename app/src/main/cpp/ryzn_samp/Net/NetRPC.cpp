@@ -441,10 +441,10 @@ void ServerJoin(RPCParameters* rpcParams)
 	bsData.Read(szPlayerName, byteNameLen);
 	szPlayerName[byteNameLen] = '\0';
 
-	spdlog::info("PlayerID {}", PlayerID);
-	spdlog::info("dwMarkerColor {}", dwMarkerColor);
-	spdlog::info("byteIsNPC {}", byteIsNPC);
-	spdlog::info("szPlayerName {}", szPlayerName);
+	spdlog::debug("PlayerID {}", PlayerID);
+	spdlog::debug("dwMarkerColor {}", dwMarkerColor);
+	spdlog::debug("byteIsNPC {}", byteIsNPC);
+	spdlog::debug("szPlayerName {}", szPlayerName);
 
 	if (strlen(szPlayerName) > MAX_PLAYER_NAME) {
 		return;
@@ -765,7 +765,7 @@ void ScmEvent(RPCParameters* rpcParams)
 
 void UpdateScoresPingsIPs(RPCParameters* rpcParams)
 {
-	spdlog::info("RPC: Update scores and pings");
+	spdlog::debug("RPC: Update scores and pings");
 
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
@@ -781,7 +781,7 @@ void UpdateScoresPingsIPs(RPCParameters* rpcParams)
 		bsData.Read(iPlayerScore);
 		bsData.Read(iPlayerPing);
 
-		spdlog::info("RPC_PINGIP: ({}): score: {}, ping: {}", playerId, iPlayerScore, iPlayerPing);
+		spdlog::debug("RPC_PINGIP: ({}): score: {}, ping: {}", playerId, iPlayerScore, iPlayerPing);
 
 		pPlayerPool->UpdatePlayerScore(playerId, iPlayerScore);
 		pPlayerPool->UpdatePlayerPing(playerId, iPlayerPing);
@@ -790,7 +790,7 @@ void UpdateScoresPingsIPs(RPCParameters* rpcParams)
 
 void Pickup(RPCParameters* rpcParams)
 {
-	spdlog::info("RPC: Pickup");
+	spdlog::debug("RPC: Pickup");
 
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
@@ -810,7 +810,7 @@ void Pickup(RPCParameters* rpcParams)
 //destroy pickup
 void DestroyPickup(RPCParameters* rpcParams)
 {
-	spdlog::info("RPC: Destroy pickup");
+	spdlog::debug("RPC: Destroy pickup");
 
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
@@ -1024,7 +1024,7 @@ void ExitVehicle(RPCParameters* rpcParams)
 //Vehicle parameters
 void VehicleParamsEx(RPCParameters* rpcParams)
 {
-	spdlog::info("RPC: VehicleParamsEx");
+	spdlog::debug("RPC: VehicleParamsEx");
 
 	auto Data = reinterpret_cast<unsigned char*>(rpcParams->input);
 	int iBitLength = rpcParams->numberOfBitsOfData;
