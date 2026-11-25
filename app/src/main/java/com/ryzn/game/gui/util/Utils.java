@@ -79,34 +79,46 @@ public class Utils {
     }
 
     public static Spanned transfromColors(String str) {
-        if (str == null) str = "";
-        int i;
-        LinkedList<String> linkedList = new LinkedList<>();
-        int i2 = 0;
-        String str2 = str;
-        int i3 = 0;
-        for (int i4 = 0; i4 < str2.length(); i4++) {
-            if (str2.charAt(i4) == '{' && (i = i4 + 7) < str2.length() && str2.charAt(i) == '}') {
-                int i5 = i4 + 1;
-                linkedList.addLast("#" + str2.substring(i5, i));
-                str2 = str2.substring(0, i5) + "repl" + i3 + str2.substring(i);
-                i3++;
-            }
+        if (str == null || str.isEmpty()) {
+            return Html.fromHtml("");
         }
-        Iterator<String> it = linkedList.iterator();
-        while (it.hasNext()) {
-            String str3 = it.next();
-            if (i2 == 0) {
-                str2 = str2.replaceAll(Pattern.quote("{repl" + i2 + "}"), "<font color='" + str3 + "'>");
+        StringBuilder html = new StringBuilder(str.length() + 32);
+        boolean openFont = false;
+        int len = str.length();
+        for (int i = 0; i < len; i++) {
+            char c = str.charAt(i);
+            if (c == '{' && i + 7 < len && str.charAt(i + 7) == '}' && isHex6(str, i + 1)) {
+                if (openFont) {
+                    html.append("</font>");
+                }
+                html.append("<font color='#").append(str, i + 1, i + 7).append("'>");
+                openFont = true;
+                i += 7;
+            } else if (c == '\n') {
+                html.append("<br>");
+            } else if (c == '&') {
+                html.append("&amp;");
+            } else if (c == '<') {
+                html.append("&lt;");
+            } else if (c == '>') {
+                html.append("&gt;");
             } else {
-                str2 = str2.replaceAll(Pattern.quote("{repl" + i2 + "}"), "</font><font color='" + str3 + "'>");
+                html.append(c);
             }
-            i2++;
         }
-        if (linkedList.size() >= 1) {
-            str2 = str2 + "</font>";
+        if (openFont) {
+            html.append("</font>");
         }
-        return Html.fromHtml(str2.replaceAll(Pattern.quote("\n"), "<br>"));
+        return Html.fromHtml(html.toString());
+    }
+
+    private static boolean isHex6(String s, int start) {
+        for (int i = 0; i < 6; i++) {
+            char ch = s.charAt(start + i);
+            boolean hex = (ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F');
+            if (!hex) return false;
+        }
+        return true;
     }
 
     public static CharSequence getColoredString(String str) {

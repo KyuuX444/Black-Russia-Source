@@ -5,7 +5,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="colorAccent">#ff0000ee</item>
+        <item name="colorAccent">@color/manga_crimson</item>
     </style>
 
     <style name="Theme.RyznGame" parent="@style/Theme.MaterialComponents.NoActionBar">
@@ -14,9 +14,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowBackground">@color/black</item>
-        <item name="colorPrimary">@color/ryzn_purple_primary</item>
+        <item name="colorPrimary">@color/manga_crimson</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/ryzn_purple_primary</item>
+        <item name="colorAccent">@color/manga_crimson</item>
     </style>
 
     <style name="CircularDeterminateProgressBar">
@@ -27,49 +27,59 @@
     <style name="AppBaseTheme" parent="@android:style/Theme.Light" />
 
     <style name="round_progressbar" parent="android:Widget.Holo.ProgressBar">
-    <item name="android:layout_width">100dp</item>
-    <item name="android:layout_marginLeft">8dp</item>
-</style>
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-</style>
+        <item name="android:layout_width">100dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
 
-    <style name="AppTheme.NoActionBar" parent="@style/Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@color/ryzn_bg_black</item>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="colorAccent">@color/manga_crimson</item>
+        <item name="colorPrimary">@color/manga_ink</item>
+        <item name="colorPrimaryDark">@color/manga_ink</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/manga_paper</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="android:statusBarColor">@color/ryzn_bg_black</item>
-        <item name="android:navigationBarColor">@color/ryzn_nav_bar</item>
-        <item name="colorAccent">@color/ryzn_purple_primary</item>
-        <item name="colorPrimary">@color/ryzn_purple_primary</item>
-        <item name="colorPrimaryDark">@color/ryzn_bg_black</item>
+        <item name="android:statusBarColor">@color/manga_panel</item>
+        <item name="android:navigationBarColor">@color/manga_panel</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorAccent">@color/manga_crimson</item>
+        <item name="colorPrimary">@color/manga_crimson</item>
+        <item name="colorPrimaryDark">@color/manga_ink</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowTitleSize">0dp</item>
     </style>
 
-    <style name="AppTheme.RyznDialog" parent="Theme.MaterialComponents.Dialog.Alert">
+    <style name="AppTheme.RyznDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="colorAccent">@color/ryzn_accent</item>
-        <item name="colorPrimary">@color/ryzn_accent</item>
+        <item name="colorAccent">@color/manga_crimson</item>
+        <item name="colorPrimary">@color/manga_crimson</item>
     </style>
+
     <style name="PopupWindowAnimationNotification">
         <item name="android:windowEnterAnimation">@anim/popup_show_notification</item>
         <item name="android:windowExitAnimation">@anim/popup_hide_notification</item>
     </style>
 
     <style name="AppTheme.WithSplash">
-    <item name="android:windowBackground">@color/black</item>
-    <item name="android:windowContentOverlay">@null</item>
-    <item name="android:windowFullscreen">true</item>
-    <item name="windowActionBar">false</item>
-    <item name="windowNoTitle">true</item>
-    <item name="android:windowTitleSize">0dp</item>
+        <item name="android:windowBackground">@color/manga_paper</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTitleSize">0dp</item>
     </style>
 
-    <style name="MontserratRegular14sp"><item name="android:textSize">14.0sp</item><item name="android:textColor">@android:color/white</item><item name="android:fontFamily">@font/montserrat_regular</item></style>
+    <style name="MontserratRegular14sp">
+        <item name="android:textSize">14.0sp</item>
+        <item name="android:textColor">@color/manga_ink</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+    </style>
 
-    <style name="MontserratRegular12sp"><item name="android:textSize">12.0sp</item><item name="android:textColor">@android:color/white</item><item name="android:fontFamily">@font/montserrat_regular</item></style>
+    <style name="MontserratRegular12sp">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@color/manga_ink</item>
+        <item name="android:fontFamily">@font/montserrat_regular</item>
+    </style>
 </resources>
-

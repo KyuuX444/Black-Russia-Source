@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="270"
-                android:endColor="#5420AD"
-                android:startColor="#682BD0" />
-            <corners android:radius="8dp" />
-            <stroke
-                android:width="1.5dp"
-                android:color="#C4B5FD" />
-        </shape>
+        <layer-list>
+            <item android:left="2dp" android:top="2dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#B01C2A" />
+                    <corners android:radius="4dp" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="#111111" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
     <item>
-        <shape android:shape="rectangle">
-            <gradient
-                android:angle="270"
-                android:endColor="#682BD0"
-                android:startColor="#803DF2" />
-            <corners android:radius="8dp" />
-            <stroke
-                android:width="1.5dp"
-                android:color="#A78BFA" />
-        </shape>
+        <layer-list>
+            <item android:left="3dp" android:top="3dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#111111" />
+                    <corners android:radius="4dp" />
+                </shape>
+            </item>
+            <item android:bottom="3dp" android:right="3dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#D62839" />
+                    <corners android:radius="4dp" />
+                    <stroke
+                        android:width="2dp"
+                        android:color="#111111" />
+                </shape>
+            </item>
+        </layer-list>
     </item>
 </selector>

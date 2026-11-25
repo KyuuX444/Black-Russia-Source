@@ -5,7 +5,10 @@
     android:background="@drawable/ryzn_sheet_surface"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:paddingStart="20dp"
+    android:paddingTop="20dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp">
 
     <TextView
         android:id="@+id/prompt_title"
@@ -14,7 +17,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:gravity="center"
         android:text="Identitas Pemain"
-        android:textColor="@color/ryzn_text_primary"
+        android:textColor="@color/manga_ink"
         android:textSize="16sp" />
 
     <TextView
@@ -36,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@drawable/ryzn_field_surface"
-        android:fontFamily="@font/montserrat_regular"
+        android:fontFamily="@font/montserrat_medium"
         android:hint="Nick_Name..."
         android:imeOptions="actionDone"
         android:inputType="textNoSuggestions"
@@ -44,7 +47,7 @@
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textColor="@color/ryzn_text_primary"
+        android:textColor="@color/manga_ink"
         android:textColorHint="@color/ryzn_text_muted"
         android:textSize="13sp" />
 
@@ -54,14 +57,14 @@
         android:layout_height="44dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/ryzn_field_surface"
-        android:fontFamily="@font/montserrat_regular"
+        android:fontFamily="@font/montserrat_medium"
         android:hint="Kata sandi server..."
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textColor="@color/ryzn_text_primary"
+        android:textColor="@color/manga_ink"
         android:textColorHint="@color/ryzn_text_muted"
         android:textSize="13sp"
         android:visibility="gone" />
@@ -75,23 +78,25 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prompt_cancel_btn"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="44dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_action_dark"
             android:fontFamily="@font/montserrat_bold"
+            android:paddingBottom="2dp"
             android:text="Batal"
             android:textAllCaps="false"
-            android:textColor="@color/ryzn_text_primary"
+            android:textColor="@color/manga_ink"
             android:textSize="13sp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/prompt_confirm_btn"
             android:layout_width="0dp"
-            android:layout_height="42dp"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@drawable/bg_btn_play_purple"
             android:fontFamily="@font/montserrat_bold"
+            android:paddingBottom="3dp"
             android:text="Simpan"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"

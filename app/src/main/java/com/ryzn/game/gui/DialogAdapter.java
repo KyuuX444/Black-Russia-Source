@@ -1,6 +1,5 @@
 package com.ryzn.game.gui;
 
-import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,26 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ryzn.game.R;
 import com.ryzn.game.gui.util.Utils;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder> {
-    private final Activity mContext;
-    private int mCurrentSelectedPosition = 0;
-    private View mCurrentSelectedView;
-    private int mFieldsCount = 1;
-    private boolean mNeedMatchParent = false;
-
-    private OnClickListener mOnClickListener;
-    private OnDoubleClickListener mOnDoubleClickListener;
-    private final ArrayList<String> mRowsList;
-    private final int[] mTabSizes = {0, 0, 0, 0};
-    private final boolean mTablist;
-    private boolean mbSkip = false;
-    private SampGuiSkin mSkin;
-    private int mSkinVersion = 0;
 
     public interface OnClickListener {
-        void onClick(int i, String str);
+        void onClick(int position, String col0Text);
     }
 
     public interface OnDoubleClickListener {
@@ -42,166 +27,106 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView[] mFields = new TextView[4];
         public final ImageView mRowBg;
-        private final View mView;
+        private final View mRoot;
 
-        public ViewHolder(View view) {
+        public ViewHolder(@NonNull View view) {
             super(view);
-            this.mView = view;
-            this.mRowBg = view.findViewById(R.id.item_bg);
-            this.mFields[0] = view.findViewById(R.id.item_field1);
-            this.mFields[1] = view.findViewById(R.id.item_field2);
-            this.mFields[2] = view.findViewById(R.id.item_field3);
-            this.mFields[3] = view.findViewById(R.id.item_field4);
-        }
-
-        public View getMView() {
-            return this.mView;
+            mRoot = view;
+            mRowBg = view.findViewById(R.id.item_bg);
+            mFields[0] = view.findViewById(R.id.item_field1);
+            mFields[1] = view.findViewById(R.id.item_field2);
+            mFields[2] = view.findViewById(R.id.item_field3);
+            mFields[3] = view.findViewById(R.id.item_field4);
         }
     }
 
-    public DialogAdapter(ArrayList<String> arrayList, Activity activity, boolean tablist) {
-        this.mRowsList = arrayList;
-        this.mContext = activity;
-        this.mTablist = tablist;
+    private final List<String[]> mRows;
+    private final int mColumnCount;
+    private final int[] mColumnWidths;
+    private boolean mMatchParent = false;
+    private int mSelectedPosition = 0;
+
+    private OnClickListener mOnClickListener;
+    private OnDoubleClickListener mOnDoubleClickListener;
+
+    public DialogAdapter(List<String[]> rows, int columnCount, int[] columnWidths) {
+        this.mRows = rows;
+        this.mColumnCount = Math.max(1, Math.min(4, columnCount));
+        this.mColumnWidths = columnWidths != null ? columnWidths : new int[]{0, 0, 0, 0};
     }
 
-    public void setSkin(SampGuiSkin skin) {
-        this.mSkin = skin;
-        this.mSkinVersion++;
-        notifyDataSetChanged();
+    public void setOnClickListener(OnClickListener listener) {
+        this.mOnClickListener = listener;
     }
 
-    public void setOnDoubleClickListener(OnDoubleClickListener onDoubleClickListener) {
-        this.mOnDoubleClickListener = onDoubleClickListener;
-    }
-
-    public void setOnClickListener(OnClickListener onClickListener) {
-        this.mOnClickListener = onClickListener;
+    public void setOnDoubleClickListener(OnDoubleClickListener listener) {
+        this.mOnDoubleClickListener = listener;
     }
 
     public void setMatchParent(boolean matchParent) {
-        if (this.mNeedMatchParent != matchParent) {
-            this.mNeedMatchParent = matchParent;
+        if (this.mMatchParent != matchParent) {
+            this.mMatchParent = matchParent;
             notifyDataSetChanged();
-        }
-    }
-
-    public int[] mergeTabSizes(int[] headerSizes) {
-        for (int i = 0; i < 4; i++) {
-            if (headerSizes[i] > mTabSizes[i]) {
-                mTabSizes[i] = headerSizes[i];
-            }
-        }
-        this.mbSkip = true;
-        notifyDataSetChanged();
-        return this.mTabSizes;
-    }
-
-    private void updateSizes(TextView textView) {
-        for (int i = 0; i < 4; i++) {
-            mTabSizes[i] = 0;
-        }
-        this.mFieldsCount = 1;
-        for (int i = 0; i < this.mRowsList.size(); i++) {
-            String str = this.mRowsList.get(i);
-            if (!this.mTablist) {
-                float textWidth = Utils.getTextWidth(Utils.getColoredString(str).toString(), textView.getPaint())
-                        + Utils.scale(this.mContext, 32.0f);
-                if ((float) mTabSizes[0] < textWidth) {
-                    mTabSizes[0] = (int) textWidth;
-                }
-            } else {
-                String[] split = str.split("\t");
-                int length = Math.min(4, split.length);
-                if (this.mFieldsCount < length) {
-                    this.mFieldsCount = length;
-                }
-                for (int i2 = 0; i2 < length; i2++) {
-                    float textWidth2 = Utils.getTextWidth(Utils.getColoredString(split[i2]).toString(), textView.getPaint())
-                            + Utils.scale(this.mContext, 32.0f);
-                    if ((float) mTabSizes[i2] < textWidth2) {
-                        mTabSizes[i2] = (int) textWidth2;
-                    }
-                }
-            }
         }
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View inflate = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_dialog_item, viewGroup, false);
-        return new ViewHolder(inflate);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_dialog_item, parent, false);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        int pos = viewHolder.getAdapterPosition();
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        int pos = holder.getAdapterPosition();
         if (pos == RecyclerView.NO_POSITION) pos = position;
+        if (pos < 0 || pos >= mRows.size()) return;
 
-        if (pos == 0 && !this.mbSkip) {
-            updateSizes(viewHolder.mFields[0]);
-        }
-        for (int i2 = 0; i2 < 4; i2++) {
-            if (this.mFieldsCount <= i2) {
-                viewHolder.mFields[i2].setVisibility(View.GONE);
+        String[] cols = mRows.get(pos);
+        for (int c = 0; c < 4; c++) {
+            TextView tv = holder.mFields[c];
+            if (c >= mColumnCount) {
+                tv.setVisibility(View.GONE);
             } else {
-                viewHolder.mFields[i2].setVisibility(View.VISIBLE);
-                ViewGroup.LayoutParams lp = viewHolder.mFields[i2].getLayoutParams();
-                lp.width = this.mTabSizes[i2];
-                viewHolder.mFields[i2].setLayoutParams(lp);
-                viewHolder.mFields[i2].setText("");
-            }
-        }
-        String str = this.mRowsList.get(pos);
-        if (!this.mTablist) {
-            viewHolder.mFields[0].setText(Utils.getColoredString(str));
-        } else {
-            String[] split = str.split("\t");
-            int length = Math.min(4, split.length);
-            for (int i3 = 0; i3 < length; i3++) {
-                viewHolder.mFields[i3].setText(Utils.getColoredString(split[i3]));
-            }
-        }
-        if (this.mSkin != null) {
-            Object tag = viewHolder.mRowBg.getTag();
-            if (!(tag instanceof Integer) || ((Integer) tag) != mSkinVersion) {
-                android.graphics.drawable.Drawable selBg = mSkin.createSelectionBarDrawable(mContext);
-                viewHolder.mRowBg.setImageDrawable(null);
-                if (selBg != null) {
-                    viewHolder.mRowBg.setBackground(selBg);
+                tv.setVisibility(View.VISIBLE);
+                String cell = c < cols.length ? cols[c] : "";
+                tv.setText(Utils.getColoredString(cell));
+
+                ViewGroup.LayoutParams lp = tv.getLayoutParams();
+                if (mColumnWidths[c] > 0) {
+                    lp.width = mColumnWidths[c];
                 } else {
-                    viewHolder.mRowBg.setBackgroundColor(0x40808080);
+                    lp.width = ViewGroup.LayoutParams.WRAP_CONTENT;
                 }
-                viewHolder.mRowBg.setTag(mSkinVersion);
+                tv.setLayoutParams(lp);
             }
         }
-        if (this.mCurrentSelectedPosition == pos) {
-            this.mCurrentSelectedView = viewHolder.mRowBg;
-            viewHolder.mRowBg.setVisibility(View.VISIBLE);
-            if (this.mOnClickListener != null) {
-                this.mOnClickListener.onClick(pos, viewHolder.mFields[0].getText().toString());
-            }
-        } else {
-            viewHolder.mRowBg.setVisibility(View.GONE);
+
+        holder.mRowBg.setVisibility(pos == mSelectedPosition ? View.VISIBLE : View.GONE);
+
+        ViewGroup.LayoutParams rootLp = holder.mRoot.getLayoutParams();
+        if (rootLp != null) {
+            rootLp.width = mMatchParent
+                    ? ViewGroup.LayoutParams.MATCH_PARENT
+                    : ViewGroup.LayoutParams.WRAP_CONTENT;
+            holder.mRoot.setLayoutParams(rootLp);
         }
 
-        ViewGroup.LayoutParams rootLp = viewHolder.getMView().getLayoutParams();
-        rootLp.width = this.mNeedMatchParent ? -1 : -2;
-        viewHolder.getMView().setLayoutParams(rootLp);
-
-        viewHolder.getMView().setOnClickListener(view -> {
-            int clickedPos = viewHolder.getAdapterPosition();
-            if (clickedPos == RecyclerView.NO_POSITION) return;
-            if (clickedPos != mCurrentSelectedPosition) {
-                if (mCurrentSelectedView != null) {
-                    mCurrentSelectedView.setVisibility(View.GONE);
+        holder.mRoot.setOnClickListener(v -> {
+            int clickedPos = holder.getAdapterPosition();
+            if (clickedPos == RecyclerView.NO_POSITION || clickedPos >= mRows.size()) return;
+            if (clickedPos != mSelectedPosition) {
+                int prev = mSelectedPosition;
+                mSelectedPosition = clickedPos;
+                if (prev >= 0 && prev < mRows.size()) {
+                    notifyItemChanged(prev);
                 }
-                mCurrentSelectedPosition = clickedPos;
-                mCurrentSelectedView = viewHolder.mRowBg;
-                viewHolder.mRowBg.setVisibility(View.VISIBLE);
+                notifyItemChanged(clickedPos);
                 if (mOnClickListener != null) {
-                    mOnClickListener.onClick(clickedPos, viewHolder.mFields[0].getText().toString());
+                    String[] row = mRows.get(clickedPos);
+                    String firstCol = row.length > 0 ? Utils.getStringWithoutColors(row[0]) : "";
+                    mOnClickListener.onClick(clickedPos, firstCol);
                 }
             } else if (mOnDoubleClickListener != null) {
                 mOnDoubleClickListener.onDoubleClick();
@@ -211,6 +136,6 @@ public class DialogAdapter extends RecyclerView.Adapter<DialogAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return this.mRowsList.size();
+        return mRows.size();
     }
 }

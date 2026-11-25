@@ -3,7 +3,9 @@ package com.ryzn.launcher.fragment;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +35,12 @@ import com.ryzn.launcher.other.ServerManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
- * Primary portrait home screen displaying the navigation rail, Los Santos hero banner,
- * selectable SA-MP server list with live Refresh, selected Server Information + preview,
- * and main PLAY / Settings actions.
+ * Primary portrait home screen displaying the Manga Los Santos hero banner,
+ * searchable SA-MP server list with +IP/Refresh, selected Server Information, and PLAY CTA.
  */
 public class HomeFragment extends Fragment {
 
@@ -46,11 +48,13 @@ public class HomeFragment extends Fragment {
             "^(((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)+[A-Za-z]{2,10}|localhost|(([0-9]{1,3}\\.){3})[0-9]{1,3})(:[0-9]{1,5})?$"
     );
 
-    private final List<ServerInfo> servers = new ArrayList<>();
+    private final List<ServerInfo> allServers = new ArrayList<>();
+    private final List<ServerInfo> filteredServers = new ArrayList<>();
     private ServerAdapter adapter;
     private RecyclerView recyclerView;
     private TextView emptyHint;
     private ImageView refreshIcon;
+    private EditText searchInput;
 
     private TextView bannerNickText;
     private TextView infoServerName;
@@ -66,7 +70,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        bindNavigationRail(view);
         bindBanner(view, inflater);
         bindServerList(view, inflater);
         bindInfoAndActions(view);
@@ -81,30 +84,6 @@ public class HomeFragment extends Fragment {
         updateNickBadge();
     }
 
-    private void bindNavigationRail(View view) {
-        view.findViewById(R.id.rail_home).setOnClickListener(v -> reloadAndQueryServers());
-        view.findViewById(R.id.rail_server).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openServersTab();
-            }
-        });
-        view.findViewById(R.id.rail_settings).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openSettingsTab();
-            }
-        });
-        view.findViewById(R.id.rail_about).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).showAboutDialog();
-            }
-        });
-        view.findViewById(R.id.rail_exit).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).confirmExit();
-            }
-        });
-    }
-
     private void bindBanner(View view, LayoutInflater inflater) {
         bannerNickText = view.findViewById(R.id.banner_nick_text);
         view.findViewById(R.id.banner_nick_chip).setOnClickListener(v ->
@@ -116,9 +95,10 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.home_servers_recycler);
         emptyHint = view.findViewById(R.id.home_servers_empty);
         refreshIcon = view.findViewById(R.id.icon_refresh);
+        searchInput = view.findViewById(R.id.home_server_search);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        adapter = new ServerAdapter(servers);
+        adapter = new ServerAdapter(filteredServers);
         adapter.setOnServerClickListener((server, position) -> {
             selectedAddressKey = server.getAddress();
             updateSelectedServerInfo(server);
@@ -131,6 +111,16 @@ public class HomeFragment extends Fragment {
             reloadAndQueryServers();
         });
         view.findViewById(R.id.btn_add_server_inline).setOnClickListener(v -> showAddServerDialog(inflater));
+
+        if (searchInput != null) {
+            searchInput.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    applyServerFilter(s != null ? s.toString() : "");
+                }
+                @Override public void afterTextChanged(Editable s) { }
+            });
+        }
     }
 
     private void bindInfoAndActions(View view) {
@@ -141,40 +131,60 @@ public class HomeFragment extends Fragment {
         infoPing = view.findViewById(R.id.info_ping);
 
         view.findViewById(R.id.btn_play_main).setOnClickListener(v -> handlePlayAction());
-        view.findViewById(R.id.btn_open_settings).setOnClickListener(v -> {
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).openSettingsTab();
-            }
-        });
     }
 
-    private void reloadAndQueryServers() {
+    private void applyServerFilter(String rawQuery) {
         if (!isAdded()) return;
+        String q = rawQuery != null ? rawQuery.trim().toLowerCase(Locale.ROOT) : "";
+
         ServerInfo prev = adapter.getSelectedServer();
         if (prev != null) {
             selectedAddressKey = prev.getAddress();
         }
 
-        servers.clear();
-        servers.addAll(ServerManager.loadServers(requireContext()));
+        filteredServers.clear();
+        for (ServerInfo item : allServers) {
+            if (q.isEmpty()
+                    || item.name.toLowerCase(Locale.ROOT).contains(q)
+                    || item.getAddress().toLowerCase(Locale.ROOT).contains(q)
+                    || item.mode.toLowerCase(Locale.ROOT).contains(q)) {
+                filteredServers.add(item);
+            }
+        }
 
         int targetPos = 0;
-        for (int i = 0; i < servers.size(); i++) {
-            if (servers.get(i).getAddress().equalsIgnoreCase(selectedAddressKey)) {
+        for (int i = 0; i < filteredServers.size(); i++) {
+            if (filteredServers.get(i).getAddress().equalsIgnoreCase(selectedAddressKey)) {
                 targetPos = i;
                 break;
             }
         }
         adapter.notifyDataSetChanged();
-        adapter.setSelectedPosition(servers.isEmpty() ? -1 : targetPos);
+        adapter.setSelectedPosition(filteredServers.isEmpty() ? -1 : targetPos);
 
-        emptyHint.setVisibility(servers.isEmpty() ? View.VISIBLE : View.GONE);
+        if (filteredServers.isEmpty()) {
+            emptyHint.setVisibility(View.VISIBLE);
+            emptyHint.setText(allServers.isEmpty()
+                    ? "Belum ada server. Ketuk + IP untuk menambahkan server SA-MP."
+                    : "Server tidak ditemukan untuk \"" + q + "\".");
+        } else {
+            emptyHint.setVisibility(View.GONE);
+        }
         updateSelectedServerInfo(adapter.getSelectedServer());
+    }
 
-        if (!servers.isEmpty() && getActivity() != null) {
-            ServerManager.queryAllServers(getActivity(), servers, updated -> {
+    private void reloadAndQueryServers() {
+        if (!isAdded()) return;
+        allServers.clear();
+        allServers.addAll(ServerManager.loadServers(requireContext()));
+        applyServerFilter(searchInput != null && searchInput.getText() != null
+                ? searchInput.getText().toString()
+                : "");
+
+        if (!allServers.isEmpty() && getActivity() != null) {
+            ServerManager.queryAllServers(getActivity(), allServers, updated -> {
                 if (!isAdded()) return;
-                int idx = servers.indexOf(updated);
+                int idx = filteredServers.indexOf(updated);
                 if (idx >= 0) {
                     adapter.notifyItemChanged(idx);
                     if (idx == adapter.getSelectedPosition()) {
@@ -211,11 +221,7 @@ public class HomeFragment extends Fragment {
     private void updateNickBadge() {
         if (!isAdded() || bannerNickText == null) return;
         String nick = ServerManager.readSavedNickname(requireContext());
-        if (TextUtils.isEmpty(nick)) {
-            bannerNickText.setText("Set Nick_Name");
-        } else {
-            bannerNickText.setText(nick);
-        }
+        bannerNickText.setText(TextUtils.isEmpty(nick) ? "Set Nick_Name" : nick);
     }
 
     private void handlePlayAction() {
@@ -349,7 +355,7 @@ public class HomeFragment extends Fragment {
                 .setTitle(server.name)
                 .setItems(options, (d, which) -> {
                     if (which == 0) {
-                        int idx = servers.indexOf(server);
+                        int idx = filteredServers.indexOf(server);
                         if (idx >= 0) adapter.setSelectedPosition(idx);
                         updateSelectedServerInfo(server);
                         handlePlayAction();

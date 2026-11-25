@@ -4,14 +4,14 @@
     android:id="@+id/item_server_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/bg_server_item_normal"
     android:clickable="true"
     android:focusable="true"
     android:paddingStart="10dp"
     android:paddingTop="8dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="8dp">
+    android:paddingEnd="11dp"
+    android:paddingBottom="9dp">
 
     <FrameLayout
         android:id="@+id/item_icon_frame"
@@ -28,7 +28,8 @@
             android:layout_height="17dp"
             android:layout_gravity="center"
             android:contentDescription="@null"
-            android:src="@drawable/ic_server_node" />
+            android:src="@drawable/ic_server_node"
+            app:tint="@color/manga_ink" />
 
         <ImageView
             android:id="@+id/item_lock_icon"
@@ -56,7 +57,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat_bold"
             android:text="0 / 0"
-            android:textColor="@color/ryzn_text_primary"
+            android:textColor="@color/manga_ink"
             android:textSize="11.5sp" />
 
         <LinearLayout
@@ -78,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
-                android:fontFamily="@font/montserrat_medium"
+                android:fontFamily="@font/montserrat_bold"
                 android:text="-- ms"
                 android:textColor="@color/ryzn_text_secondary"
                 android:textSize="10sp" />
@@ -102,7 +103,7 @@
         android:fontFamily="@font/montserrat_bold"
         android:maxLines="1"
         android:text="Memuat server..."
-        android:textColor="@color/ryzn_text_primary"
+        android:textColor="@color/manga_ink"
         android:textSize="13sp"
         app:layout_constraintEnd_toStartOf="@id/item_right_col"
         app:layout_constraintStart_toEndOf="@id/item_icon_frame"
@@ -119,7 +120,6 @@
         android:text="127.0.0.1:7777 • SA-MP"
         android:textColor="@color/ryzn_text_secondary"
         android:textSize="10.5sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/item_server_name"
         app:layout_constraintStart_toStartOf="@id/item_server_name"
         app:layout_constraintTop_toBottomOf="@id/item_server_name" />

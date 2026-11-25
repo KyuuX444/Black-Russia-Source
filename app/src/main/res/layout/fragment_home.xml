@@ -8,188 +8,19 @@
     android:paddingEnd="10dp"
     android:paddingBottom="8dp">
 
-    <!-- Top Hero Row: Left Vertical Navigation Rail + Right Los Santos Banner -->
-    <LinearLayout
-        android:id="@+id/nav_rail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toStartOf="@+id/hero_banner_card"
-        app:layout_constraintHorizontal_weight="0.36"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <LinearLayout
-            android:id="@+id/rail_home"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/bg_nav_item_selected"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_home" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_bold"
-                android:maxLines="1"
-                android:text="@string/nav_home"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="11.5sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rail_server"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/bg_nav_item_normal"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_server" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_bold"
-                android:maxLines="1"
-                android:text="@string/nav_servers"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="11.5sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rail_settings"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/bg_nav_item_normal"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_settings" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_bold"
-                android:maxLines="1"
-                android:text="@string/nav_settings"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="11.5sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rail_about"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/bg_nav_item_normal"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_info" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_bold"
-                android:maxLines="1"
-                android:text="@string/nav_about"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="11.5sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/rail_exit"
-            android:layout_width="match_parent"
-            android:layout_height="31dp"
-            android:background="@drawable/bg_nav_item_normal"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="9dp"
-            android:paddingEnd="8dp">
-
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_exit" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
-                android:fontFamily="@font/montserrat_bold"
-                android:maxLines="1"
-                android:text="@string/nav_exit"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="11.5sp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- 2. Banner (Los Santos Sunset Vector Skyline) -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- 1. Hero Manga Banner Panel -->
+    <FrameLayout
         android:id="@+id/hero_banner_card"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        app:cardBackgroundColor="#18181D"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/nav_rail"
+        android:layout_height="118dp"
+        android:background="@drawable/bg_card_surface"
+        android:paddingStart="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.64"
-        app:layout_constraintStart_toEndOf="@+id/nav_rail"
-        app:layout_constraintTop_toTopOf="@+id/nav_rail"
-        app:strokeColor="@color/ryzn_surface_stroke"
-        app:strokeWidth="1dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -206,77 +37,84 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#28000000" />
+                android:background="#58FAF8F3" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingStart="12dp"
-                android:paddingEnd="12dp"
-                android:paddingBottom="18dp">
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="RYZN"
+                        android:textColor="@color/manga_ink"
+                        android:textSize="26sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="@color/manga_ink"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:paddingStart="7dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="7dp"
+                        android:paddingBottom="2dp"
+                        android:text="SA-MP"
+                        android:textColor="#FFFFFF"
+                        android:textSize="11.5sp" />
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:background="#DCFFFFFF"
                     android:fontFamily="@font/montserrat_bold"
-                    android:shadowColor="#CC000000"
-                    android:shadowDx="2"
-                    android:shadowDy="2"
-                    android:shadowRadius="4"
-                    android:text="Ryzn"
-                    android:textColor="@color/ryzn_text_primary"
-                    android:textSize="26sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="-6dp"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:shadowColor="#CC000000"
-                    android:shadowDx="1"
-                    android:shadowDy="2"
-                    android:shadowRadius="3"
-                    android:text="SA-MP"
-                    android:textColor="@color/ryzn_purple_light"
-                    android:textSize="17sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:shadowColor="#CC000000"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-                    android:shadowRadius="2"
+                    android:paddingStart="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="2dp"
                     android:text="@string/banner_tagline"
-                    android:textColor="#E4E4E7"
+                    android:textColor="@color/manga_crimson"
                     android:textSize="10.5sp" />
             </LinearLayout>
 
-            <!-- Tappable Nickname Pill bottom-right of Banner -->
+            <!-- Tappable Nickname Badge bottom-right of Banner -->
             <LinearLayout
                 android:id="@+id/banner_nick_chip"
                 android:layout_width="wrap_content"
-                android:layout_height="24dp"
+                android:layout_height="26dp"
                 android:layout_gravity="bottom|end"
                 android:layout_margin="8dp"
-                android:background="#B816161B"
+                android:background="@color/manga_ink"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp">
+                android:paddingStart="9dp"
+                android:paddingEnd="9dp">
 
                 <ImageView
                     android:layout_width="13dp"
                     android:layout_height="13dp"
-                    android:layout_marginEnd="4dp"
+                    android:layout_marginEnd="5dp"
                     android:contentDescription="@null"
-                    android:src="@drawable/ic_nick" />
+                    android:src="@drawable/ic_nick"
+                    app:tint="#FFFFFF" />
 
                 <TextView
                     android:id="@+id/banner_nick_text"
@@ -284,403 +122,407 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/montserrat_bold"
-                    android:maxWidth="115dp"
+                    android:maxWidth="135dp"
                     android:maxLines="1"
                     android:text="Set Nick_Name"
-                    android:textColor="@color/ryzn_text_primary"
-                    android:textSize="10sp" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="10.5sp" />
             </LinearLayout>
         </FrameLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 
-    <!-- 3. Server List Card -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- 2. Server List Comic Panel -->
+    <LinearLayout
         android:id="@+id/server_list_card"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        app:cardBackgroundColor="@color/ryzn_surface_dark"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
+        android:background="@drawable/bg_card_surface"
+        android:orientation="vertical"
+        android:paddingStart="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_split_barrier"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_min="138dp"
+        app:layout_constraintHeight_min="148dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nav_rail"
-        app:strokeColor="@color/ryzn_surface_stroke"
-        app:strokeWidth="1dp">
+        app:layout_constraintTop_toBottomOf="@+id/hero_banner_card">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:paddingEnd="6dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/bg_section_header_tab"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center_vertical"
+                android:paddingStart="12dp"
+                android:paddingEnd="14dp"
+                android:paddingBottom="2dp"
+                android:text="@string/section_server_list"
+                android:textColor="#FFFFFF"
+                android:textSize="12.5sp" />
+
+            <LinearLayout
+                android:id="@+id/btn_refresh_servers"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_btn_action_dark"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="8dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="2dp">
+
+                <ImageView
+                    android:id="@+id/icon_refresh"
+                    android:layout_width="13dp"
+                    android:layout_height="13dp"
+                    android:layout_marginEnd="4dp"
+                    android:contentDescription="@string/action_refresh"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/manga_ink" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/action_refresh"
+                    android:textColor="@color/manga_ink"
+                    android:textSize="10.5sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/btn_add_server_inline"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="6dp"
+                android:layout_toStartOf="@id/btn_refresh_servers"
+                android:background="@drawable/bg_btn_action_dark"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:paddingStart="9dp"
+                android:paddingEnd="11dp"
+                android:paddingBottom="2dp"
+                android:text="@string/action_add_ip"
+                android:textColor="@color/manga_crimson"
+                android:textSize="10.5sp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/manga_ink" />
+
+        <!-- Compact Inline Server Filter -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="34dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/ryzn_field_surface"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="9dp"
+            android:paddingEnd="9dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="34dp"
-                android:paddingEnd="8dp">
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginEnd="7dp"
+                android:contentDescription="@null"
+                android:src="@drawable/search_24px"
+                app:tint="@color/ryzn_text_secondary" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:background="@drawable/bg_section_header_tab"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:gravity="center_vertical"
-                    android:paddingStart="12dp"
-                    android:paddingEnd="14dp"
-                    android:text="@string/section_server_list"
-                    android:textColor="@color/ryzn_text_primary"
-                    android:textSize="13sp" />
-
-                <LinearLayout
-                    android:id="@+id/btn_refresh_servers"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/bg_btn_action_dark"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp">
-
-                    <ImageView
-                        android:id="@+id/icon_refresh"
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        android:layout_marginEnd="4dp"
-                        android:contentDescription="@string/action_refresh"
-                        android:src="@drawable/ic_refresh" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_bold"
-                        android:text="@string/action_refresh"
-                        android:textColor="@color/ryzn_text_primary"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/btn_add_server_inline"
-                    android:layout_width="wrap_content"
-                    android:layout_height="26dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="6dp"
-                    android:layout_toStartOf="@id/btn_refresh_servers"
-                    android:background="@drawable/bg_btn_action_dark"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:gravity="center"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp"
-                    android:text="@string/action_add_ip"
-                    android:textColor="@color/ryzn_purple_light"
-                    android:textSize="11sp" />
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#282831" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/home_servers_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:paddingStart="6dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="6dp" />
-
-                <TextView
-                    android:id="@+id/home_servers_empty"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/montserrat_regular"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="Belum ada server. Ketuk + IP untuk menambahkan server SA-MP."
-                    android:textColor="@color/ryzn_text_muted"
-                    android:textSize="12sp"
-                    android:visibility="gone" />
-            </FrameLayout>
+            <EditText
+                android:id="@+id/home_server_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/montserrat_medium"
+                android:hint="Cari nama / IP server..."
+                android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/manga_ink"
+                android:textColorHint="@color/ryzn_text_muted"
+                android:textSize="11.5sp" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_servers_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingStart="6dp"
+                android:paddingTop="6dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="6dp" />
+
+            <TextView
+                android:id="@+id/home_servers_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/montserrat_medium"
+                android:gravity="center"
+                android:padding="16dp"
+                android:text="Belum ada server. Ketuk + IP untuk menambahkan server SA-MP."
+                android:textColor="@color/ryzn_text_muted"
+                android:textSize="12sp"
+                android:visibility="gone" />
+        </FrameLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/bottom_split_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="top"
-        app:constraint_referenced_ids="info_card,main_action_col" />
+        app:constraint_referenced_ids="info_card,btn_play_main" />
 
-    <!-- 4. Server Information Card (Bottom Left) -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- 3. Server Information Card (Bottom Left) -->
+    <LinearLayout
         android:id="@+id/info_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        app:cardBackgroundColor="@color/ryzn_surface_dark"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
+        android:background="@drawable/bg_card_surface"
+        android:orientation="vertical"
+        android:paddingStart="2dp"
+        android:paddingTop="2dp"
+        android:paddingEnd="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/main_action_col"
-        app:layout_constraintHorizontal_weight="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/ryzn_surface_stroke"
-        app:strokeWidth="1dp">
+        app:layout_constraintEnd_toStartOf="@+id/btn_play_main"
+        app:layout_constraintHorizontal_weight="0.56"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:background="@drawable/bg_section_header_tab"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center_vertical"
+            android:paddingStart="10dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="2dp"
+            android:text="@string/section_server_info"
+            android:textColor="#FFFFFF"
+            android:textSize="11.5sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingStart="9dp"
+            android:paddingTop="6dp"
+            android:paddingEnd="9dp"
+            android:paddingBottom="7dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="26dp"
-                android:background="@drawable/bg_section_header_tab"
+                android:id="@+id/info_server_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
                 android:fontFamily="@font/montserrat_bold"
-                android:gravity="center_vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="12dp"
-                android:text="@string/section_server_info"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="12sp" />
+                android:maxLines="1"
+                android:text="Pilih server"
+                android:textColor="@color/manga_ink"
+                android:textSize="11.5sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingStart="9dp"
-                android:paddingTop="6dp"
-                android:paddingEnd="9dp"
-                android:paddingBottom="8dp">
+                android:layout_marginTop="4dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/info_server_name"
-                    android:layout_width="match_parent"
+                    android:layout_width="50dp"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/label_mode"
+                    android:textColor="@color/ryzn_text_secondary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/info_mode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:maxLines="1"
+                    android:text=": -"
+                    android:textColor="@color/manga_ink"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/label_map"
+                    android:textColor="@color/ryzn_text_secondary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/info_map"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:maxLines="1"
+                    android:text=": San Andreas"
+                    android:textColor="@color/manga_ink"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/label_players"
+                    android:textColor="@color/ryzn_text_secondary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/info_players"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:maxLines="1"
+                    android:text=": 0 / 0"
+                    android:textColor="@color/manga_ink"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/label_ping"
+                    android:textColor="@color/ryzn_text_secondary"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/info_ping"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:fontFamily="@font/montserrat_bold"
                     android:maxLines="1"
-                    android:text="Pilih server"
-                    android:textColor="@color/ryzn_text_primary"
-                    android:textSize="11.5sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/label_mode"
-                        android:textColor="@color/ryzn_text_muted"
-                        android:textSize="10.5sp" />
-
-                    <TextView
-                        android:id="@+id/info_mode"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:maxLines="1"
-                        android:text=": -"
-                        android:textColor="@color/ryzn_text_primary"
-                        android:textSize="10.5sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/label_map"
-                        android:textColor="@color/ryzn_text_muted"
-                        android:textSize="10.5sp" />
-
-                    <TextView
-                        android:id="@+id/info_map"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:maxLines="1"
-                        android:text=": San Andreas"
-                        android:textColor="@color/ryzn_text_primary"
-                        android:textSize="10.5sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/label_players"
-                        android:textColor="@color/ryzn_text_muted"
-                        android:textSize="10.5sp" />
-
-                    <TextView
-                        android:id="@+id/info_players"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:maxLines="1"
-                        android:text=": 0 / 0"
-                        android:textColor="@color/ryzn_text_primary"
-                        android:textSize="10.5sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="52dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:text="@string/label_ping"
-                        android:textColor="@color/ryzn_text_muted"
-                        android:textSize="10.5sp" />
-
-                    <TextView
-                        android:id="@+id/info_ping"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/montserrat_medium"
-                        android:maxLines="1"
-                        android:text=": -- ms"
-                        android:textColor="@color/ryzn_text_primary"
-                        android:textSize="10.5sp" />
-                </LinearLayout>
-
-                <!-- Preview screenshot server -->
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@drawable/bg_los_santos_sky">
-
-                    <ImageView
-                        android:id="@+id/info_preview_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:contentDescription="@string/section_server_info"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/bg_server_preview" />
-                </FrameLayout>
+                    android:text=": -- ms"
+                    android:textColor="@color/manga_ink"
+                    android:textSize="10sp" />
             </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <!-- 5. Main Action (PLAY & Settings) -->
+            <!-- Preview skyline panel -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/ryzn_field_surface"
+                android:padding="1.5dp">
+
+                <ImageView
+                    android:id="@+id/info_preview_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_los_santos_sky"
+                    android:contentDescription="@string/section_server_info"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/bg_server_preview" />
+            </FrameLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 4. Bold Shonen Manga PLAY CTA Panel (Bottom Right) -->
     <LinearLayout
-        android:id="@+id/main_action_col"
+        android:id="@+id/btn_play_main"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="bottom"
+        android:background="@drawable/bg_btn_play_purple"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
         android:orientation="vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="4dp"
         app:layout_constraintBottom_toBottomOf="@+id/info_card"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_weight="0.48"
+        app:layout_constraintHorizontal_weight="0.44"
         app:layout_constraintStart_toEndOf="@+id/info_card"
         app:layout_constraintTop_toTopOf="@+id/info_card">
 
-        <LinearLayout
-            android:id="@+id/btn_play_main"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_btn_play_purple"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+        <ImageView
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:contentDescription="@string/action_play"
+            android:src="@drawable/ic_play"
+            app:tint="#FFFFFF" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_play" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:letterSpacing="0.08"
+            android:text="@string/action_play"
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_bold"
-                android:letterSpacing="0.06"
-                android:shadowColor="#AA000000"
-                android:shadowDx="1"
-                android:shadowDy="2"
-                android:shadowRadius="3"
-                android:text="@string/action_play"
-                android:textColor="#FFFFFF"
-                android:textSize="22sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_open_settings"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_btn_action_dark"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginEnd="8dp"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_nav_settings" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserrat_bold"
-                android:text="@string/nav_settings"
-                android:textColor="@color/ryzn_text_primary"
-                android:textSize="13sp" />
-        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="MASUK GAME"
+            android:textColor="#FFE8EA"
+            android:textSize="9.5sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

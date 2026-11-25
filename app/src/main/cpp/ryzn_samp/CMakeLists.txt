@@ -71,8 +71,12 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         -O3 # Optimize
         -fexceptions # Enable exceptions
         -fstack-protector # Stack protector
-#        -fvisibility=hidden # Hide symbols
-#        -fvisibility-inlines-hidden # Hide inline symbols
+        -ffunction-sections
+        -fdata-sections
+)
+
+target_link_options(${PROJECT_NAME} PRIVATE
+        -Wl,--gc-sections
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE RAKSAMP_CLIENT)

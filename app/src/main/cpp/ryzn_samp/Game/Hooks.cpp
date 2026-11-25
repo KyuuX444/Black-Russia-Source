@@ -247,14 +247,21 @@ DECL_HOOK(bool, CFileMgr_ReadLine, uintptr_t handle, char *buffer, int maxSize)
 }
 
 static bool file_readable(const std::string& path) {
+	struct stat st{};
+	if (stat(path.c_str(), &st) != 0 || S_ISDIR(st.st_mode)) {
+		return false;
+	}
 	return access(path.c_str(), R_OK) == 0;
 }
 
 static std::mutex s_fsCacheMutex;
+static std::vector<std::string> s_modBases;
+static std::vector<std::string> s_stockBases;
 static std::vector<std::string> s_validBases;
 static bool s_basesInitialized = false;
 static std::unordered_map<std::string, std::unordered_map<std::string, std::string>> s_dirCache;
 static std::unordered_map<std::string, std::string> s_pathCache;
+static std::vector<std::string> s_customTdbNames;
 
 static std::string to_lower_ascii(std::string s)
 {
@@ -264,10 +271,77 @@ static std::string to_lower_ascii(std::string s)
 	return s;
 }
 
-static const std::vector<std::string>& get_valid_bases()
+static void push_unique_dir(std::vector<std::string>& out, const std::string& rawDir)
+{
+	if (rawDir.empty()) return;
+	std::string dir = rawDir;
+	if (dir.back() != '/') dir += '/';
+	for (const auto& existing : out) {
+		if (existing == dir) return;
+	}
+	struct stat st{};
+	if (stat(dir.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+		out.push_back(std::move(dir));
+	}
+}
+
+static void discover_modpack_roots(const std::string& parentDir, std::vector<std::string>& out)
+{
+	static const char* kAssetFolders[] = {
+		"anim", "audio", "cleo", "data", "models", "movies",
+		"mp3", "samp", "scripts", "texdb", "text", "tracks"
+	};
+
+	std::string modsDir;
+	DIR* parent = opendir(parentDir.c_str());
+	if (!parent) return;
+	struct dirent* pe;
+	while ((pe = readdir(parent)) != nullptr) {
+		if (strcasecmp(pe->d_name, "mods") == 0) {
+			modsDir = parentDir + pe->d_name + "/";
+			break;
+		}
+	}
+	closedir(parent);
+	if (modsDir.empty()) return;
+
+	// Direct files under <base>/mods/ take highest priority.
+	push_unique_dir(out, modsDir);
+
+	// Also allow modpack bundles such as <base>/mods/<PackName>/data/... or texdb/...
+	std::vector<std::string> packDirs;
+	DIR* mdir = opendir(modsDir.c_str());
+	if (mdir) {
+		struct dirent* me;
+		while ((me = readdir(mdir)) != nullptr) {
+			if (me->d_name[0] == '.') continue;
+			std::string lower = to_lower_ascii(me->d_name);
+			bool isStandardAssetSubdir = false;
+			for (const char* stdName : kAssetFolders) {
+				if (lower == stdName) {
+					isStandardAssetSubdir = true;
+					break;
+				}
+			}
+			if (isStandardAssetSubdir) continue;
+			std::string full = modsDir + me->d_name + "/";
+			struct stat st{};
+			if (stat(full.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
+				packDirs.push_back(std::move(full));
+			}
+		}
+		closedir(mdir);
+	}
+	std::sort(packDirs.begin(), packDirs.end());
+	for (const auto& pd : packDirs) {
+		push_unique_dir(out, pd);
+	}
+}
+
+static void init_file_bases_locked()
 {
 	if (s_basesInitialized) {
-		return s_validBases;
+		return;
 	}
 	const char* candidateBases[] = {
 		Client::gameDir(),
@@ -278,22 +352,27 @@ static const std::vector<std::string>& get_valid_bases()
 	};
 	for (const char* b : candidateBases) {
 		if (!b || !b[0]) continue;
-		std::string base(b);
-		if (base.back() != '/') base += '/';
-		bool dup = false;
-		for (const auto& existing : s_validBases) {
-			if (existing == base) {
-				dup = true;
-				break;
-			}
-		}
-		if (dup) continue;
-		struct stat st{};
-		if (stat(base.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
-			s_validBases.push_back(std::move(base));
-		}
+		std::string norm(b);
+		if (norm.back() != '/') norm += '/';
+		push_unique_dir(s_stockBases, norm);
+	}
+	// Modpack directories have priority over all stock bases.
+	for (const auto& stock : s_stockBases) {
+		discover_modpack_roots(stock, s_modBases);
+	}
+	for (const auto& modBase : s_modBases) {
+		push_unique_dir(s_validBases, modBase);
+	}
+	for (const auto& stock : s_stockBases) {
+		push_unique_dir(s_validBases, stock);
 	}
 	s_basesInitialized = true;
+}
+
+static std::vector<std::string> get_valid_bases()
+{
+	std::lock_guard<std::mutex> lock(s_fsCacheMutex);
+	init_file_bases_locked();
 	return s_validBases;
 }
 
@@ -365,32 +444,71 @@ static std::string resolve_case_insensitive_path(const std::string& baseDir, con
 	return "";
 }
 
-static std::string find_real_file(const std::string& requestedPath, bool useCache = true)
+static std::string extract_relative_asset_path(const std::string& requestedPath)
 {
 	std::string clean = requestedPath;
 	for (char& c : clean) {
 		if (c == '\\') c = '/';
 	}
 
-	// Extract relative part if requestedPath contains game directory or /files/
 	std::string rel = clean;
 	const char* pFiles = strstr(clean.c_str(), "/files/");
 	if (pFiles) {
 		rel = pFiles + 7;
 	} else if (!clean.empty() && clean.front() == '/') {
-		if (clean.find(Client::gameDir()) == 0) {
-			rel = clean.substr(strlen(Client::gameDir()));
+		const char* gd = Client::gameDir();
+		if (gd && gd[0] && clean.find(gd) == 0) {
+			rel = clean.substr(strlen(gd));
 		}
 	}
 	while (!rel.empty() && rel.front() == '/') {
 		rel.erase(rel.begin());
 	}
+	return rel;
+}
+
+static std::string resolve_in_base_list(const std::vector<std::string>& bases, const std::string& rel)
+{
+	if (rel.empty()) return "";
+	for (const auto& base : bases) {
+		std::string resolved = resolve_case_insensitive_path(base, rel);
+		if (!resolved.empty()) {
+			return resolved;
+		}
+
+		// Special case: decision files (PedEvent.txt, *.ped, *.grp) might be inside data/Decision/
+		if (rel.find("Decision") == std::string::npos && (rel.find(".ped") != std::string::npos || rel.find(".grp") != std::string::npos || rel == "PedEvent.txt")) {
+			std::string tryDec1 = resolve_case_insensitive_path(base, "data/Decision/" + rel);
+			if (!tryDec1.empty()) {
+				return tryDec1;
+			}
+			std::string tryDec2 = resolve_case_insensitive_path(base, "data/Decision/Allowed/" + rel);
+			if (!tryDec2.empty()) {
+				return tryDec2;
+			}
+		}
+
+		// Bare config/data filenames requested without directory prefix (e.g. TouchDefaultPhoneWidescreen.cfg, ShopUVs.dat)
+		if (rel.find('/') == std::string::npos) {
+			std::string tryData = resolve_case_insensitive_path(base, "data/" + rel);
+			if (!tryData.empty()) {
+				return tryData;
+			}
+		}
+	}
+	return "";
+}
+
+static std::string find_real_file(const std::string& requestedPath, bool useCache = true)
+{
+	std::string rel = extract_relative_asset_path(requestedPath);
 	if (rel.empty()) {
 		return "";
 	}
 
 	std::string cacheKey = to_lower_ascii(rel);
 	std::lock_guard<std::mutex> lock(s_fsCacheMutex);
+	init_file_bases_locked();
 
 	if (useCache) {
 		auto cached = s_pathCache.find(cacheKey);
@@ -399,42 +517,23 @@ static std::string find_real_file(const std::string& requestedPath, bool useCach
 		}
 	}
 
-	std::string foundPath;
-	for (const auto& base : get_valid_bases()) {
-		std::string resolved = resolve_case_insensitive_path(base, rel);
-		if (!resolved.empty()) {
-			foundPath = std::move(resolved);
-			break;
-		}
-
-		// Special case: decision files (PedEvent.txt, *.ped, *.grp) might be inside data/Decision/
-		if (rel.find("Decision") == std::string::npos && (rel.find(".ped") != std::string::npos || rel.find(".grp") != std::string::npos || rel == "PedEvent.txt")) {
-			std::string tryDec1 = resolve_case_insensitive_path(base, "data/Decision/" + rel);
-			if (!tryDec1.empty()) {
-				foundPath = std::move(tryDec1);
-				break;
-			}
-			std::string tryDec2 = resolve_case_insensitive_path(base, "data/Decision/Allowed/" + rel);
-			if (!tryDec2.empty()) {
-				foundPath = std::move(tryDec2);
-				break;
-			}
-		}
-
-		// Bare config/data filenames requested without directory prefix (e.g. TouchDefaultPhoneWidescreen.cfg, ShopUVs.dat)
-		if (rel.find('/') == std::string::npos) {
-			std::string tryData = resolve_case_insensitive_path(base, "data/" + rel);
-			if (!tryData.empty()) {
-				foundPath = std::move(tryData);
-				break;
-			}
-		}
-	}
+	std::string foundPath = resolve_in_base_list(s_validBases, rel);
 
 	if (useCache) {
 		s_pathCache.emplace(std::move(cacheKey), foundPath);
 	}
 	return foundPath;
+}
+
+static std::string find_modpack_only_file(const std::string& relPath)
+{
+	std::string rel = extract_relative_asset_path(relPath);
+	if (rel.empty()) {
+		return "";
+	}
+	std::lock_guard<std::mutex> lock(s_fsCacheMutex);
+	init_file_bases_locked();
+	return resolve_in_base_list(s_modBases, rel);
 }
 
 static std::string to_storage_relative(const std::string& absPath)
@@ -465,16 +564,17 @@ DECL_HOOK(uintptr_t, CFileMgr_OpenFile, const char* filename, const char* mode)
 	uintptr_t handle = CFileMgr_OpenFile(filename, mode);
 	if (!handle && filename) {
 		bool isReadOnly = (!mode || (mode[0] == 'r' && strchr(mode, '+') == nullptr));
-		if (!s_retrying && filename[0] != '/') {
-			std::string real = find_real_file(filename, isReadOnly);
+		if (!s_retrying && isReadOnly && filename[0] != '/') {
+			std::string real = find_real_file(filename, true);
 			if (!real.empty()) {
 				std::string rel = to_storage_relative(real);
-				if (!rel.empty() && rel != filename) {
+				const std::string& retryPath = !rel.empty() ? rel : real;
+				if (retryPath != filename) {
 					s_retrying = true;
-					handle = CFileMgr_OpenFile(rel.c_str(), mode);
+					handle = CFileMgr_OpenFile(retryPath.c_str(), mode);
 					s_retrying = false;
 					if (handle) {
-						spdlog::debug("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, rel);
+						spdlog::debug("CFileMgr::OpenFile(\"{}\") resolved -> \"{}\"", filename, retryPath);
 						return handle;
 					}
 				}
@@ -533,9 +633,7 @@ DECL_HOOK(void, SurfaceInfos_c_LoadAdhesiveLimits, uintptr_t _this)
 		}
 	}
 
-	std::string extSamp = std::string(Client::gameDir()) + "SAMP/surface.dat";
-	std::string extData = std::string(Client::gameDir()) + "data/surface.dat";
-	if (check_file_readable(extSamp) || check_file_readable(extData)) {
+	if (!find_real_file("SAMP/surface.dat").empty() || !find_real_file("data/surface.dat").empty()) {
 		SurfaceInfos_c_LoadAdhesiveLimits(_this);
 		spdlog::info("SurfaceInfos_c::LoadAdhesiveLimits initialized from surface.dat");
 	} else {
@@ -550,251 +648,133 @@ DECL_HOOK(void, CTimeCycle_Initialise, bool a1)
 	spdlog::info("CTimeCycle::Initialise finished successfully");
 }
 
+static std::string normalize_forward_slashes(const char* raw)
+{
+	if (!raw) return "";
+	std::string out(raw);
+	for (char& c : out) {
+		if (c == '\\') c = '/';
+	}
+	return out;
+}
+
 DECL_HOOK(int, OS_FileOpen, int a1, uintptr_t handle, char *name, int a2)
 {
 	char path[512] = {0};
 
 	if (!name) goto ret;
 
-	if (!strncasecmp(name, "data\\surface.dat", 16) || !strncasecmp(name, "data/surface.dat", 16))
 	{
-		spdlog::info("OS_FileOpen: surface.dat requested");
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/surface.dat";
-		std::string extData = std::string(Client::gameDir()) + "data/surface.dat";
-		const char* intSamp = "/data/data/com.ryzn.samp/files/SAMP/surface.dat";
-		const char* intData = "/data/data/com.ryzn.samp/files/data/surface.dat";
+		struct DataRedirect {
+			const char* matchRel;
+			const char* bareAlias;
+			const char* sampRel;
+			bool modDataBeatsSamp;
+		};
+		static const DataRedirect kRedirects[] = {
+			{"data/surface.dat",       nullptr,         "SAMP/surface.dat",    false},
+			{"data/surfinfo.dat",      nullptr,         "SAMP/surfinfo.dat",   false},
+			{"data/surfaud.dat",       nullptr,         "SAMP/surfaud.dat",    false},
+			{"data/script/mainv1.scm", nullptr,         "SAMP/main.scm",       false},
+			{"data/script/scriptv1.img", nullptr,       "SAMP/script.img",     false},
+			{"data/gta.dat",           nullptr,         "SAMP/gta.dat",        false},
+			{"data/peds.ide",          nullptr,         "SAMP/peds.ide",       false},
+			{"data/samp.ide",          "samp.ide",      "SAMP/SAMP.ide",       false},
+			{"data/paths/tracks2.dat", nullptr,         "SAMP/tracks2.dat",    true},
+			{"data/paths/tracks4.dat", nullptr,         "SAMP/tracks4.dat",    true},
+			{"data/timecyc.dat",       "timecyc.dat",   "SAMP/timecyc.dat",    true},
+			{"data/colorcycle.dat",    "colorcycle.dat","SAMP/colorcycle.dat", true},
+			{"data/popcycle.dat",      "popcycle.dat",  "SAMP/popcycle.dat",   true},
+			{"data/handling.cfg",      "handling.cfg",  "SAMP/handling.cfg",   true},
+			{"data/vehicles.ide",      "vehicles.ide",  "SAMP/vehicles.ide",   true},
+			{"data/weapon.dat",        "weapon.dat",    "SAMP/weapon.dat",     true},
+			{"data/carcols.dat",       "carcols.dat",   "SAMP/carcols.dat",    true},
+			{"data/object.dat",        "object.dat",    "SAMP/object.dat",     true},
+		};
 
-		if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\surface.dat");
-			name = path;
-		} else if (check_file_readable(extData)) {
-			sprintf(path, "data\\surface.dat");
-			name = path;
-		} else if (check_file_readable(intSamp)) {
-			sprintf(path, "%s", intSamp);
-			name = path;
-		} else if (check_file_readable(intData)) {
-			sprintf(path, "%s", intData);
-			name = path;
+		std::string reqLower = to_lower_ascii(normalize_forward_slashes(name));
+		while (!reqLower.empty() && reqLower.front() == '/') {
+			reqLower.erase(reqLower.begin());
 		}
-		goto ret;
-	}
 
-	if (!strncasecmp(name, "data\\surfinfo.dat", 17) || !strncasecmp(name, "data/surfinfo.dat", 17))
-	{
-		spdlog::info("OS_FileOpen: surfinfo.dat requested");
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/surfinfo.dat";
-		std::string extData = std::string(Client::gameDir()) + "data/surfinfo.dat";
-		const char* intSamp = "/data/data/com.ryzn.samp/files/SAMP/surfinfo.dat";
+		for (const auto& rule : kRedirects) {
+			bool matched = (reqLower == rule.matchRel) ||
+				(rule.bareAlias && reqLower == rule.bareAlias);
+			if (!matched) continue;
 
-		if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\surfinfo.dat");
-			name = path;
-		} else if (check_file_readable(extData)) {
-			sprintf(path, "data\\surfinfo.dat");
-			name = path;
-		} else if (check_file_readable(intSamp)) {
-			sprintf(path, "%s", intSamp);
-			name = path;
+			std::string chosen;
+			{
+				std::lock_guard<std::mutex> lock(s_fsCacheMutex);
+				init_file_bases_locked();
+				if (rule.modDataBeatsSamp) {
+					// Modpacks under mods/ override everything first.
+					chosen = resolve_in_base_list(s_modBases, rule.sampRel);
+					if (chosen.empty()) chosen = resolve_in_base_list(s_modBases, rule.matchRel);
+					// External game directory data/ or SAMP/ override internal /data/data/ defaults.
+					if (chosen.empty()) {
+						const char* gd = Client::gameDir();
+						std::string extSamp = (gd && gd[0]) ? resolve_case_insensitive_path(gd, rule.sampRel) : "";
+						std::string extData = (gd && gd[0]) ? resolve_case_insensitive_path(gd, rule.matchRel) : "";
+						bool preferDataOverSamp =
+							!strcasecmp(rule.matchRel, "data/timecyc.dat") ||
+							!strcasecmp(rule.matchRel, "data/colorcycle.dat") ||
+							!strcasecmp(rule.matchRel, "data/popcycle.dat");
+						chosen = preferDataOverSamp
+							? (!extData.empty() ? extData : extSamp)
+							: (!extSamp.empty() ? extSamp : extData);
+					}
+				} else {
+					chosen = resolve_in_base_list(s_modBases, rule.sampRel);
+					if (chosen.empty()) chosen = resolve_in_base_list(s_modBases, rule.matchRel);
+				}
+			}
+			if (chosen.empty()) {
+				chosen = rule.modDataBeatsSamp
+					? (!find_real_file(rule.matchRel).empty() ? find_real_file(rule.matchRel) : find_real_file(rule.sampRel))
+					: (!find_real_file(rule.sampRel).empty() ? find_real_file(rule.sampRel) : find_real_file(rule.matchRel));
+			}
+
+			if (!chosen.empty()) {
+				std::string relName = to_storage_relative(chosen);
+				if (!relName.empty()) {
+					snprintf(path, sizeof(path), "%s", relName.c_str());
+					name = path;
+				} else if (a1 != 1 && a2 != 1 && a2 != 2 && chosen.front() == '/') {
+					snprintf(path, sizeof(path), "%s", chosen.c_str());
+					name = path;
+				}
+				spdlog::debug("OS_FileOpen redirect '{}' -> '{}'", reqLower, name);
+			}
+			goto call_orig;
 		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "data\\surfaud.dat", 16) || !strncasecmp(name, "data/surfaud.dat", 16))
-	{
-		spdlog::info("OS_FileOpen: surfaud.dat requested");
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/surfaud.dat";
-		std::string extData = std::string(Client::gameDir()) + "data/surfaud.dat";
-		const char* intSamp = "/data/data/com.ryzn.samp/files/SAMP/surfaud.dat";
-
-		if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\surfaud.dat");
-			name = path;
-		} else if (check_file_readable(extData)) {
-			sprintf(path, "data\\surfaud.dat");
-			name = path;
-		} else if (check_file_readable(intSamp)) {
-			sprintf(path, "%s", intSamp);
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "data\\script\\mainV1.scm", 22) || !strncasecmp(name, "data/script/mainV1.scm", 22))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/main.scm";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading mainV1.scm -> SAMP\\main.scm..");
-			sprintf(path, "SAMP\\main.scm");
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "DATA\\SCRIPT\\SCRIPTV1.IMG", 24) || !strncasecmp(name, "data/script/scriptv1.img", 24))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/script.img";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading scriptV1.img -> SAMP\\script.img..");
-			sprintf(path, "SAMP\\script.img");
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "DATA\\GTA.DAT", 12) || !strncasecmp(name, "data/gta.dat", 12))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/gta.dat";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading gta.dat -> SAMP\\gta.dat..");
-			sprintf(path, "SAMP\\gta.dat");
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "DATA\\PEDS.IDE", 13) || !strncasecmp(name, "data/peds.ide", 13))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/peds.ide";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading peds.ide -> SAMP\\peds.ide..");
-			sprintf(path, "SAMP\\peds.ide");
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "DATA\\TIMECYC.DAT", 16) || !strncasecmp(name, "data/timecyc.dat", 16) || !strcasecmp(name, "TIMECYC.DAT"))
-	{
-		spdlog::info("OS_FileOpen: timecyc.dat requested ({})", name);
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/timecyc.dat";
-		std::string extSampUpper = std::string(Client::gameDir()) + "SAMP/TIMECYC.DAT";
-		std::string extData = std::string(Client::gameDir()) + "data/timecyc.dat";
-		std::string extDataUpper = std::string(Client::gameDir()) + "data/TIMECYC.DAT";
-
-		if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\timecyc.dat");
-			name = path;
-			spdlog::info("Loading modpack timecyc.dat from SAMP\\timecyc.dat");
-		} else if (check_file_readable(extSampUpper)) {
-			sprintf(path, "SAMP\\TIMECYC.DAT");
-			name = path;
-			spdlog::info("Loading modpack timecyc.dat from SAMP\\TIMECYC.DAT");
-		} else if (check_file_readable(extData)) {
-			sprintf(path, "data\\timecyc.dat");
-			name = path;
-			spdlog::info("Loading modpack timecyc.dat from data\\timecyc.dat");
-		} else if (check_file_readable(extDataUpper)) {
-			sprintf(path, "data\\TIMECYC.DAT");
-			name = path;
-			spdlog::info("Loading modpack timecyc.dat from data\\TIMECYC.DAT");
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "data\\colorcycle.dat", 19) || !strncasecmp(name, "data/colorcycle.dat", 19) || !strcasecmp(name, "colorcycle.dat"))
-	{
-		spdlog::info("OS_FileOpen: colorcycle.dat requested ({})", name);
-		std::string extData = std::string(Client::gameDir()) + "data/colorcycle.dat";
-		std::string extDataUpper = std::string(Client::gameDir()) + "data/COLORCYCLE.DAT";
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/colorcycle.dat";
-		std::string extSampUpper = std::string(Client::gameDir()) + "SAMP/COLORCYCLE.DAT";
-
-		if (check_file_readable(extData)) {
-			sprintf(path, "data\\colorcycle.dat");
-			name = path;
-			spdlog::info("Loading modpack colorcycle.dat from data\\colorcycle.dat");
-		} else if (check_file_readable(extDataUpper)) {
-			sprintf(path, "data\\COLORCYCLE.DAT");
-			name = path;
-			spdlog::info("Loading modpack colorcycle.dat from data\\COLORCYCLE.DAT");
-		} else if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\colorcycle.dat");
-			name = path;
-			spdlog::info("Loading modpack colorcycle.dat from SAMP\\colorcycle.dat");
-		} else if (check_file_readable(extSampUpper)) {
-			sprintf(path, "SAMP\\COLORCYCLE.DAT");
-			name = path;
-			spdlog::info("Loading modpack colorcycle.dat from SAMP\\COLORCYCLE.DAT");
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "DATA\\POPCYCLE.DAT", 17) || !strncasecmp(name, "data/popcycle.dat", 17) || !strcasecmp(name, "POPCYCLE.DAT"))
-	{
-		spdlog::info("OS_FileOpen: popcycle.dat requested ({})", name);
-		std::string extData = std::string(Client::gameDir()) + "data/popcycle.dat";
-		std::string extDataUpper = std::string(Client::gameDir()) + "data/POPCYCLE.DAT";
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/popcycle.dat";
-		std::string extSampUpper = std::string(Client::gameDir()) + "SAMP/POPCYCLE.DAT";
-
-		if (check_file_readable(extData)) {
-			sprintf(path, "data\\popcycle.dat");
-			name = path;
-			spdlog::info("Loading popcycle.dat from data\\popcycle.dat");
-		} else if (check_file_readable(extDataUpper)) {
-			sprintf(path, "data\\POPCYCLE.DAT");
-			name = path;
-			spdlog::info("Loading popcycle.dat from data\\POPCYCLE.DAT");
-		} else if (check_file_readable(extSamp)) {
-			sprintf(path, "SAMP\\popcycle.dat");
-			name = path;
-			spdlog::info("Loading popcycle.dat from SAMP\\popcycle.dat");
-		} else if (check_file_readable(extSampUpper)) {
-			sprintf(path, "SAMP\\POPCYCLE.DAT");
-			name = path;
-			spdlog::info("Loading popcycle.dat from SAMP\\POPCYCLE.DAT");
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "data\\paths\\tracks2.dat", 22) || !strncasecmp(name, "data/paths/tracks2.dat", 22))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/tracks2.dat";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading tracks2.dat -> SAMP/tracks2.dat...");
-			snprintf(path, sizeof(path), "SAMP/tracks2.dat");
-			name = path;
-		}
-		goto ret;
-	}
-
-	if (!strncasecmp(name, "data\\paths\\tracks4.dat", 22) || !strncasecmp(name, "data/paths/tracks4.dat", 22))
-	{
-		std::string extSamp = std::string(Client::gameDir()) + "SAMP/tracks4.dat";
-		if (check_file_readable(extSamp)) {
-			spdlog::info("Loading tracks4.dat -> SAMP/tracks4.dat...");
-			snprintf(path, sizeof(path), "SAMP/tracks4.dat");
-			name = path;
-		}
-		goto ret;
 	}
 
 ret:
-	char normBuf[512];
-	if (name) {
+	{
 		char* storageRoot = g_saSym ? g_saSym->GetSymbol<char*>("StorageRootBuffer") : nullptr;
 		if (storageRoot && Client::gameDir() && Client::gameDir()[0] && strcmp(storageRoot, Client::gameDir()) != 0) {
 			snprintf(storageRoot, 512, "%s", Client::gameDir());
 		}
 
-		std::string real = find_real_file(name, a2 != 1 && a2 != 2);
+		bool isReadOnly = (a2 != 1 && a2 != 2);
+		std::string real = find_real_file(name, isReadOnly);
 		std::string relName = !real.empty() ? to_storage_relative(real) : "";
 		if (!relName.empty()) {
 			snprintf(path, sizeof(path), "%s", relName.c_str());
 			name = path;
+		} else if (!real.empty() && isReadOnly && a1 != 1 && real.front() == '/') {
+			snprintf(path, sizeof(path), "%s", real.c_str());
+			name = path;
 		} else {
-			strncpy(normBuf, name, sizeof(normBuf) - 1);
-			normBuf[sizeof(normBuf) - 1] = '\0';
-			bool modified = false;
-			for (char* p = normBuf; *p; ++p) {
-				if (*p == '\\') { *p = '/'; modified = true; }
-			}
-			if (modified) {
-				name = normBuf;
+			std::string norm = normalize_forward_slashes(name);
+			if (norm != name) {
+				snprintf(path, sizeof(path), "%s", norm.c_str());
+				name = path;
 			}
 		}
 	}
+
+call_orig:
 	return OS_FileOpen(a1, handle, name, a2);
 }
 
@@ -835,11 +815,142 @@ DECL_HOOK(sa::CAtomicModelInfo *, CModelInfo_AddAtomicModel, int id)
 	return model;
 }
 
+static bool tdb_thumb_exists(const char* dbName, const char* ext)
+{
+	if (!dbName || !ext) return false;
+	std::string rel = std::string("texdb/") + dbName + "/" + dbName + "." + ext + ".tmb";
+	return !find_real_file(rel, true).empty();
+}
+
+static bool tdb_any_format_exists(const char* dbName)
+{
+	static const char* kExts[] = { "etc", "dxt", "pvr", "unc", "360", "ps3" };
+	for (const char* ext : kExts) {
+		if (tdb_thumb_exists(dbName, ext)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+static bool is_builtin_tdb_name(const std::string& lowerName)
+{
+	static const char* kBuiltin[] = {
+		"gta3", "gta_int", "cutscene", "menu", "mobile", "player", "playerhi", "txd", "samp"
+	};
+	for (const char* b : kBuiltin) {
+		if (lowerName == b) return true;
+	}
+	return false;
+}
+
+static void discover_custom_tdbs()
+{
+	s_customTdbNames.clear();
+	for (const auto& base : get_valid_bases()) {
+		std::string texdbDir;
+		DIR* bd = opendir(base.c_str());
+		if (!bd) continue;
+		struct dirent* be;
+		while ((be = readdir(bd)) != nullptr) {
+			if (strcasecmp(be->d_name, "texdb") == 0) {
+				texdbDir = base + be->d_name + "/";
+				break;
+			}
+		}
+		closedir(bd);
+		if (texdbDir.empty()) continue;
+
+		DIR* td = opendir(texdbDir.c_str());
+		if (!td) continue;
+		struct dirent* te;
+		while ((te = readdir(td)) != nullptr) {
+			if (te->d_name[0] == '.') continue;
+			std::string sub = texdbDir + te->d_name;
+			struct stat st{};
+			if (stat(sub.c_str(), &st) != 0 || !S_ISDIR(st.st_mode)) continue;
+
+			std::string lower = to_lower_ascii(te->d_name);
+			if (is_builtin_tdb_name(lower)) continue;
+
+			bool dup = false;
+			for (const auto& existing : s_customTdbNames) {
+				if (to_lower_ascii(existing) == lower) {
+					dup = true;
+					break;
+				}
+			}
+			if (!dup && tdb_any_format_exists(te->d_name)) {
+				s_customTdbNames.emplace_back(te->d_name);
+			}
+		}
+		closedir(td);
+	}
+}
+
+// GTA:SA v2.10 TextureDatabaseFormat mapping: 0=unc, 1=dxt, 2=360, 3=ps3, 4=pvr, 5=etc, 6=DF_Default
+DECL_HOOK(sa::TextureDatabaseRuntime*, TextureDatabaseRuntime_Load, const char* dbName, bool bFullLoad, int format)
+{
+	static const char* kExts[6] = { "unc", "dxt", "360", "ps3", "pvr", "etc" };
+	static const int kGpuOrder[3] = { 1, 4, 5 }; // dxt, pvr, etc
+	static const int kAllOrder[6] = { 5, 1, 4, 0, 2, 3 };
+
+	if (!dbName || !dbName[0]) return nullptr;
+
+	if (format >= 0 && format < 6) {
+		if (!tdb_thumb_exists(dbName, kExts[format])) {
+			int fallback = -1;
+			for (int fmt : kAllOrder) {
+				if (tdb_thumb_exists(dbName, kExts[fmt])) {
+					fallback = fmt;
+					break;
+				}
+			}
+			if (fallback == -1) {
+				spdlog::warn("TextureDatabaseRuntime::Load skipped missing DB '{}' (format={})", dbName, format);
+				return nullptr;
+			}
+			spdlog::info("TextureDatabaseRuntime::Load fallback for '{}': {} -> {}", dbName, format, fallback);
+			format = fallback;
+		}
+	} else if (format == sa::DF_Default) {
+		int foundCount = 0;
+		int foundFmt = -1;
+		for (int fmt : kGpuOrder) {
+			if (tdb_thumb_exists(dbName, kExts[fmt])) {
+				foundFmt = fmt;
+				foundCount++;
+			}
+		}
+		if (foundCount == 1) {
+			format = foundFmt;
+		} else if (foundCount == 0) {
+			if (tdb_thumb_exists(dbName, "unc")) format = sa::DF_UNC;
+			else if (tdb_thumb_exists(dbName, "ps3")) format = sa::DF_PS3;
+			else if (tdb_thumb_exists(dbName, "360")) format = sa::DF_360;
+			else {
+				spdlog::warn("TextureDatabaseRuntime::Load skipped missing auto DB '{}'", dbName);
+				return nullptr;
+			}
+		}
+	}
+
+	return TextureDatabaseRuntime_Load(dbName, bFullLoad, format);
+}
+
 DECL_HOOK(RwTexture *, CTxdStore_TxdStoreFindCB, const char *texture_name)
 {
-	// spdlog::info("Finding texture: {}", texture_name);
+	std::vector<std::string> texture_databases;
+	for (const auto& customDb : s_customTdbNames) {
+		texture_databases.push_back(customDb);
+	}
+	static const char* kStandardDbs[] = {
+		"samp", "gta_int", "gta3", "txd", "menu", "mobile", "player", "playerhi"
+	};
+	for (const char* db : kStandardDbs) {
+		texture_databases.emplace_back(db);
+	}
 
-	std::vector<std::string> texture_databases = {"gta_int", "gta3", "samp", "menu", "mobile"};
 	for (const auto &texture_database : texture_databases)
 	{
 		auto database_handle = sa::TextureDatabaseRuntime::GetDatabase(texture_database.c_str());
@@ -910,6 +1021,12 @@ DECL_HOOK(int, CGame_InitialiseRenderWare)
 	auto sampTex = sa::TextureDatabaseRuntime::Load("samp", false, sa::DF_Default);
 	spdlog::info("samp texture database loaded: {}", (void*)sampTex);
 
+	discover_custom_tdbs();
+	for (const auto& customDb : s_customTdbNames) {
+		auto customHandle = sa::TextureDatabaseRuntime::Load(customDb.c_str(), false, sa::DF_Default);
+		spdlog::info("Loaded custom texture database '{}': {}", customDb, (void*)customHandle);
+	}
+
 	Client::initializeUI();
 	spdlog::info("CGame_InitialiseRenderWare hook completed");
 	return result;
@@ -974,6 +1091,25 @@ struct CStreamingFile
 VALIDATE_SIZE(CStreamingFile, 0x30);
 
 CStreamingFile *CStreaming_ms_files = nullptr;
+static void try_add_streaming_img(const char* imgRel, int& addedCount, std::vector<std::string>& seenImgs)
+{
+	if (!imgRel || addedCount >= 8) return;
+	if (strlen(imgRel) >= sizeof(CStreamingFile::m_name)) {
+		spdlog::warn("Skipping IMG path exceeding 39 chars: {}", imgRel);
+		return;
+	}
+	std::string normLower = to_lower_ascii(normalize_forward_slashes(imgRel));
+	for (const auto& s : seenImgs) {
+		if (s == normLower) return;
+	}
+	if (find_real_file(imgRel, true).empty()) return;
+
+	Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", imgRel, true);
+	seenImgs.push_back(std::move(normLower));
+	addedCount++;
+	spdlog::info("Added IMG archive slot #{}: {}", addedCount, imgRel);
+}
+
 DECL_HOOK(void, CStreaming_InitImageList)
 {
 	spdlog::info("Initializing image list...");
@@ -988,10 +1124,32 @@ DECL_HOOK(void, CStreaming_InitImageList)
 			CStreaming_ms_files[i].m_lsn = 0;
 		}
 
-		Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", "TEXDB\\SAMPCOL.IMG", true);
-		Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", "TEXDB\\GTA3.IMG", true);
-		Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", "TEXDB\\GTA_INT.IMG", true);
-		Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", "TEXDB\\SAMP.IMG", true);
+		int addedCount = 0;
+		std::vector<std::string> seenImgs;
+		auto addRequired = [&](const char* img) {
+			Memory::callFunction<void>("_ZN10CStreaming14AddImageToListEPKcb", img, true);
+			seenImgs.push_back(to_lower_ascii(normalize_forward_slashes(img)));
+			addedCount++;
+		};
+
+		addRequired("TEXDB\\SAMPCOL.IMG");
+		addRequired("TEXDB\\GTA3.IMG");
+		addRequired("TEXDB\\GTA_INT.IMG");
+		addRequired("TEXDB\\SAMP.IMG");
+
+		// Optional modpack / mobile archives (ms_files fits at most 8 slots total)
+		const char* extraCandidates[] = {
+			"TEXDB\\PLAYER.IMG",
+			"TEXDB\\CUSTOM.IMG",
+			"SAMP\\CUSTOM.IMG",
+			"MODS\\CUSTOM.IMG",
+			"TEXDB\\MODPACK.IMG",
+			"MODS\\MODPACK.IMG",
+			"MODS\\MODS.IMG"
+		};
+		for (const char* cand : extraCandidates) {
+			try_add_streaming_img(cand, addedCount, seenImgs);
+		}
 	}
 	else
 	{
@@ -1513,6 +1671,72 @@ DECL_HOOK(void*, TextureDatabaseRuntime_GetTexture, const char* name)
 	return TextureDatabaseRuntime_GetTexture(name);
 }
 
+struct AnimBlendClumpDataView
+{
+#ifdef __aarch64__
+	uintptr_t ptr0;
+	uintptr_t ptr1;
+	int32_t m_nNumBones;
+	int32_t pad14;
+	uintptr_t ptr18;
+	void* m_pFrames;
+#else
+	uintptr_t ptr0;
+	uintptr_t ptr1;
+	int32_t m_nNumBones;
+	uintptr_t ptr0c;
+	void* m_pFrames;
+#endif
+};
+
+struct RpAnimUpdateParams
+{
+	uint32_t bHasNonPartial;
+	void* nodes[12];
+};
+
+static thread_local int s_inUpdateAnimsDepth = 0;
+
+DECL_HOOK(void, CAnimBlendClumpData_ForAllFrames, uintptr_t _this, void (*callback)(void*, void*), void* data)
+{
+	if (!_this || !callback) {
+		return;
+	}
+
+	auto* clumpData = reinterpret_cast<AnimBlendClumpDataView*>(_this);
+	if (clumpData->m_nNumBones <= 0 || !clumpData->m_pFrames) {
+		return;
+	}
+
+	if (s_inUpdateAnimsDepth > 0 && data && g_saSym) {
+		uintptr_t cbOff = g_saSym->ToLibAddr(reinterpret_cast<uintptr_t>(callback));
+#ifdef __aarch64__
+		bool isUpdateCb = (cbOff == 0x46621c || cbOff == 0x4649b0 || cbOff == 0x464f10 || cbOff == 0x465448 || cbOff == 0x4659e8);
+#else
+		uintptr_t thumbOff = cbOff & ~uintptr_t(1);
+		bool isUpdateCb = (thumbOff == 0x38c22c || thumbOff == 0x38c6f8 || thumbOff == 0x38cc30 || thumbOff == 0x38d11c || thumbOff == 0x38d93c);
+#endif
+		if (isUpdateCb) {
+			auto* params = reinterpret_cast<RpAnimUpdateParams*>(data);
+			if (!params->nodes[0]) {
+				return;
+			}
+		}
+	}
+
+	CAnimBlendClumpData_ForAllFrames(_this, callback, data);
+}
+
+DECL_HOOK(void, RpAnimBlendClumpUpdateAnimations, void* clump, float step, bool bDoBlend)
+{
+	if (!clump) {
+		return;
+	}
+	++s_inUpdateAnimsDepth;
+	RpAnimBlendClumpUpdateAnimations(clump, step, bDoBlend);
+	--s_inUpdateAnimsDepth;
+}
+
 DECL_HOOK(void, OALService)
 {
 	auto pMutex = g_saSym->GetSymbol<pthread_mutex_t**>("trashMutex");
@@ -1838,8 +2062,11 @@ void Hooks::install()
 	HOOK("_Z15RwFrameAddChildP7RwFrameS0_", RwFrameAddChild);
 	HOOK("_Z13RLEDecompressPhjPKhjj", RLEDecompress);
 	HOOK("_Z23RwResourcesFreeResEntryP10RwResEntry", RwResourcesFreeResEntry);
+	HOOK("_ZN22TextureDatabaseRuntime4LoadEPKcb21TextureDatabaseFormat", TextureDatabaseRuntime_Load);
 	HOOK("_ZN22TextureDatabaseRuntime8GetEntryEPKcRb", TextureDatabaseRuntime_GetEntry);
 	HOOK("_ZN22TextureDatabaseRuntime10GetTextureEPKc", TextureDatabaseRuntime_GetTexture);
+	HOOK("_Z32RpAnimBlendClumpUpdateAnimationsP7RpClumpfb", RpAnimBlendClumpUpdateAnimations);
+	HOOK("_ZN19CAnimBlendClumpData12ForAllFramesEPFvP18AnimBlendFrameDataPvES2_", CAnimBlendClumpData_ForAllFrames);
 	HOOK("_ZN10MobileMenu12InitForTitleEv", MobileMenu_InitForTitle);
 	HOOK("_ZN10MobileMenu4LoadEv", MobileMenu_Load);
 	HOOK("_ZN10MobileMenu12InitForPauseEv", MobileMenu_InitForPause);

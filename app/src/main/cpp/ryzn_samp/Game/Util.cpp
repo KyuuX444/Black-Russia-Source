@@ -281,12 +281,15 @@ uint16_t ModelInfoGetReferenceCount(int iModelID)
 
 bool IsValidModel(int iModelID)
 {
+	if (iModelID < 0 || iModelID == 65535 || iModelID > 20000) {
+		return false;
+	}
 	sa::CBaseModelInfo* pModel = GetModelInfoByID(iModelID);
 	if (pModel && *(uintptr_t*) pModel != 0xFFFFFFEC) {
 		return true;
 	}
 
-	spdlog::error("IsValidModel: {} is not a valid model.", iModelID);
+	spdlog::debug("IsValidModel: {} is not a valid model.", iModelID);
 	return false;
 }
 
@@ -313,6 +316,10 @@ bool IsValidPedModel(uint modelID)
 sa::CBaseModelInfo* GetModelInfoByID(int iModelID)
 {
 	spdlog::debug("GetModelInfoByID: {}", iModelID);
+
+	if (iModelID == 65535) {
+		return nullptr;
+	}
 
 	if (iModelID < 0 || iModelID > 20000) {
 		spdlog::error("Invalid model ID: {}", iModelID);

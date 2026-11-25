@@ -4,35 +4,36 @@
     android:height="140dp"
     android:viewportWidth="320"
     android:viewportHeight="140">
-    <!-- Distant San Andreas ocean/bay horizon glow -->
+    <!-- Crimson Horizon Glow -->
     <path
-        android:fillColor="#26803DF2"
+        android:fillColor="#26D62839"
         android:pathData="M0,78H320V92H0Z" />
-    <!-- Skyline & Hills -->
+    <!-- Manga Ink Skyline -->
     <path
-        android:fillColor="#23222A"
+        android:fillColor="#B8B1A2"
         android:pathData="M0,92L42,74L84,82V58H102V84H128V44H146V28H156V44H172V78H206V60H228V80L272,68L320,84V140H0Z" />
-    <!-- Palm boulevard -->
     <path
-        android:fillColor="#141418"
+        android:fillColor="#111111"
         android:pathData="M0,92H320V140H0Z" />
     <path
-        android:fillColor="#0E0E12"
+        android:fillColor="#D62839"
+        android:pathData="M0,91H320V94H0Z" />
+    <path
+        android:fillColor="#111111"
         android:pathData="M44,104L48,42L52,104Z" />
     <path
-        android:fillColor="#0E0E12"
+        android:fillColor="#111111"
         android:pathData="M48,42C36,34 24,36 18,44C27,42 38,42 46,46C35,49 28,56 24,64C32,57 41,53 48,51C42,59 40,68 41,76C45,65 48,56 50,51C57,59 62,67 64,74C65,63 60,54 52,49C62,48 72,51 79,56C72,44 60,39 48,42Z" />
     <path
-        android:fillColor="#0E0E12"
+        android:fillColor="#111111"
         android:pathData="M268,104L272,48L276,104Z" />
     <path
-        android:fillColor="#0E0E12"
+        android:fillColor="#111111"
         android:pathData="M272,48C262,41 251,43 246,49C254,48 263,48 270,51C260,54 254,60 251,67C258,61 265,57 272,55C267,62 265,70 266,77C269,68 272,60 274,55C280,62 284,69 286,75C287,66 283,58 275,54C284,53 292,55 298,60C292,50 282,45 272,48Z" />
-    <!-- Road strip & stripes -->
     <path
-        android:fillColor="#1E1E24"
+        android:fillColor="#26262B"
         android:pathData="M28,140L138,94H182L292,140Z" />
     <path
-        android:fillColor="#66FFFFFF"
+        android:fillColor="#F4F1EA"
         android:pathData="M157,96H163L167,108H153Z M151,115H169L175,134H145Z" />
 </vector>

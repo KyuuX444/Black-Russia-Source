@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,16 +24,16 @@
             android:paddingStart="12dp"
             android:paddingTop="5dp"
             android:paddingEnd="14dp"
-            android:paddingBottom="5dp"
+            android:paddingBottom="7dp"
             android:text="@string/nav_settings"
-            android:textColor="@color/ryzn_text_primary"
-            android:textSize="14sp" />
+            android:textColor="#FFFFFF"
+            android:textSize="13.5sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:fontFamily="@font/montserrat_regular"
+            android:fontFamily="@font/montserrat_medium"
             android:text="Sesuaikan Nick_Name, tampilan, dan obrolan Ryzn SA-MP"
             android:textColor="@color/ryzn_text_secondary"
             android:textSize="11.5sp" />
@@ -63,7 +64,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="PROFIL PEMAIN"
-                android:textColor="@color/ryzn_purple_light"
+                android:textColor="@color/manga_crimson"
                 android:textSize="10.5sp" />
 
             <LinearLayout
@@ -72,7 +73,10 @@
                 android:background="@drawable/bg_card_surface"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:padding="10dp">
+                android:paddingStart="10dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="13dp"
+                android:paddingBottom="13dp">
 
                 <ImageView
                     android:layout_width="28dp"
@@ -80,6 +84,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="6dp"
                     android:src="@drawable/ic_nick"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <EditText
@@ -98,19 +103,20 @@
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:singleLine="true"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textColorHint="@color/ryzn_text_muted"
                     android:textSize="12.5sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/settings_nick_save"
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
+                    android:layout_height="38dp"
                     android:background="@drawable/bg_btn_play_purple"
                     android:fontFamily="@font/montserrat_bold"
                     android:minWidth="74dp"
                     android:paddingStart="12dp"
-                    android:paddingEnd="12dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="2dp"
                     android:text="Simpan"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
@@ -119,10 +125,10 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="1.5dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginBottom="12dp"
-                android:background="@color/ryzn_surface_stroke" />
+                android:background="@color/manga_ink" />
 
             <!-- Section: Tampilan & Layar -->
             <TextView
@@ -132,7 +138,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="TAMPILAN &amp; LAYAR"
-                android:textColor="@color/ryzn_purple_light"
+                android:textColor="@color/manga_crimson"
                 android:textSize="10.5sp" />
 
             <RelativeLayout
@@ -148,6 +154,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -163,7 +170,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Tampilkan FPS"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -201,6 +208,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -216,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Mode Layar Penuh"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -254,6 +262,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -269,7 +278,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Radar Kotak"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -296,10 +305,10 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="1.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="12dp"
-                android:background="@color/ryzn_surface_stroke" />
+                android:background="@color/manga_ink" />
 
             <!-- Section: Suara & Chat -->
             <TextView
@@ -309,7 +318,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="SUARA &amp; OBROLAN"
-                android:textColor="@color/ryzn_purple_light"
+                android:textColor="@color/manga_crimson"
                 android:textSize="10.5sp" />
 
             <RelativeLayout
@@ -325,6 +334,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -340,7 +350,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Voice Chat"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -378,6 +388,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -393,7 +404,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Timestamp Obrolan"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -431,6 +442,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -441,7 +453,7 @@
                     android:layout_toEndOf="@id/fontsizeIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Ukuran Font"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textSize="13sp" />
 
                 <EditText
@@ -457,7 +469,7 @@
                     android:inputType="numberDecimal"
                     android:maxLength="5"
                     android:singleLine="true"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textColorHint="@color/ryzn_text_muted"
                     android:textSize="12sp" />
             </RelativeLayout>
@@ -475,6 +487,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -485,7 +498,7 @@
                     android:layout_toEndOf="@id/chatstringsIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Baris Obrolan"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textSize="13sp" />
 
                 <LinearLayout
@@ -508,7 +521,7 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="-"
-                        android:textColor="@color/ryzn_purple_light"
+                        android:textColor="@color/manga_crimson"
                         android:textSize="15sp" />
 
                     <TextView
@@ -518,7 +531,7 @@
                         android:fontFamily="@font/montserrat_bold"
                         android:gravity="center"
                         android:text="8"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="12sp" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -530,17 +543,17 @@
                         android:minWidth="0dp"
                         android:minHeight="0dp"
                         android:text="+"
-                        android:textColor="@color/ryzn_purple_light"
+                        android:textColor="@color/manga_crimson"
                         android:textSize="15sp" />
                 </LinearLayout>
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="1.5dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="12dp"
-                android:background="@color/ryzn_surface_stroke" />
+                android:background="@color/manga_ink" />
 
             <!-- Section: Sistem & Data -->
             <TextView
@@ -550,7 +563,7 @@
                 android:fontFamily="@font/montserrat_bold"
                 android:letterSpacing="0.08"
                 android:text="SISTEM &amp; DATA"
-                android:textColor="@color/ryzn_purple_light"
+                android:textColor="@color/manga_crimson"
                 android:textSize="10.5sp" />
 
             <RelativeLayout
@@ -566,6 +579,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <LinearLayout
@@ -581,7 +595,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserrat_bold"
                         android:text="Data Game"
-                        android:textColor="@color/ryzn_text_primary"
+                        android:textColor="@color/manga_ink"
                         android:textSize="13sp" />
 
                     <TextView
@@ -596,17 +610,18 @@
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/reinstallGame"
                     android:layout_width="wrap_content"
-                    android:layout_height="34dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/bg_btn_play_purple"
                     android:fontFamily="@font/montserrat_bold"
-                    android:paddingStart="14dp"
-                    android:paddingEnd="14dp"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="15dp"
+                    android:paddingBottom="2dp"
                     android:text="Unduh / Perbaiki"
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
-                    android:textSize="11.5sp" />
+                    android:textSize="11sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -622,6 +637,7 @@
                     android:background="@drawable/ryzn_icon_tint_circle"
                     android:padding="8dp"
                     android:src="@drawable/security_icon"
+                    app:tint="@color/manga_ink"
                     tools:ignore="ContentDescription" />
 
                 <TextView
@@ -633,20 +649,21 @@
                     android:layout_toEndOf="@id/resetIcon"
                     android:fontFamily="@font/montserrat_bold"
                     android:text="Reset Pengaturan"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textSize="13sp" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/restore_button"
                     android:layout_width="88dp"
-                    android:layout_height="34dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/bg_btn_action_dark"
                     android:fontFamily="@font/montserrat_bold"
+                    android:paddingBottom="2dp"
                     android:text="Reset"
                     android:textAllCaps="false"
-                    android:textColor="@color/ryzn_text_primary"
+                    android:textColor="@color/manga_ink"
                     android:textSize="11.5sp" />
             </RelativeLayout>
 

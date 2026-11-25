@@ -4,42 +4,48 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.fragment.app.Fragment;
 
 import com.ryzn.game.R;
-import com.ryzn.launcher.fragment.FavoriteServersFragment;
 import com.ryzn.launcher.fragment.HomeFragment;
 import com.ryzn.launcher.fragment.SettingsFragment;
 import com.ryzn.launcher.other.RyznGameDownloader;
 import com.ryzn.launcher.other.ServerManager;
 
 /**
- * Portrait 9:16 launcher host managing the top Header, Fragment navigation (Home, Servers, Settings),
- * runtime storage/audio permissions, and live Footer client readiness status.
+ * Portrait Manga-themed launcher host with 2 bottom navigation buttons (Beranda & Pengaturan),
+ * runtime storage/audio permissions, and live client readiness status in the header.
  */
 public class MainActivity extends AppCompatActivity {
 
     public static final int TAB_HOME = 1;
-    public static final int TAB_SERVERS = 2;
-    public static final int TAB_SETTINGS = 3;
+    public static final int TAB_SETTINGS = 2;
+    private static final String STATE_SELECTED_TAB = "selected_tab";
 
     private int selectedTab = TAB_HOME;
     private long quitTime = 0;
 
-    private ImageButton navHomeBtn;
-    private ImageButton navServersBtn;
-    private ImageButton navSettingsBtn;
-    private View footerStatusDot;
-    private TextView footerStatusText;
+    private View navHomeBtn;
+    private View navSettingsBtn;
+    private ImageView navHomeIcon;
+    private ImageView navSettingsIcon;
+    private TextView navHomeText;
+    private TextView navSettingsText;
+
+    private View statusDot;
+    private TextView statusText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,21 +54,32 @@ public class MainActivity extends AppCompatActivity {
 
         requestRequiredPermissions();
 
-        navHomeBtn = findViewById(R.id.header_nav_home);
-        navServersBtn = findViewById(R.id.header_nav_servers);
-        navSettingsBtn = findViewById(R.id.header_nav_settings);
-        footerStatusDot = findViewById(R.id.footer_status_dot);
-        footerStatusText = findViewById(R.id.footer_status_text);
+        navHomeBtn = findViewById(R.id.bottom_nav_home);
+        navSettingsBtn = findViewById(R.id.bottom_nav_settings);
+        navHomeIcon = findViewById(R.id.bottom_nav_home_icon);
+        navSettingsIcon = findViewById(R.id.bottom_nav_settings_icon);
+        navHomeText = findViewById(R.id.bottom_nav_home_text);
+        navSettingsText = findViewById(R.id.bottom_nav_settings_text);
+
+        statusDot = findViewById(R.id.footer_status_dot);
+        statusText = findViewById(R.id.footer_status_text);
 
         bindVersionLabels();
-        bindHeaderAndFooterActions();
+        bindActions();
 
         if (savedInstanceState == null) {
             switchTab(TAB_HOME, new HomeFragment());
         } else {
-            updateHeaderNavHighlight();
+            selectedTab = savedInstanceState.getInt(STATE_SELECTED_TAB, TAB_HOME);
+            updateBottomNavHighlight();
         }
         refreshFooterClientState();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_TAB, selectedTab);
     }
 
     @Override
@@ -113,18 +130,13 @@ public class MainActivity extends AppCompatActivity {
     private void bindVersionLabels() {
         String version = getAppVersionName();
         TextView headerVersion = findViewById(R.id.header_version);
-        TextView footerBrand = findViewById(R.id.footer_brand_version);
         if (headerVersion != null) {
             headerVersion.setText("v" + version);
         }
-        if (footerBrand != null) {
-            footerBrand.setText("Ryzn SA-MP • v" + version);
-        }
     }
 
-    private void bindHeaderAndFooterActions() {
+    private void bindActions() {
         navHomeBtn.setOnClickListener(v -> openHomeTab());
-        navServersBtn.setOnClickListener(v -> openServersTab());
         navSettingsBtn.setOnClickListener(v -> openSettingsTab());
 
         findViewById(R.id.footer_client_status).setOnClickListener(v -> {
@@ -145,12 +157,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void openServersTab() {
-        if (selectedTab != TAB_SERVERS) {
-            switchTab(TAB_SERVERS, new FavoriteServersFragment());
-        }
-    }
-
     public void openSettingsTab() {
         if (selectedTab != TAB_SETTINGS) {
             switchTab(TAB_SETTINGS, new SettingsFragment());
@@ -163,60 +169,47 @@ public class MainActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container, fragment)
                 .commit();
-        updateHeaderNavHighlight();
+        updateBottomNavHighlight();
     }
 
-    private void updateHeaderNavHighlight() {
+    private void updateBottomNavHighlight() {
+        int white = ContextCompat.getColor(this, R.color.white);
+        int ink = ContextCompat.getColor(this, R.color.manga_ink);
+
+        boolean isHome = selectedTab == TAB_HOME;
         if (navHomeBtn != null) {
-            navHomeBtn.setBackgroundResource(selectedTab == TAB_HOME
-                    ? R.drawable.bg_nav_item_selected
-                    : R.drawable.bg_nav_item_normal);
-        }
-        if (navServersBtn != null) {
-            navServersBtn.setBackgroundResource(selectedTab == TAB_SERVERS
-                    ? R.drawable.bg_nav_item_selected
-                    : R.drawable.bg_nav_item_normal);
+            navHomeBtn.setBackgroundResource(isHome ? R.drawable.bg_nav_item_selected : R.drawable.bg_nav_item_normal);
+            if (navHomeIcon != null) {
+                ImageViewCompat.setImageTintList(navHomeIcon, ColorStateList.valueOf(isHome ? white : ink));
+            }
+            if (navHomeText != null) {
+                navHomeText.setTextColor(isHome ? white : ink);
+            }
         }
         if (navSettingsBtn != null) {
-            navSettingsBtn.setBackgroundResource(selectedTab == TAB_SETTINGS
-                    ? R.drawable.bg_nav_item_selected
-                    : R.drawable.bg_nav_item_normal);
+            navSettingsBtn.setBackgroundResource(!isHome ? R.drawable.bg_nav_item_selected : R.drawable.bg_nav_item_normal);
+            if (navSettingsIcon != null) {
+                ImageViewCompat.setImageTintList(navSettingsIcon, ColorStateList.valueOf(!isHome ? white : ink));
+            }
+            if (navSettingsText != null) {
+                navSettingsText.setTextColor(!isHome ? white : ink);
+            }
         }
     }
 
     public void refreshFooterClientState() {
-        if (footerStatusDot == null || footerStatusText == null) return;
+        if (statusDot == null || statusText == null) return;
         ServerManager.ClientState state = ServerManager.getClientState(this);
         if (state == ServerManager.ClientState.READY) {
-            footerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_online);
-            footerStatusText.setText("Client Siap");
+            statusDot.setBackgroundResource(R.drawable.bg_status_dot_online);
+            statusText.setText("Client Siap");
         } else if (state == ServerManager.ClientState.NEEDS_PERMISSION) {
-            footerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
-            footerStatusText.setText("Butuh Izin File");
+            statusDot.setBackgroundResource(R.drawable.bg_status_dot_offline);
+            statusText.setText("Butuh Izin");
         } else {
-            footerStatusDot.setBackgroundResource(R.drawable.bg_status_dot_pending);
-            footerStatusText.setText("Unduh Data Game");
+            statusDot.setBackgroundResource(R.drawable.bg_status_dot_pending);
+            statusText.setText("Unduh Data");
         }
-    }
-
-    public void showAboutDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Tentang Ryzn SA-MP")
-                .setMessage("Ryzn SA-MP Mobile Launcher\n"
-                        + "Versi: v" + getAppVersionName() + "\n"
-                        + "Direktori Data: /storage/emulated/0/" + RyznGameDownloader.GAME_DIR_NAME + "/\n"
-                        + "Skin Dialog: SAMP/sampgui.png")
-                .setPositiveButton("Tutup", null)
-                .show();
-    }
-
-    public void confirmExit() {
-        new AlertDialog.Builder(this)
-                .setTitle("Keluar Launcher")
-                .setMessage("Tutup Ryzn SA-MP sekarang?")
-                .setPositiveButton("Keluar", (d, w) -> finish())
-                .setNegativeButton("Batal", null)
-                .show();
     }
 
     private String getAppVersionName() {
@@ -227,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
             }
         } catch (Exception ignored) {
         }
-        return "1.0-ryzn";
+        return "2.0-ryzn";
     }
 
     @Override

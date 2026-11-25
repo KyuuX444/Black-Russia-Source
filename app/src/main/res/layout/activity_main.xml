@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_ryzn_root"
     android:orientation="vertical">
 
-    <!-- 1. Header -->
+    <!-- 1. Manga Ink Header -->
     <LinearLayout
         android:id="@+id/header_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/ryzn_header_height"
-        android:background="#18181D"
+        android:background="@color/manga_panel"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="12dp"
-        android:paddingEnd="10dp">
+        android:paddingEnd="12dp">
 
         <ImageView
             android:id="@+id/header_logo"
@@ -55,8 +56,8 @@
                     android:paddingTop="1dp"
                     android:paddingEnd="6dp"
                     android:paddingBottom="1dp"
-                    android:text="v1.0"
-                    android:textColor="@color/ryzn_purple_light"
+                    android:text="v2.0"
+                    android:textColor="@color/manga_crimson"
                     android:textSize="9.5sp" />
             </LinearLayout>
 
@@ -65,102 +66,24 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_regular"
                 android:text="SA-MP Mobile Client"
-                android:textColor="@color/ryzn_text_muted"
+                android:textColor="@color/ryzn_text_secondary"
                 android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Header quick navigation buttons -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/header_nav_home"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/bg_nav_item_selected"
-                android:contentDescription="@string/nav_home"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_nav_home" />
-
-            <ImageButton
-                android:id="@+id/header_nav_servers"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/bg_nav_item_normal"
-                android:contentDescription="@string/nav_servers"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_nav_server" />
-
-            <ImageButton
-                android:id="@+id/header_nav_settings"
-                android:layout_width="34dp"
-                android:layout_height="34dp"
-                android:background="@drawable/bg_nav_item_normal"
-                android:contentDescription="@string/nav_settings"
-                android:padding="7dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_nav_settings" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/ryzn_surface_stroke" />
-
-    <!-- Fragment Host -->
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/ryzn_surface_stroke" />
-
-    <!-- 6. Footer -->
-    <LinearLayout
-        android:id="@+id/footer_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/ryzn_footer_height"
-        android:background="#101013"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp">
-
-        <TextView
-            android:id="@+id/footer_brand_version"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:fontFamily="@font/montserrat_medium"
-            android:maxLines="1"
-            android:text="Ryzn SA-MP • v1.0-ryzn"
-            android:textColor="@color/ryzn_text_secondary"
-            android:textSize="11sp" />
-
+        <!-- Client status pill inside header -->
         <LinearLayout
             android:id="@+id/footer_client_status"
             android:layout_width="wrap_content"
-            android:layout_height="26dp"
+            android:layout_height="28dp"
             android:background="@drawable/bg_btn_action_dark"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="9dp"
-            android:paddingEnd="9dp">
+            android:paddingTop="2dp"
+            android:paddingEnd="11dp"
+            android:paddingBottom="4dp">
 
             <View
                 android:id="@+id/footer_status_dot"
@@ -177,6 +100,100 @@
                 android:text="Client Siap"
                 android:textColor="@color/ryzn_text_primary"
                 android:textSize="10.5sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/manga_ink" />
+
+    <!-- Fragment Host -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/manga_ink" />
+
+    <!-- 2-Button Manga Bottom Navigation Bar -->
+    <LinearLayout
+        android:id="@+id/bottom_nav_bar"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:background="@color/manga_panel"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingTop="7dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="7dp">
+
+        <LinearLayout
+            android:id="@+id/bottom_nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="2dp">
+
+            <ImageView
+                android:id="@+id/bottom_nav_home_icon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="7dp"
+                android:contentDescription="@string/nav_home"
+                android:src="@drawable/ic_nav_home"
+                app:tint="#FFFFFF" />
+
+            <TextView
+                android:id="@+id/bottom_nav_home_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/nav_home"
+                android:textColor="#FFFFFF"
+                android:textSize="12.5sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bottom_nav_settings"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_nav_item_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/bottom_nav_settings_icon"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="7dp"
+                android:contentDescription="@string/nav_settings"
+                android:src="@drawable/ic_nav_settings"
+                app:tint="@color/manga_ink" />
+
+            <TextView
+                android:id="@+id/bottom_nav_settings_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@string/nav_settings"
+                android:textColor="@color/manga_ink"
+                android:textSize="12.5sp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
