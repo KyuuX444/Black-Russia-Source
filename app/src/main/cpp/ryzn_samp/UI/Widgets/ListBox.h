@@ -55,7 +55,7 @@ public:
 		int m_itemsCount;
 	};
 
-	Panel* panel() { return m_panel; }
+	Panel* panel() const { return m_panel; }
 
 private:
 	Panel* m_panel;
